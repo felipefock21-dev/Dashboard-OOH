@@ -421,5 +421,8 @@ function renderBrazilMap(svg, geojson) {
 // Atualizar a cada 30 segundos
 setInterval(loadDashboard, 30000);
 
+// Carregar dashboard na inicialização
+loadDashboard();
+
 // Carregar ao abrir a página
 document.addEventListener('DOMContentLoaded', loadDashboard);
