@@ -165,8 +165,7 @@ function renderCidadesTable(data) {
 
 // Atualizar hora de última atualização
 function updateTime() {
-    const now = new Date();
-    document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('pt-BR');
+    // Função removida
 }
 
 // Carregar e exibir dados
