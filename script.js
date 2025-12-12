@@ -64,14 +64,21 @@ function parseCSV(csv) {
 
 // Processar dados e calcular métricas
 function processMetrics(data) {
+    console.log('=== PROCESSANDO MÉTRICAS ===');
+    console.log('Total de linhas carregadas:', data.length);
+    
     // Filtrar apenas registros com "Status Cliente" = ATIVA
     const activeData = data.filter(item => {
         const status = item.status.toLowerCase().trim();
         return status === 'ativo' || status === 'ativa';
     });
+    
+    console.log('Linhas com status ATIVA:', activeData.length);
+    console.log('Primeiras linhas ativas:', activeData.slice(0, 3));
 
     // KPIs
     const totalImpactos = activeData.reduce((sum, item) => sum + item.impactostotal, 0);
+    console.log('Total de impactos calculado:', totalImpactos);
     
     // Clientes Ativos (contagem única de clientes)
     const clientesUnicos = new Set(activeData.map(item => item.cliente));
