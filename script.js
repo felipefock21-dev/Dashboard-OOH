@@ -51,10 +51,10 @@ function parseCSV(csv) {
 
 // Processar dados e calcular métricas
 function processMetrics(data) {
-    // Filtrar apenas registros com "Status Cliente" ativo
+    // Filtrar apenas registros com exibidora ativa
     const activeData = data.filter(item => {
-        const status = item.status.toLowerCase().trim();
-        return status === 'ativo' || status === 'ativa';
+        // Consideramos ativo se tem exibidora e impactos
+        return item.exibidora && item.exibidora.trim() !== '' && item.impactostotal > 0;
     });
 
     // KPIs
