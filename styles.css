@@ -86,16 +86,17 @@ body {
     min-width: 0;
     overflow: hidden;
     width: 60% !important;
+    padding: clamp(15px, 2vw, 25px);
 }
 
 /* Seção do Mapa */
 .mapa-section {
     flex: 1;
-    background: rgba(224, 61, 153, 0.08);
+    background: transparent;
     border-radius: clamp(10px, 1.5vw, 20px);
-    padding: clamp(12px, 2vw, 20px);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(224, 61, 153, 0.3);
+    padding: clamp(20px, 3vw, 30px);
+    backdrop-filter: none;
+    border: none;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -115,6 +116,7 @@ body {
     gap: clamp(12px, 2vw, 20px);
     min-height: 0;
     width: 100%;
+    padding: clamp(15px, 2.5vw, 25px);
 }
 
 #mapa-container {
@@ -127,7 +129,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 0;
-    padding: clamp(12px, 2vw, 20px);
+    padding: clamp(15px, 2.5vw, 25px);
 }
 
 #mapasvg {
