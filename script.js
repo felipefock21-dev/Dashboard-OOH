@@ -376,6 +376,14 @@ async function loadDashboard() {
     // Renderizar mapa com dados ativos
     const activeData = data.filter(item => item.status.toUpperCase() === 'ATIVA');
     renderMap(activeData);
+    
+    // Carregar e renderizar KML do Brasil (polígonos dos estados)
+    if (typeof loadKMLFile === 'function') {
+        const kmlFeatures = await loadKMLFile();
+        if (kmlFeatures && mapInstance) {
+            addKMLToMap(mapInstance, kmlFeatures, activeData);
+        }
+    }
 
     updateTime();
     console.log('Dashboard atualizado!', metrics);
