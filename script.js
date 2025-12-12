@@ -27,25 +27,38 @@ function parseCSV(csv) {
     const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
     const data = [];
 
-    // Encontrar índices das colunas
-    const clienteIdx = headers.findIndex(h => h === 'cliente' || h === 'a');
-    const statusIdx = headers.findIndex(h => h === 'status cliente' || h === 'status' || h === 'b');
-    const cidadeIdx = headers.findIndex(h => h === 'cidade' || h === 'h');
-    const exibidoraIdx = headers.findIndex(h => h === 'exibidora' || h === 'i');
-    const impactosIdx = headers.findIndex(h => h === 'impactos total' || h === 'impactostotal' || h === 'n');
+    console.log('Headers encontrados:', headers);
+
+    // Encontrar índices das colunas (busca flexível)
+    let clienteIdx = -1, statusIdx = -1, cidadeIdx = -1, exibidoraIdx = -1, impactosIdx = -1;
+    
+    headers.forEach((h, idx) => {
+        if (h.includes('cliente') && !h.includes('status')) clienteIdx = idx;
+        if (h.includes('status')) statusIdx = idx;
+        if (h.includes('cidade') || h.includes('praca')) cidadeIdx = idx;
+        if (h.includes('exibidora') || h.includes('emissor')) exibidoraIdx = idx;
+        if (h.includes('impacto')) impactosIdx = idx;
+    });
+
+    console.log('Índices encontrados:', { clienteIdx, statusIdx, cidadeIdx, exibidoraIdx, impactosIdx });
 
     for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue; // Pular linhas vazias
+        
         const values = lines[i].split(',').map(v => v.trim());
         
-        data.push({
+        const item = {
             cliente: clienteIdx >= 0 ? values[clienteIdx] || '' : '',
             status: statusIdx >= 0 ? values[statusIdx] || '' : '',
             cidade: cidadeIdx >= 0 ? values[cidadeIdx] || '' : '',
             exibidora: exibidoraIdx >= 0 ? values[exibidoraIdx] || '' : '',
             impactostotal: impactosIdx >= 0 ? parseInt(values[impactosIdx] || '0', 10) : 0
-        });
+        };
+        
+        data.push(item);
     }
 
+    console.log('Primeiros 5 registros parseados:', data.slice(0, 5));
     return data;
 }
 
@@ -216,6 +229,8 @@ async function loadDashboard() {
 
     console.log(`${data.length} linhas carregadas`);
     const metrics = processMetrics(data);
+
+    console.log('Métricas calculadas:', metrics);
 
     // Renderizar tudo
     renderKPIs(metrics);
