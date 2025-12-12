@@ -267,13 +267,9 @@ let map = null;
 function loadMap(data) {
     // Apenas inicializa uma vez
     if (!map) {
-        map = L.map('map').setView([-15.8, -48.0], 4);
-        
-        // Adicionar tile layer (OpenStreetMap dark)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(map);
+        map = L.map('map', {
+            attributionControl: false
+        }).setView([-15.8, -48.0], 4);
         
         // Carregar e exibir KML do Brasil
         fetch('BRASIL.kml')
@@ -287,11 +283,15 @@ function loadMap(data) {
                     style: {
                         color: '#5a5fff',
                         weight: 2,
-                        opacity: 0.7,
+                        opacity: 0.8,
                         fillColor: '#5a5fff',
-                        fillOpacity: 0.1
+                        fillOpacity: 0.15
                     }
                 }).addTo(map);
+                
+                // Ajustar zoom ao GeoJSON
+                const bounds = L.geoJSON(geoJson).getBounds();
+                map.fitBounds(bounds, { padding: [50, 50] });
                 
                 console.log('Mapa do Brasil carregado com sucesso');
             })
