@@ -37,11 +37,10 @@ function parseCSV(csv) {
 
         data.push({
             cliente: row.cliente || '',
-            praca: row.praca || '',
+            cidade: row.cidade || row.praca || '',
             exibidora: row.exibidora || '',
-            impactos: parseInt(row.impactos || '0', 10),
-            mes: row.mes || new Date().toISOString().slice(0, 7),
-            ativo: row.ativo !== 'false' && row.ativo !== '0'
+            impactostotal: parseInt(row.impactostotal || '0', 10),
+            status: row.status ? row.status.toLowerCase() : 'inativo'
         });
     }
 
@@ -50,65 +49,114 @@ function parseCSV(csv) {
 
 // Processar dados e calcular métricas
 function processMetrics(data) {
-    const clienteMap = new Map();
-    const pracaMap = new Map();
-    const exibidoraMap = new Map();
+    // Filtrar apenas registros ativos
+    const activeData = data.filter(item => item.status === 'ativo' || item.status === 'ativa');
 
-    // Filtrar dados ativos
-    const activeData = data.filter(item => item.ativo);
+    // KPIs
+    const totalImpactos = activeData.reduce((sum, item) => sum + item.impactostotal, 0);
+    
+    // Clientes Ativos (contagem única de clientes)
+    const clientesUnicos = new Set(activeData.map(item => item.cliente));
+    const totalClientes = clientesUnicos.size;
 
+    // Praças Ativas (contagem única de cidades ativas)
+    const pracasUnicas = new Set(activeData.map(item => item.cidade));
+    const totalPracas = pracasUnicas.size;
+
+    // Exibidoras Ativas (contagem única de exibidoras ativas)
+    const exibidorasUnicas = new Set(activeData.map(item => item.exibidora));
+    const totalExibidoras = exibidorasUnicas.size;
+
+    // === CLIENTES MAIS ATIVOS ===
+    // Ranking dos 3 clientes com mais cidades ativas
+    const clientesCidades = new Map();
     activeData.forEach(item => {
-        // Clientes
-        if (!clienteMap.has(item.cliente)) {
-            clienteMap.set(item.cliente, { nome: item.cliente, impactos: 0 });
+        if (!clientesCidades.has(item.cliente)) {
+            clientesCidades.set(item.cliente, new Set());
         }
-        clienteMap.get(item.cliente).impactos += item.impactos;
-
-        // Praças
-        if (!pracaMap.has(item.praca)) {
-            pracaMap.set(item.praca, { nome: item.praca, impactos: 0 });
-        }
-        pracaMap.get(item.praca).impactos += item.impactos;
-
-        // Exibidoras
-        if (!exibidoraMap.has(item.exibidora)) {
-            exibidoraMap.set(item.exibidora, { nome: item.exibidora, impactos: 0 });
-        }
-        exibidoraMap.get(item.exibidora).impactos += item.impactos;
+        clientesCidades.get(item.cliente).add(item.cidade);
     });
 
-    // Converter para arrays e ordenar
-    const clientes = Array.from(clienteMap.values())
-        .sort((a, b) => b.impactos - a.impactos)
-        .slice(0, 10);
+    const clientesMaisAtivos = Array.from(clientesCidades.entries())
+        .map(([nome, cidades]) => ({
+            nome,
+            cidadesAtivas: cidades.size,
+            impactos: activeData
+                .filter(item => item.cliente === nome)
+                .reduce((sum, item) => sum + item.impactostotal, 0)
+        }))
+        .sort((a, b) => b.cidadesAtivas - a.cidadesAtivas)
+        .slice(0, 3);
 
-    const pracas = Array.from(pracaMap.values())
-        .sort((a, b) => b.impactos - a.impactos)
-        .slice(0, 10);
-
-    const exibidoras = Array.from(exibidoraMap.values())
-        .sort((a, b) => b.impactos - a.impactos)
-        .slice(0, 10);
-
-    // Extrair estado da praça (assumindo formato "Cidade, UF")
-    const cidadesComUF = pracas.map(praca => {
-        const parts = praca.nome.split(',');
-        return {
-            ...praca,
-            cidade: parts[0].trim(),
-            uf: parts.length > 1 ? parts[1].trim().toUpperCase() : 'XX'
-        };
+    // === PRAÇAS MAIS ATIVAS ===
+    // Ranking das 3 cidades com mais clientes ativos
+    const pracasClientes = new Map();
+    activeData.forEach(item => {
+        if (!pracasClientes.has(item.cidade)) {
+            pracasClientes.set(item.cidade, new Set());
+        }
+        pracasClientes.get(item.cidade).add(item.cliente);
     });
+
+    const pracasMaisAtivas = Array.from(pracasClientes.entries())
+        .map(([nome, clientes]) => ({
+            nome,
+            clientesAtivos: clientes.size,
+            impactos: activeData
+                .filter(item => item.cidade === nome)
+                .reduce((sum, item) => sum + item.impactostotal, 0)
+        }))
+        .sort((a, b) => b.clientesAtivos - a.clientesAtivos)
+        .slice(0, 3);
+
+    // === EXIBIDORAS MAIS ATIVAS ===
+    // Ranking das 3 exibidoras com mais clientes ativos
+    const exibidorasClientes = new Map();
+    activeData.forEach(item => {
+        if (!exibidorasClientes.has(item.exibidora)) {
+            exibidorasClientes.set(item.exibidora, new Set());
+        }
+        exibidorasClientes.get(item.exibidora).add(item.cliente);
+    });
+
+    const exibidorasMaisAtivas = Array.from(exibidorasClientes.entries())
+        .map(([nome, clientes]) => ({
+            nome,
+            clientesAtivos: clientes.size,
+            impactos: activeData
+                .filter(item => item.exibidora === nome)
+                .reduce((sum, item) => sum + item.impactostotal, 0)
+        }))
+        .sort((a, b) => b.clientesAtivos - a.clientesAtivos)
+        .slice(0, 3);
+
+    // === RANKING DE IMPACTOS POR CIDADE ===
+    // Ranking das 3 cidades com mais impactos totais
+    const cidadesImpactos = new Map();
+    activeData.forEach(item => {
+        if (!cidadesImpactos.has(item.cidade)) {
+            cidadesImpactos.set(item.cidade, 0);
+        }
+        cidadesImpactos.set(item.cidade, cidadesImpactos.get(item.cidade) + item.impactostotal);
+    });
+
+    const rankingCidades = Array.from(cidadesImpactos.entries())
+        .map(([nome, impactos]) => ({
+            nome,
+            impactos
+        }))
+        .sort((a, b) => b.impactos - a.impactos)
+        .slice(0, 3);
 
     return {
-        totalImpactos: activeData.reduce((sum, item) => sum + item.impactos, 0),
-        totalClientes: clienteMap.size,
-        totalPracas: pracaMap.size,
-        totalExibidoras: exibidoraMap.size,
-        clientes,
-        pracas,
-        exibidoras,
-        cidades: cidadesComUF
+        totalImpactos,
+        totalClientes,
+        totalPracas,
+        totalExibidoras,
+        clientesMaisAtivos,
+        pracasMaisAtivas,
+        exibidorasMaisAtivas,
+        rankingCidades
     };
 }
 
@@ -120,8 +168,8 @@ function renderKPIs(metrics) {
     document.getElementById('totalExibidoras').textContent = metrics.totalExibidoras;
 }
 
-// Renderizar tabela genérica
-function renderTable(data, elementId, maxRows = 10) {
+// Renderizar tabela genérica com 3 linhas
+function renderTable(data, elementId) {
     const tbody = document.getElementById(elementId);
     tbody.innerHTML = '';
 
@@ -130,34 +178,17 @@ function renderTable(data, elementId, maxRows = 10) {
         return;
     }
 
-    data.slice(0, maxRows).forEach((item, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><strong>${index + 1}</strong></td>
-            <td>${item.nome || item.cidade}</td>
-            <td>${item.impactos.toLocaleString('pt-BR')}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-// Renderizar tabela de cidades (com UF)
-function renderCidadesTable(data) {
-    const tbody = document.getElementById('cidadesList');
-    tbody.innerHTML = '';
-
-    if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Sem dados</td></tr>';
-        return;
-    }
-
     data.forEach((item, index) => {
         const tr = document.createElement('tr');
+        const impactos = item.impactos || item.cidadesAtivas || item.clientesAtivos || 0;
+        const label = item.cidadesAtivas !== undefined ? `${item.cidadesAtivas} cidades` : 
+                      item.clientesAtivos !== undefined ? `${item.clientesAtivos} clientes` :
+                      impactos.toLocaleString('pt-BR');
+        
         tr.innerHTML = `
             <td><strong>${index + 1}</strong></td>
-            <td>${item.cidade}</td>
-            <td>${item.uf}</td>
-            <td>${item.impactos.toLocaleString('pt-BR')}</td>
+            <td>${item.nome}</td>
+            <td>${label}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -183,13 +214,13 @@ async function loadDashboard() {
 
     // Renderizar tudo
     renderKPIs(metrics);
-    renderTable(metrics.clientes, 'clientesList', 10);
-    renderTable(metrics.pracas, 'pracasList', 10);
-    renderTable(metrics.exibidoras, 'exibidorasList', 10);
-    renderCidadesTable(metrics.cidades);
+    renderTable(metrics.clientesMaisAtivos, 'clientesList');
+    renderTable(metrics.pracasMaisAtivas, 'pracasList');
+    renderTable(metrics.exibidorasMaisAtivas, 'exibidorasList');
+    renderTable(metrics.rankingCidades, 'cidadesList');
 
     updateTime();
-    console.log('Dashboard atualizado!');
+    console.log('Dashboard atualizado!', metrics);
 }
 
 // Atualizar a cada 30 segundos
