@@ -187,7 +187,7 @@ function processMetrics(data) {
     };
 }
 
-// Renderizar KPIs
+// Renderizar KPIs (4 métricas principais)
 function renderKPIs(metrics) {
     document.getElementById('totalImpactos').textContent = metrics.totalImpactos.toLocaleString('pt-BR');
     document.getElementById('totalClientes').textContent = metrics.totalClientes;
@@ -195,18 +195,19 @@ function renderKPIs(metrics) {
     document.getElementById('totalExibidoras').textContent = metrics.totalExibidoras;
 }
 
-// Renderizar tabela genérica com 3 linhas
-function renderTable(data, elementId) {
-    const tbody = document.getElementById(elementId);
-    tbody.innerHTML = '';
+// Renderizar itens de ranking em cards
+function renderRankingList(data, elementId) {
+    const container = document.getElementById(elementId);
+    container.innerHTML = '';
 
     if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Sem dados</td></tr>';
+        container.innerHTML = '<div class="loading">Sem dados</div>';
         return;
     }
 
     data.forEach((item, index) => {
-        const tr = document.createElement('tr');
+        const div = document.createElement('div');
+        div.className = 'ranking-item';
         
         // Determina qual valor mostrar baseado no que tem
         let valor = '';
@@ -218,12 +219,12 @@ function renderTable(data, elementId) {
             valor = item.impactos.toLocaleString('pt-BR');
         }
         
-        tr.innerHTML = `
-            <td><strong>${index + 1}</strong></td>
-            <td>${item.nome}</td>
-            <td>${valor}</td>
+        div.innerHTML = `
+            <span class="ranking-item-posicao">#${index + 1}</span>
+            <span class="ranking-item-nome">${item.nome}</span>
+            <span class="ranking-item-valor">${valor}</span>
         `;
-        tbody.appendChild(tr);
+        container.appendChild(div);
     });
 }
 
@@ -247,12 +248,14 @@ async function loadDashboard() {
 
     console.log('Métricas calculadas:', metrics);
 
-    // Renderizar tudo
+    // Renderizar KPIs (4 métricas principais)
     renderKPIs(metrics);
-    renderTable(metrics.clientesMaisAtivos, 'clientesList');
-    renderTable(metrics.pracasMaisAtivas, 'pracasList');
-    renderTable(metrics.exibidorasMaisAtivas, 'exibidorasList');
-    renderTable(metrics.rankingCidades, 'cidadesList');
+    
+    // Renderizar os 4 rankings em cards
+    renderRankingList(metrics.clientesMaisAtivos, 'ranking-clientes');
+    renderRankingList(metrics.pracasMaisAtivas, 'ranking-pracas');
+    renderRankingList(metrics.exibidorasMaisAtivas, 'ranking-exibidoras');
+    renderRankingList(metrics.rankingCidades, 'ranking-cidades');
     
     // Carregar mapa com dados
     loadMap(data);

@@ -11,10 +11,10 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Coluna Esquerda (40%) - Métricas e Gráficos -->
+        <!-- Coluna Esquerda (40%) - Métricas -->
         <div class="left-column">
-            <!-- Métricas (3 blocos) -->
-            <div class="metricas-section">
+            <!-- Grid de Métricas (4 principais) -->
+            <div class="metricas-grid">
                 <div class="metrica-card">
                     <div class="metrica-valor" id="totalImpactos">--</div>
                     <div class="metrica-label">Total de Impactos</div>
@@ -27,27 +27,45 @@
                     <div class="metrica-valor" id="totalPracas">--</div>
                     <div class="metrica-label">Praças Ativas</div>
                 </div>
-            </div>
-
-            <!-- Gráfico: Top Clientes -->
-            <div class="grafico-section">
-                <h3>🏆 Clientes Mais Ativos</h3>
-                <div id="grafico-clientes" class="grafico-container">
-                    <div class="loading">Carregando...</div>
+                <div class="metrica-card">
+                    <div class="metrica-valor" id="totalExibidoras">--</div>
+                    <div class="metrica-label">Exibidoras Ativas</div>
                 </div>
             </div>
 
-            <!-- Gráfico: Top Cidades -->
-            <div class="grafico-section">
-                <h3>� Top Cidades por Impactos</h3>
-                <div id="grafico-cidades" class="grafico-cidades-grade">
-                    <div class="loading">Carregando...</div>
+            <!-- Grid de Rankings (4 rankings) -->
+            <div class="rankings-grid">
+                <!-- Ranking 1: Clientes Mais Ativos -->
+                <div class="ranking-card">
+                    <div class="ranking-titulo">🏆 Clientes Mais Ativos</div>
+                    <div id="ranking-clientes" class="ranking-lista">
+                        <div class="loading">Carregando...</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Footer -->
-            <div class="footer-info">
-                ⏱️ Dashboard atualizado automaticamente
+                <!-- Ranking 2: Praças Mais Ativas -->
+                <div class="ranking-card">
+                    <div class="ranking-titulo">📍 Praças Mais Ativas</div>
+                    <div id="ranking-pracas" class="ranking-lista">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+
+                <!-- Ranking 3: Exibidoras Mais Ativas -->
+                <div class="ranking-card">
+                    <div class="ranking-titulo">📺 Exibidoras Mais Ativas</div>
+                    <div id="ranking-exibidoras" class="ranking-lista">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+
+                <!-- Ranking 4: Top Cidades por Impactos -->
+                <div class="ranking-card">
+                    <div class="ranking-titulo">⭐ Top Cidades (Impactos)</div>
+                    <div id="ranking-cidades" class="ranking-lista">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
             </div>
         </div>
 
