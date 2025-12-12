@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard OOH - Outdoor</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 </head>
 <body>
     <main class="container">
@@ -79,6 +81,12 @@
             </table>
         </section>
 
+        <!-- Mapa Brasil -->
+        <section class="ranking">
+            <h2>🗺️ Mapa de Praças Ativas</h2>
+            <div id="mapContainer"></div>
+        </section>
+
         <!-- Ranking por Cidade -->
         <section class="ranking">
             <h2>🌍 Ranking de Impactos por Cidade</h2>
@@ -97,6 +105,8 @@
         </section>
     </main>
 
-    <script src="script.js?v=20251212"></script>
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="script.js?v=20251212a"></script>
 </body>
 </html>
