@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard OOH - Outdoor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="dashboard">
+        <!-- COLUNA ESQUERDA - Métricas -->
+        <div class="metrics-column">
+            <!-- KPIs Principais -->
+            <section class="kpis">
+                <div class="kpi-card">
+                    <div class="kpi-title">Total de Impactos</div>
+                    <div class="kpi-value" id="totalImpactos">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Clientes Ativos</div>
+                    <div class="kpi-value" id="totalClientes">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Praças Ativas</div>
+                    <div class="kpi-value" id="totalPracas">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Exibidoras Ativas</div>
+                    <div class="kpi-value" id="totalExibidoras">0</div>
+                </div>
+            </section>
+
+            <!-- Rankings em Grid -->
+            <section class="rankings-grid">
+                <!-- Ranking Clientes -->
+                <div class="ranking">
+                    <h3>🏆 Top Clientes</h3>
+                    <table id="clientesTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th>Campanhas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientesList">
+                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ranking Praças -->
+                <div class="ranking">
+                    <h3>🎯 Top Praças</h3>
+                    <table id="pracasTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Praça</th>
+                                <th>Campanhas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pracasList">
+                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ranking Exibidoras -->
+                <div class="ranking">
+                    <h3>📺 Top Exibidoras</h3>
+                    <table id="exibidorasTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Exibidora</th>
+                                <th>Campanhas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exibidorasList">
+                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ranking por Cidade -->
+                <div class="ranking">
+                    <h3>🌍 Top Cidades</h3>
+                    <table id="cidadesTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cidade</th>
+                                <th>Impactos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cidadesList">
+                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- COLUNA DIREITA - Mapa -->
+        <div class="map-wrapper">
+            <div class="map-container">
+                <svg id="mapasvg" viewBox="-75 -33 150 90" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.umd.js"></script>
+    <script src="script.js?v=20251217"></script>
+</body>
+</html>
+</body>
+</html>     </table>
+        </section>
+    </main>
+
+    <script src="script.js?v=20251212"></script>
+</body>
+</html>
