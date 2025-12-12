@@ -1,0 +1,129 @@
+<svg viewBox="-75 -33 150 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .estado { fill: rgba(90, 95, 255, 0.15); stroke: #5a5fff; stroke-width: 0.8; stroke-linejoin: round; }
+      .estado:hover { fill: rgba(90, 95, 255, 0.35); cursor: pointer; }
+      .rotulo { font-size: 6px; fill: rgba(255, 255, 255, 0.6); pointer-events: none; text-anchor: middle; }
+    </style>
+  </defs>
+  
+  <!-- Oceano -->
+  <rect width="100%" height="100%" fill="#001B4D"/>
+  
+  <!-- Mapa simplificado do Brasil com estados -->
+  <g id="mapa-brasil" transform="translate(0, 0)">
+    
+    <!-- NORTE -->
+    <!-- Amapá -->
+    <path class="estado" d="M -54 10 L -51 10 L -51 12 L -54 12 Z"/>
+    <text class="rotulo" x="-52.5" y="11.5">AP</text>
+    
+    <!-- Roraima -->
+    <path class="estado" d="M -63 7 L -60 7 L -60 12 L -63 12 Z"/>
+    <text class="rotulo" x="-61.5" y="10">RR</text>
+    
+    <!-- Amazonas -->
+    <path class="estado" d="M -75 0 L -60 0 L -60 8 L -75 8 Z"/>
+    <text class="rotulo" x="-67.5" y="4">AM</text>
+    
+    <!-- Pará -->
+    <path class="estado" d="M -60 -2 L -48 -2 L -48 8 L -60 8 Z"/>
+    <text class="rotulo" x="-54" y="3">PA</text>
+    
+    <!-- Acre -->
+    <path class="estado" d="M -73 -8 L -67 -8 L -67 0 L -73 0 Z"/>
+    <text class="rotulo" x="-70" y="-4">AC</text>
+    
+    <!-- Rondônia -->
+    <path class="estado" d="M -67 -8 L -61 -8 L -61 -2 L -67 -2 Z"/>
+    <text class="rotulo" x="-64" y="-5">RO</text>
+    
+    <!-- Mato Grosso -->
+    <path class="estado" d="M -61 -8 L -50 -8 L -50 2 L -61 2 Z"/>
+    <text class="rotulo" x="-55.5" y="-3">MT</text>
+    
+    <!-- NORDESTE -->
+    <!-- Maranhão -->
+    <path class="estado" d="M -48 0 L -42 0 L -42 8 L -48 8 Z"/>
+    <text class="rotulo" x="-45" y="4">MA</text>
+    
+    <!-- Piauí -->
+    <path class="estado" d="M -45 -6 L -40 -6 L -40 0 L -45 0 Z"/>
+    <text class="rotulo" x="-42.5" y="-3">PI</text>
+    
+    <!-- Ceará -->
+    <path class="estado" d="M -42 -6 L -37 -6 L -37 -2 L -42 -2 Z"/>
+    <text class="rotulo" x="-39.5" y="-4">CE</text>
+    
+    <!-- Rio Grande do Norte -->
+    <path class="estado" d="M -37 -5 L -35 -5 L -35 -3 L -37 -3 Z"/>
+    <text class="rotulo" x="-36" y="-4">RN</text>
+    
+    <!-- Paraíba -->
+    <path class="estado" d="M -37 -4 L -35 -4 L -35 -2 L -37 -2 Z"/>
+    <text class="rotulo" x="-36" y="-3">PB</text>
+    
+    <!-- Pernambuco -->
+    <path class="estado" d="M -37 -2 L -34 -2 L -34 0 L -37 0 Z"/>
+    <text class="rotulo" x="-35.5" y="-1">PE</text>
+    
+    <!-- Alagoas -->
+    <path class="estado" d="M -36.5 0 L -35.5 0 L -35.5 1.5 L -36.5 1.5 Z"/>
+    <text class="rotulo" x="-36" y="0.8">AL</text>
+    
+    <!-- Sergipe -->
+    <path class="estado" d="M -35.5 0.5 L -34.5 0.5 L -34.5 2 L -35.5 2 Z"/>
+    <text class="rotulo" x="-35" y="1.3">SE</text>
+    
+    <!-- Bahia -->
+    <path class="estado" d="M -48 -14 L -38 -14 L -38 0 L -48 0 Z"/>
+    <text class="rotulo" x="-43" y="-7">BA</text>
+    
+    <!-- CENTRO-OESTE -->
+    <!-- Tocantins -->
+    <path class="estado" d="M -64 -2 L -48 -2 L -48 8 L -64 8 Z"/>
+    <text class="rotulo" x="-56" y="3">TO</text>
+    
+    <!-- Goiás -->
+    <path class="estado" d="M -54 -14 L -46 -14 L -46 -8 L -54 -8 Z"/>
+    <text class="rotulo" x="-50" y="-11">GO</text>
+    
+    <!-- Distrito Federal -->
+    <path class="estado" d="M -49 -13 L -48 -13 L -48 -12 L -49 -12 Z"/>
+    <text class="rotulo" x="-48.5" y="-12.4">DF</text>
+    
+    <!-- Mato Grosso do Sul -->
+    <path class="estado" d="M -58 -20 L -52 -20 L -52 -8 L -58 -8 Z"/>
+    <text class="rotulo" x="-55" y="-14">MS</text>
+    
+    <!-- SUDESTE -->
+    <!-- Minas Gerais -->
+    <path class="estado" d="M -48 -22 L -40 -22 L -40 -12 L -48 -12 Z"/>
+    <text class="rotulo" x="-44" y="-17">MG</text>
+    
+    <!-- São Paulo -->
+    <path class="estado" d="M -52 -26 L -44 -26 L -44 -21 L -52 -21 Z"/>
+    <text class="rotulo" x="-48" y="-23">SP</text>
+    
+    <!-- Rio de Janeiro -->
+    <path class="estado" d="M -44 -24 L -41 -24 L -41 -21 L -44 -21 Z"/>
+    <text class="rotulo" x="-42.5" y="-22.5">RJ</text>
+    
+    <!-- Espírito Santo -->
+    <path class="estado" d="M -41 -22 L -39 -22 L -39 -19 L -41 -19 Z"/>
+    <text class="rotulo" x="-40" y="-20.5">ES</text>
+    
+    <!-- SUL -->
+    <!-- Paraná -->
+    <path class="estado" d="M -56 -28 L -48 -28 L -48 -22 L -56 -22 Z"/>
+    <text class="rotulo" x="-52" y="-25">PR</text>
+    
+    <!-- Santa Catarina -->
+    <path class="estado" d="M -56 -30 L -48 -30 L -48 -28 L -56 -28 Z"/>
+    <text class="rotulo" x="-52" y="-29">SC</text>
+    
+    <!-- Rio Grande do Sul -->
+    <path class="estado" d="M -56 -32 L -49 -32 L -49 -30 L -56 -30 Z"/>
+    <text class="rotulo" x="-52.5" y="-31">RS</text>
+  </g>
+</svg>
