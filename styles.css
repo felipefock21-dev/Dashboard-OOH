@@ -93,8 +93,8 @@ body {
 .mapa-section {
     flex: 1;
     background: transparent;
-    border-radius: clamp(10px, 1.5vw, 20px);
-    padding: clamp(20px, 3vw, 30px);
+    border-radius: 0;
+    padding: clamp(15px, 2vw, 25px);
     backdrop-filter: none;
     border: none;
     display: flex;
@@ -116,7 +116,7 @@ body {
     gap: 0;
     min-height: 0;
     width: 100%;
-    padding: clamp(15px, 2.5vw, 25px);
+    padding: 0;
 }
 
 #mapa-container {
