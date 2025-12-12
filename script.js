@@ -86,28 +86,28 @@ function processMetrics(data) {
     const totalExibidoras = exibidorasUnicas.size;
 
     // === CLIENTES MAIS ATIVOS ===
-    // Ranking dos 3 clientes com mais impactos totais
-    const clientesImpactos = new Map();
+    // Ranking dos 3 clientes com mais CIDADES DIFERENTES ativas
+    const clientesCidades = new Map();
     activeData.forEach(item => {
-        if (!clientesImpactos.has(item.cliente)) {
-            clientesImpactos.set(item.cliente, { impactos: 0, cidades: new Set() });
+        if (!clientesCidades.has(item.cliente)) {
+            clientesCidades.set(item.cliente, new Set());
         }
-        const cliente = clientesImpactos.get(item.cliente);
-        cliente.impactos += item.impactostotal;
-        cliente.cidades.add(item.cidade);
+        clientesCidades.get(item.cliente).add(item.cidade);
     });
 
-    const clientesMaisAtivos = Array.from(clientesImpactos.entries())
-        .map(([nome, dados]) => ({
+    const clientesMaisAtivos = Array.from(clientesCidades.entries())
+        .map(([nome, cidades]) => ({
             nome,
-            impactos: dados.impactos,
-            cidadesAtivas: dados.cidades.size
+            cidadesAtivas: cidades.size,
+            impactos: activeData
+                .filter(item => item.cliente === nome)
+                .reduce((sum, item) => sum + item.impactostotal, 0)
         }))
-        .sort((a, b) => b.impactos - a.impactos)
+        .sort((a, b) => b.cidadesAtivas - a.cidadesAtivas)
         .slice(0, 3);
 
     // === PRAÇAS MAIS ATIVAS ===
-    // Ranking das 3 cidades com mais clientes ativos
+    // Ranking das 3 cidades com mais CLIENTES DIFERENTES ativos
     const pracasClientes = new Map();
     activeData.forEach(item => {
         if (!pracasClientes.has(item.cidade)) {
@@ -128,24 +128,24 @@ function processMetrics(data) {
         .slice(0, 3);
 
     // === EXIBIDORAS MAIS ATIVAS ===
-    // Ranking das 3 exibidoras com mais clientes ativos
-    const exibidorasClientes = new Map();
+    // Ranking das 3 exibidoras com mais CIDADES DIFERENTES ativas
+    const exibidorasCidades = new Map();
     activeData.forEach(item => {
-        if (!exibidorasClientes.has(item.exibidora)) {
-            exibidorasClientes.set(item.exibidora, new Set());
+        if (!exibidorasCidades.has(item.exibidora)) {
+            exibidorasCidades.set(item.exibidora, new Set());
         }
-        exibidorasClientes.get(item.exibidora).add(item.cliente);
+        exibidorasCidades.get(item.exibidora).add(item.cidade);
     });
 
-    const exibidorasMaisAtivas = Array.from(exibidorasClientes.entries())
-        .map(([nome, clientes]) => ({
+    const exibidorasMaisAtivas = Array.from(exibidorasCidades.entries())
+        .map(([nome, cidades]) => ({
             nome,
-            clientesAtivos: clientes.size,
+            cidadesAtivas: cidades.size,
             impactos: activeData
                 .filter(item => item.exibidora === nome)
                 .reduce((sum, item) => sum + item.impactostotal, 0)
         }))
-        .sort((a, b) => b.clientesAtivos - a.clientesAtivos)
+        .sort((a, b) => b.cidadesAtivas - a.cidadesAtivas)
         .slice(0, 3);
 
     // === RANKING DE IMPACTOS POR CIDADE ===
@@ -198,9 +198,16 @@ function renderTable(data, elementId) {
 
     data.forEach((item, index) => {
         const tr = document.createElement('tr');
-        // Prioriza mostrar impactos, se não tiver, mostra a contagem de relação (cidades/clientes)
-        const valor = item.impactos !== undefined ? item.impactos.toLocaleString('pt-BR') : 
-                      item.cidadesAtivas || item.clientesAtivos || '0';
+        
+        // Determina qual valor mostrar baseado no que tem
+        let valor = '';
+        if (item.cidadesAtivas !== undefined) {
+            valor = `${item.cidadesAtivas} cidades`;
+        } else if (item.clientesAtivos !== undefined) {
+            valor = `${item.clientesAtivos} clientes`;
+        } else {
+            valor = item.impactos.toLocaleString('pt-BR');
+        }
         
         tr.innerHTML = `
             <td><strong>${index + 1}</strong></td>
