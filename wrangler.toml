@@ -1,0 +1,19 @@
+{
+  "build": {
+    "command": "npm run build",
+    "cwd": "/",
+    "watch_paths": ["/src/**/*"],
+    "success_status": 0
+  },
+  "env": {
+    "NODE_VERSION": "18",
+    "NODE_ENV": "production"
+  },
+  "routes": [
+    {
+      "pattern": "^/api/.*$",
+      "methods": ["GET", "POST"],
+      "zone_name": "example.com"
+    }
+  ]
+}
