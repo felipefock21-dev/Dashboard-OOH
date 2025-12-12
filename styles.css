@@ -99,32 +99,33 @@ body {
 
 .kpi-card {
     background: rgba(90, 95, 255, 0.08);
-    border: 2px solid rgba(90, 95, 255, 0.3);
-    border-radius: 8px;
-    padding: 25px;
+    border: 2px solid rgba(90, 95, 255, 0.4);
+    border-radius: 12px;
+    padding: 40px 30px;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 140px;
 }
 
 .kpi-card:hover {
-    border-color: rgba(90, 95, 255, 0.6);
+    border-color: rgba(90, 95, 255, 0.7);
     background: rgba(90, 95, 255, 0.12);
     transform: translateY(-3px);
 }
 
 .kpi-title {
-    font-size: 0.9em;
+    font-size: 0.85em;
     color: #94a3b8;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
+    letter-spacing: 1.2px;
+    margin-bottom: 15px;
     font-weight: 600;
 }
 
 .kpi-value {
-    font-size: 2.2em;
+    font-size: 2.8em;
     font-weight: bold;
     color: #fff;
 }
@@ -140,9 +141,9 @@ body {
 
 .ranking {
     background: rgba(90, 95, 255, 0.08);
-    border: 2px solid rgba(90, 95, 255, 0.3);
+    border: 2px solid rgba(90, 95, 255, 0.4);
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -151,13 +152,13 @@ body {
 }
 
 .ranking:hover {
-    border-color: rgba(90, 95, 255, 0.6);
+    border-color: rgba(90, 95, 255, 0.7);
     background: rgba(90, 95, 255, 0.12);
 }
 
 .ranking h3 {
     font-size: 1.1em;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
     color: #fff;
     font-weight: 600;
 }
@@ -174,19 +175,19 @@ body {
 }
 
 .ranking thead {
-    background: rgba(90, 95, 255, 0.15);
+    background: rgba(90, 95, 255, 0.2);
     border-bottom: 1px solid rgba(90, 95, 255, 0.3);
     flex-shrink: 0;
 }
 
 .ranking th {
-    padding: 12px;
+    padding: 14px 12px;
     text-align: left;
     font-weight: 600;
     color: #94a3b8;
     text-transform: uppercase;
     font-size: 0.8em;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .ranking tbody {
@@ -195,7 +196,7 @@ body {
 }
 
 .ranking td {
-    padding: 12px;
+    padding: 14px 12px;
     border-bottom: 1px solid rgba(90, 95, 255, 0.1);
     color: #e2e8f0;
 }
