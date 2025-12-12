@@ -98,40 +98,6 @@ table td {
 
 table tbody tr:hover {
     background: rgba(90, 95, 255, 0.15);
-}
-
-/* Mapa */
-#mapContainer {
-    width: 100%;
-    height: 500px;
-    border-radius: 8px;
-    border: 2px solid rgba(90, 95, 255, 0.3);
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.leaflet-container {
-    background: #0d1b3d;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-}
-
-.leaflet-popup-content {
-    color: #001B4D;
-    font-weight: 500;
-}
-
-.map-marker {
-    background: linear-gradient(135deg, #5a5fff, #0ea5e9);
-    color: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    box-shadow: 0 4px 12px rgba(90, 95, 255, 0.4);
-}
     transition: background 0.2s ease;
 }
 
@@ -178,6 +144,25 @@ table tbody tr:last-child td {
     }
 }
 
+/* Mapa */
+#map {
+    width: 100%;
+    height: 500px;
+    border-radius: 8px;
+    border: 2px solid rgba(90, 95, 255, 0.3);
+    margin-bottom: 20px;
+}
+
+.leaflet-container {
+    background: #0d1726 !important;
+}
+
+@media (max-width: 768px) {
+    #map {
+        height: 400px;
+    }
+}
+
 @media (max-width: 480px) {
     .kpis {
         grid-template-columns: 1fr;
@@ -185,5 +170,9 @@ table tbody tr:last-child td {
 
     .header h1 {
         font-size: 1.5em;
+    }
+    
+    #map {
+        height: 300px;
     }
 }

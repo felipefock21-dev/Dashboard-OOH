@@ -227,125 +227,6 @@ function renderTable(data, elementId) {
     });
 }
 
-// Coordenadas das principais cidades do Brasil
-const CITY_COORDINATES = {
-    'são paulo': [-23.5505, -46.6333],
-    'rio de janeiro': [-22.9068, -43.1729],
-    'belo horizonte': [-19.9191, -43.9386],
-    'brasília': [-15.8267, -47.8822],
-    'salvador': [-12.9714, -38.5014],
-    'fortaleza': [-3.7275, -38.5275],
-    'recife': [-8.0476, -34.8770],
-    'manaus': [-3.1190, -60.0217],
-    'belém': [-1.4554, -48.5038],
-    'curitiba': [-25.4284, -49.2733],
-    'porto alegre': [-30.0331, -51.2304],
-    'goiânia': [-15.8904, -48.9876],
-    'são luis': [-2.5298, -44.3045],
-    'natal': [-5.7942, -35.2110],
-    'teresina': [-5.0892, -42.8019],
-    'joão pessoa': [-7.1150, -34.8450],
-    'maceió': [-9.6498, -35.7348],
-    'aracaju': [-10.9111, -37.0705],
-    'vitória': [-20.3155, -40.3128],
-    'campo grande': [-20.4697, -54.6201],
-    'cuiabá': [-15.5939, -56.0912],
-    'porto velho': [-8.7619, -63.9039],
-    'boa vista': [2.8235, -60.6743],
-    'macapá': [0.3889, -51.4925],
-    'rio branco': [-9.9754, -67.8077],
-    'palmas': [-10.2090, -48.3239],
-    'campinas': [-22.8952, -47.0467],
-    'santos': [-23.9608, -46.3338],
-    'sorocaba': [-23.5006, -47.4589],
-    'ribeirão preto': [-21.1758, -47.8102],
-    'guarulhos': [-23.4628, -46.4829],
-    'osasco': [-23.5340, -46.7922],
-    'abc paulista': [-23.6981, -46.5644],
-    'santo andré': [-23.6681, -46.5348],
-    'são bernardo do campo': [-23.6944, -46.5644],
-    'diadema': [-23.6885, -46.6131],
-    'jundiaí': [-23.1905, -46.8840],
-    'piracicaba': [-22.7298, -47.6405],
-    'limeira': [-22.5643, -47.4128],
-    'araçatuba': [-21.2010, -50.4368],
-    'presidente prudente': [-22.1230, -51.4605],
-    'marília': [-22.2141, -49.9589],
-    'londrina': [-23.3045, -51.1696],
-    'maringá': [-23.4250, -51.4693],
-    'ponta grossa': [-25.0955, -50.1646],
-    'cascavel': [-24.9542, -53.4551],
-    'foz do iguaçu': [-25.5051, -54.5753],
-    'blumenau': [-26.8791, -49.0629],
-    'joinville': [-26.3045, -48.8487],
-    'brasília-df': [-15.8267, -47.8822],
-    'df': [-15.8267, -47.8822],
-};
-
-let mapInstance = null;
-let markersLayer = null;
-
-// Inicializar mapa
-function initMap() {
-    if (mapInstance) return;
-
-    mapInstance = L.map('mapContainer').setView([-14.2350, -51.9253], 4);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19,
-    }).addTo(mapInstance);
-
-    markersLayer = L.featureGroup().addTo(mapInstance);
-}
-
-// Renderizar mapa com praças ativas
-function renderMap(data) {
-    if (!mapInstance) initMap();
-
-    markersLayer.clearLayers();
-
-    // Agrupar dados por cidade e contar impactos
-    const cityData = {};
-    
-    data.forEach(item => {
-        const cidade = item.cidade.toLowerCase().trim();
-        if (!cityData[cidade]) {
-            cityData[cidade] = { impactos: 0, clientes: new Set(), exibidoras: new Set() };
-        }
-        cityData[cidade].impactos += item.impactos;
-        if (item.cliente) cityData[cidade].clientes.add(item.cliente);
-        if (item.exibidora) cityData[cidade].exibidoras.add(item.exibidora);
-    });
-
-    // Plotar markers no mapa
-    Object.entries(cityData).forEach(([cidade, dados]) => {
-        const coords = CITY_COORDINATES[cidade];
-        if (!coords) return;
-
-        const marker = L.circleMarker(coords, {
-            radius: Math.min(20, 8 + Math.log(dados.impactos) * 2),
-            fillColor: '#5a5fff',
-            color: '#0ea5e9',
-            weight: 2,
-            opacity: 0.8,
-            fillOpacity: 0.6,
-        });
-
-        const popupText = `
-            <div style="font-weight: bold; margin-bottom: 8px;">${cidade.toUpperCase()}</div>
-            <div>Impactos: <strong>${dados.impactos.toLocaleString('pt-BR')}</strong></div>
-            <div>Clientes: <strong>${dados.clientes.size}</strong></div>
-            <div>Exibidoras: <strong>${dados.exibidoras.size}</strong></div>
-        `;
-
-        marker.bindPopup(popupText);
-        marker.addTo(markersLayer);
-    });
-
-    mapInstance.fitBounds(markersLayer.getBounds(), { padding: [50, 50] });
-}
-
 // Atualizar hora de última atualização
 function updateTime() {
     // Função removida
@@ -373,20 +254,49 @@ async function loadDashboard() {
     renderTable(metrics.exibidorasMaisAtivas, 'exibidorasList');
     renderTable(metrics.rankingCidades, 'cidadesList');
     
-    // Renderizar mapa com dados ativos
-    const activeData = data.filter(item => item.status.toUpperCase() === 'ATIVA');
-    renderMap(activeData);
-    
-    // Carregar e renderizar KML do Brasil (polígonos dos estados)
-    if (typeof loadKMLFile === 'function') {
-        const kmlFeatures = await loadKMLFile();
-        if (kmlFeatures && mapInstance) {
-            addKMLToMap(mapInstance, kmlFeatures, activeData);
-        }
-    }
+    // Carregar mapa com dados
+    loadMap(data);
 
     updateTime();
     console.log('Dashboard atualizado!', metrics);
+}
+
+// Inicializar mapa do Brasil
+let map = null;
+
+function loadMap(data) {
+    // Apenas inicializa uma vez
+    if (!map) {
+        map = L.map('map').setView([-15.8, -48.0], 4);
+        
+        // Adicionar tile layer (OpenStreetMap dark)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+        
+        // Carregar e exibir KML do Brasil
+        fetch('BRASIL.kml')
+            .then(response => response.text())
+            .then(kmlText => {
+                const parser = new DOMParser();
+                const kmlDom = parser.parseFromString(kmlText, 'text/xml');
+                const geoJson = toGeoJSON.kml(kmlDom);
+                
+                L.geoJSON(geoJson, {
+                    style: {
+                        color: '#5a5fff',
+                        weight: 2,
+                        opacity: 0.7,
+                        fillColor: '#5a5fff',
+                        fillOpacity: 0.1
+                    }
+                }).addTo(map);
+                
+                console.log('Mapa do Brasil carregado com sucesso');
+            })
+            .catch(error => console.error('Erro ao carregar KML:', error));
+    }
 }
 
 // Atualizar a cada 30 segundos

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard OOH - Outdoor</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 </head>
 <body>
@@ -81,10 +80,10 @@
             </table>
         </section>
 
-        <!-- Mapa Brasil -->
+        <!-- Mapa Interativo -->
         <section class="ranking">
-            <h2>🗺️ Mapa de Praças Ativas</h2>
-            <div id="mapContainer"></div>
+            <h2>🗺️ Mapa do Brasil - Distribuição de Campanhas</h2>
+            <div id="map"></div>
         </section>
 
         <!-- Ranking por Cidade -->
@@ -99,15 +98,14 @@
                     </tr>
                 </thead>
                 <tbody id="cidadesList">
-                    <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
-                </tbody>
-            </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.umd.js"></script>
+    <script src="script.js?v=20251213"></script>
+</body>
+</html>     </table>
         </section>
     </main>
 
-    <!-- Leaflet JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-    <script src="kml-handler.js?v=20251212"></script>
-    <script src="script.js?v=20251212a"></script>
+    <script src="script.js?v=20251212"></script>
 </body>
 </html>
