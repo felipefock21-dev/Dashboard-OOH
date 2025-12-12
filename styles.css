@@ -50,24 +50,12 @@ body {
     align-items: stretch;
 }
 
-/* Coluna Esquerda (60%) */
+/* Coluna Esquerda (40%) */
 .left-column {
-    flex: 0 0 60% !important;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(15px, 2vh, 30px);
-    min-height: 0;
-    min-width: 0;
-    overflow: hidden;
-    width: 60% !important;
-}
-
-/* Coluna Direita (40%) */
-.right-column {
     flex: 0 0 40% !important;
     display: flex;
     flex-direction: column;
-    gap: clamp(12px, 1.5vh, 20px);
+    gap: clamp(15px, 2vh, 30px);
     min-height: 0;
     min-width: 0;
     overflow-y: auto;
@@ -75,17 +63,29 @@ body {
     padding-right: 10px;
 }
 
-.right-column::-webkit-scrollbar {
+.left-column::-webkit-scrollbar {
     width: 6px;
 }
 
-.right-column::-webkit-scrollbar-track {
+.left-column::-webkit-scrollbar-track {
     background: rgba(90, 95, 255, 0.08);
 }
 
-.right-column::-webkit-scrollbar-thumb {
+.left-column::-webkit-scrollbar-thumb {
     background: rgba(90, 95, 255, 0.3);
     border-radius: 3px;
+}
+
+/* Coluna Direita (60%) */
+.right-column {
+    flex: 0 0 60% !important;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.5vh, 20px);
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+    width: 60% !important;
 }
 
 /* Seção do Mapa */

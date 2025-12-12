@@ -11,32 +11,8 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Coluna Esquerda (60%) - Mapa -->
+        <!-- Coluna Esquerda (40%) - Métricas e Gráficos -->
         <div class="left-column">
-            <!-- Seção do Mapa (100% altura) -->
-            <div class="mapa-section">
-                <h2>🗺️ Distribuição de Campanhas</h2>
-                <div class="mapa-content-wrapper">
-                    <!-- Mapa (75% da largura) -->
-                    <div id="mapa-container">
-                        <svg id="mapasvg" viewBox="-75 -33 150 90" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"></svg>
-                        <!-- Container de animações -->
-                        <div id="animacoes-layer"></div>
-                    </div>
-
-                    <!-- Lista de Informações Lateral (25% da largura) -->
-                    <div class="insercoes-lateral">
-                        <h4>Últimas Inserções</h4>
-                        <div id="lista-lateral" class="lista-lateral">
-                            <div class="loading">Carregando...</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Coluna Direita (40%) - Métricas e Gráficos -->
-        <div class="right-column">
             <!-- Métricas (3 blocos) -->
             <div class="metricas-section">
                 <div class="metrica-card">
@@ -72,6 +48,30 @@
             <!-- Footer -->
             <div class="footer-info">
                 ⏱️ Dashboard atualizado automaticamente
+            </div>
+        </div>
+
+        <!-- Coluna Direita (60%) - Mapa -->
+        <div class="right-column">
+            <!-- Seção do Mapa (100% altura) -->
+            <div class="mapa-section">
+                <h2>🗺️ Distribuição de Campanhas</h2>
+                <div class="mapa-content-wrapper">
+                    <!-- Mapa (75% da largura) -->
+                    <div id="mapa-container">
+                        <svg id="mapasvg" viewBox="-75 -33 150 90" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"></svg>
+                        <!-- Container de animações -->
+                        <div id="animacoes-layer"></div>
+                    </div>
+
+                    <!-- Lista de Informações Lateral (25% da largura) -->
+                    <div class="insercoes-lateral">
+                        <h4>Últimas Inserções</h4>
+                        <div id="lista-lateral" class="lista-lateral">
+                            <div class="loading">Carregando...</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
