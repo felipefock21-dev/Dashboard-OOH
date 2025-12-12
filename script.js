@@ -270,134 +270,149 @@ function loadMap(data) {
     mapLoaded = true;
     
     const svg = document.getElementById('mapasvg');
-    svg.setAttribute('viewBox', '0 0 1000 1000');
     
-    // Limpar SVG anterior
-    svg.innerHTML = '';
-    
-    // Fundo
-    const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    bg.setAttribute('width', '1000');
-    bg.setAttribute('height', '1000');
-    bg.setAttribute('fill', '#0d1726');
-    svg.appendChild(bg);
-    
-    // Carregar KML
+    // Usar SVG do Brasil pré-definido com qualidade
+    fetch('https://raw.githubusercontent.com/brunocs/brasil-geojson/master/brasil.json')
+        .then(response => response.json())
+        .then(geojson => {
+            renderBrazilMap(svg, geojson);
+            console.log('Mapa do Brasil carregado com sucesso');
+        })
+        .catch(error => {
+            console.error('Erro ao carregar mapa:', error);
+            // Fallback: carregar do KML local
+            loadMapFromKML(svg);
+        });
+}
+
+function loadMapFromKML(svg) {
     fetch('BRASIL.kml')
         .then(response => response.text())
         .then(kmlText => {
-            try {
-                const parser = new DOMParser();
-                const kmlDom = parser.parseFromString(kmlText, 'text/xml');
+            const parser = new DOMParser();
+            const kmlDom = parser.parseFromString(kmlText, 'text/xml');
+            
+            if (kmlDom.getElementsByTagName('parsererror').length > 0) {
+                console.error('Erro ao parsear KML');
+                return;
+            }
+            
+            const placemarks = kmlDom.getElementsByTagName('Placemark');
+            console.log('Placemarks encontrados:', placemarks.length);
+            
+            let hasGeometry = false;
+            const features = [];
+            
+            for (let placemark of placemarks) {
+                const polygon = placemark.getElementsByTagName('Polygon')[0];
                 
-                if (kmlDom.getElementsByTagName('parsererror').length > 0) {
-                    console.error('Erro ao parsear KML');
-                    return;
-                }
-                
-                // Extrair coordenadas do KML
-                const placemarks = kmlDom.getElementsByTagName('Placemark');
-                console.log('Placemarks encontrados:', placemarks.length);
-                
-                let hasGeometry = false;
-                
-                for (let placemark of placemarks) {
-                    const polygon = placemark.getElementsByTagName('Polygon')[0];
-                    const linestring = placemark.getElementsByTagName('LineString')[0];
-                    
-                    if (polygon) {
-                        hasGeometry = true;
-                        const outerBoundary = polygon.getElementsByTagName('outerBoundaryIs')[0];
-                        if (outerBoundary) {
-                            const linearRing = outerBoundary.getElementsByTagName('LinearRing')[0];
-                            if (linearRing) {
-                                const coordinates = linearRing.getElementsByTagName('coordinates')[0];
-                                if (coordinates) {
-                                    const coordsText = coordinates.textContent.trim();
-                                    const coords = coordsText.split(/\s+/)
-                                        .filter(c => c.includes(','))
-                                        .map(c => {
-                                            const [lng, lat] = c.split(',').map(v => parseFloat(v.trim()));
-                                            return { lng, lat };
-                                        });
-                                    
-                                    if (coords.length > 0) {
-                                        renderPolygon(svg, coords);
-                                    }
+                if (polygon) {
+                    hasGeometry = true;
+                    const outerBoundary = polygon.getElementsByTagName('outerBoundaryIs')[0];
+                    if (outerBoundary) {
+                        const linearRing = outerBoundary.getElementsByTagName('LinearRing')[0];
+                        if (linearRing) {
+                            const coordinates = linearRing.getElementsByTagName('coordinates')[0];
+                            if (coordinates) {
+                                const coordsText = coordinates.textContent.trim();
+                                const coords = coordsText.split(/\s+/)
+                                    .filter(c => c.includes(','))
+                                    .map(c => {
+                                        const [lng, lat] = c.split(',').map(v => parseFloat(v.trim()));
+                                        return [lng, lat];
+                                    });
+                                
+                                if (coords.length > 2) {
+                                    features.push({
+                                        type: 'Feature',
+                                        geometry: {
+                                            type: 'Polygon',
+                                            coordinates: [coords]
+                                        }
+                                    });
                                 }
-                            }
-                        }
-                    } else if (linestring) {
-                        hasGeometry = true;
-                        const coordinates = linestring.getElementsByTagName('coordinates')[0];
-                        if (coordinates) {
-                            const coordsText = coordinates.textContent.trim();
-                            const coords = coordsText.split(/\s+/)
-                                .filter(c => c.includes(','))
-                                .map(c => {
-                                    const [lng, lat] = c.split(',').map(v => parseFloat(v.trim()));
-                                    return { lng, lat };
-                                });
-                            
-                            if (coords.length > 0) {
-                                renderPolygon(svg, coords);
                             }
                         }
                     }
                 }
-                
-                if (hasGeometry) {
-                    console.log('Mapa do Brasil carregado com sucesso');
-                } else {
-                    console.warn('Nenhuma geometria encontrada no KML');
-                }
-            } catch (error) {
-                console.error('Erro ao processar KML:', error);
+            }
+            
+            if (features.length > 0) {
+                const geojson = {
+                    type: 'FeatureCollection',
+                    features: features
+                };
+                renderBrazilMap(svg, geojson);
             }
         })
         .catch(error => console.error('Erro ao carregar KML:', error));
 }
 
-function renderPolygon(svg, coords) {
-    if (coords.length === 0) return;
+function renderBrazilMap(svg, geojson) {
+    svg.setAttribute('viewBox', '0 0 1200 1000');
+    svg.innerHTML = '';
     
-    // Encontrar bounds
-    let minLng = coords[0].lng, maxLng = coords[0].lng;
-    let minLat = coords[0].lat, maxLat = coords[0].lat;
+    // Fundo
+    const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bg.setAttribute('width', '1200');
+    bg.setAttribute('height', '1000');
+    bg.setAttribute('fill', '#0d1726');
+    svg.appendChild(bg);
     
-    coords.forEach(c => {
-        minLng = Math.min(minLng, c.lng);
-        maxLng = Math.max(maxLng, c.lng);
-        minLat = Math.min(minLat, c.lat);
-        maxLat = Math.max(maxLat, c.lat);
+    // Calcular bounds
+    let minLng = 180, maxLng = -180;
+    let minLat = 90, maxLat = -90;
+    
+    geojson.features.forEach(feature => {
+        if (feature.geometry.type === 'Polygon') {
+            feature.geometry.coordinates[0].forEach(coord => {
+                minLng = Math.min(minLng, coord[0]);
+                maxLng = Math.max(maxLng, coord[0]);
+                minLat = Math.min(minLat, coord[1]);
+                maxLat = Math.max(maxLat, coord[1]);
+            });
+        }
     });
     
-    const padding = 50;
-    const svgWidth = 1000;
-    const svgHeight = 1000;
+    const padding = 80;
+    const width = 1200 - 2 * padding;
+    const height = 1000 - 2 * padding;
     
     // Conversor de coordenadas
-    const lngToX = (lng) => ((lng - minLng) / (maxLng - minLng)) * (svgWidth - 2 * padding) + padding;
-    const latToY = (lat) => ((maxLat - lat) / (maxLat - minLat)) * (svgHeight - 2 * padding) + padding;
+    const lngToX = (lng) => ((lng - minLng) / (maxLng - minLng)) * width + padding;
+    const latToY = (lat) => ((maxLat - lat) / (maxLat - minLat)) * height + padding;
     
-    // Criar polígono SVG
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    
-    let pathData = 'M ';
-    coords.forEach((c, idx) => {
-        const x = lngToX(c.lng);
-        const y = latToY(c.lat);
-        pathData += `${x},${y} `;
+    // Renderizar polígonos
+    geojson.features.forEach(feature => {
+        if (feature.geometry.type === 'Polygon') {
+            feature.geometry.coordinates[0].forEach((coord, idx) => {
+                const x = lngToX(coord[0]);
+                const y = latToY(coord[1]);
+                
+                if (idx === 0) {
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    let pathData = `M ${x} ${y}`;
+                    
+                    for (let i = 1; i < feature.geometry.coordinates[0].length; i++) {
+                        const c = feature.geometry.coordinates[0][i];
+                        const px = lngToX(c[0]);
+                        const py = latToY(c[1]);
+                        pathData += ` L ${px} ${py}`;
+                    }
+                    
+                    pathData += ' Z';
+                    
+                    path.setAttribute('d', pathData);
+                    path.setAttribute('fill', 'rgba(90, 95, 255, 0.15)');
+                    path.setAttribute('stroke', '#5a5fff');
+                    path.setAttribute('stroke-width', '1.2');
+                    path.setAttribute('stroke-linejoin', 'round');
+                    
+                    svg.appendChild(path);
+                }
+            });
+        }
     });
-    pathData += 'Z';
-    
-    path.setAttribute('d', pathData);
-    path.setAttribute('fill', 'rgba(90, 95, 255, 0.15)');
-    path.setAttribute('stroke', '#5a5fff');
-    path.setAttribute('stroke-width', '1.5');
-    path.setAttribute('stroke-linejoin', 'round');
-    
-    svg.appendChild(path);
 }
 
 // Atualizar a cada 30 segundos
