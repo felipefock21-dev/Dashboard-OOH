@@ -34,7 +34,7 @@ function parseCSV(csv) {
     
     headers.forEach((h, idx) => {
         if (h.includes('cliente') && !h.includes('status')) clienteIdx = idx;
-        if (h.includes('status')) statusIdx = idx;
+        if (h.includes('status cliente')) statusIdx = idx;  // ESPECÍFICO: "status cliente"
         if (h.includes('cidade') || h.includes('praca')) cidadeIdx = idx;
         if (h.includes('exibidora') || h.includes('emissor')) exibidoraIdx = idx;
         if (h.includes('impacto')) impactosIdx = idx;
