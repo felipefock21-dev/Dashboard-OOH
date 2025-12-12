@@ -7,7 +7,22 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header class="header">
+        <div class="container">
+            <h1>📊 Dashboard OOH</h1>
+            <p>Monitoramento de Campanhas em Tempo Real</p>
+        </div>
+    </header>
+
     <main class="container">
+        <!-- Mapa do Brasil - DESTAQUE -->
+        <section class="map-section">
+            <h2>🗺️ Distribuição de Campanhas</h2>
+            <div id="mapContainer">
+                <svg id="mapasvg" viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+        </section>
+
         <!-- KPIs Principais -->
         <section class="kpis">
             <div class="kpi-card">
@@ -28,79 +43,82 @@
             </div>
         </section>
 
-        <!-- Ranking Clientes -->
-        <section class="ranking">
-            <h2>🏆 Clientes Mais Ativos</h2>
-            <table id="clientesTable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Impactos</th>
-                    </tr>
-                </thead>
-                <tbody id="clientesList">
-                    <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
-                </tbody>
-            </table>
-        </section>
+        <!-- Rankings em Grid 2x2 -->
+        <section class="rankings-grid">
+            <!-- Ranking Clientes -->
+            <div class="ranking">
+                <h3>🏆 Clientes Mais Ativos</h3>
+                <table id="clientesTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Campanhas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientesList">
+                        <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Ranking Praças -->
-        <section class="ranking">
-            <h2>🎯 Praças Mais Ativas</h2>
-            <table id="pracasTable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Praça</th>
-                        <th>Impactos</th>
-                    </tr>
-                </thead>
-                <tbody id="pracasList">
-                    <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
-                </tbody>
-            </table>
-        </section>
+            <!-- Ranking Praças -->
+            <div class="ranking">
+                <h3>🎯 Praças Mais Ativas</h3>
+                <table id="pracasTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Praça</th>
+                            <th>Campanhas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pracasList">
+                        <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Ranking Exibidoras -->
-        <section class="ranking">
-            <h2>📺 Exibidoras Mais Ativas</h2>
-            <table id="exibidorasTable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Exibidora</th>
-                        <th>Impactos</th>
-                    </tr>
-                </thead>
-                <tbody id="exibidorasList">
-                    <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
-                </tbody>
-            </table>
-        </section>
+            <!-- Ranking Exibidoras -->
+            <div class="ranking">
+                <h3>📺 Exibidoras Mais Ativas</h3>
+                <table id="exibidorasTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Exibidora</th>
+                            <th>Campanhas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="exibidorasList">
+                        <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Mapa Interativo -->
-        <section class="ranking">
-            <h2>🗺️ Mapa do Brasil - Distribuição de Campanhas</h2>
-            <div id="mapContainer">
-                <svg id="mapasvg" viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg"></svg>
+            <!-- Ranking por Cidade -->
+            <div class="ranking">
+                <h3>🌍 Ranking por Cidade</h3>
+                <table id="cidadesTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cidade</th>
+                            <th>Impactos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cidadesList">
+                        <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </section>
+    </main>
 
-        <!-- Ranking por Cidade -->
-        <section class="ranking">
-            <h2>🌍 Ranking de Impactos por Cidade</h2>
-            <table id="cidadesTable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Cidade</th>
-                        <th>Impactos</th>
-                    </tr>
-                </thead>
-                <tbody id="cidadesList">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.umd.js"></script>
-    <script src="script.js?v=20251214"></script>
+    <script src="script.js?v=20251215"></script>
+</body>
+</html>
 </body>
 </html>     </table>
         </section>
