@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard OOH - Outdoor</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 </head>
 <body>
     <main class="container">
@@ -83,7 +82,9 @@
         <!-- Mapa Interativo -->
         <section class="ranking">
             <h2>🗺️ Mapa do Brasil - Distribuição de Campanhas</h2>
-            <div id="map"></div>
+            <div id="mapContainer">
+                <svg id="mapasvg" viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
         </section>
 
         <!-- Ranking por Cidade -->
@@ -98,9 +99,8 @@
                     </tr>
                 </thead>
                 <tbody id="cidadesList">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.umd.js"></script>
-    <script src="script.js?v=20251213"></script>
+    <script src="script.js?v=20251214"></script>
 </body>
 </html>     </table>
         </section>

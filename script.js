@@ -261,42 +261,50 @@ async function loadDashboard() {
     console.log('Dashboard atualizado!', metrics);
 }
 
-// Inicializar mapa do Brasil
-let map = null;
+// Inicializar mapa do Brasil (estático em SVG)
+let mapLoaded = false;
 
 function loadMap(data) {
     // Apenas inicializa uma vez
-    if (!map) {
-        map = L.map('map', {
-            attributionControl: false
-        }).setView([-15.8, -48.0], 4);
-        
-        // Carregar e exibir KML do Brasil
-        fetch('BRASIL.kml')
-            .then(response => response.text())
-            .then(kmlText => {
-                const parser = new DOMParser();
-                const kmlDom = parser.parseFromString(kmlText, 'text/xml');
-                const geoJson = toGeoJSON.kml(kmlDom);
-                
-                L.geoJSON(geoJson, {
-                    style: {
-                        color: '#5a5fff',
-                        weight: 2,
-                        opacity: 0.8,
-                        fillColor: '#5a5fff',
-                        fillOpacity: 0.15
-                    }
-                }).addTo(map);
-                
-                // Ajustar zoom ao GeoJSON
-                const bounds = L.geoJSON(geoJson).getBounds();
-                map.fitBounds(bounds, { padding: [50, 50] });
-                
-                console.log('Mapa do Brasil carregado com sucesso');
-            })
-            .catch(error => console.error('Erro ao carregar KML:', error));
-    }
+    if (mapLoaded) return;
+    mapLoaded = true;
+    
+    fetch('BRASIL.kml')
+        .then(response => response.text())
+        .then(kmlText => {
+            const parser = new DOMParser();
+            const kmlDom = parser.parseFromString(kmlText, 'text/xml');
+            const geoJson = toGeoJSON.kml(kmlDom);
+            
+            const svg = document.getElementById('mapasvg');
+            
+            // Função para converter coordenadas geográficas para SVG
+            function latLngToSvg(lat, lng) {
+                const scale = 40;
+                const x = (lng + 75) * scale + 50;
+                const y = (lat * -1 + 12) * scale + 50;
+                return { x, y };
+            }
+            
+            // Renderizar features do GeoJSON
+            geoJson.features.forEach(feature => {
+                if (feature.geometry.type === 'Polygon') {
+                    feature.geometry.coordinates[0].forEach((coord, idx) => {
+                        const pos = latLngToSvg(coord[1], coord[0]);
+                        
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        path.setAttribute('cx', pos.x);
+                        path.setAttribute('cy', pos.y);
+                        path.setAttribute('r', '2');
+                        path.setAttribute('fill', '#5a5fff');
+                        svg.appendChild(path);
+                    });
+                }
+            });
+            
+            console.log('Mapa do Brasil carregado como SVG');
+        })
+        .catch(error => console.error('Erro ao carregar KML:', error));
 }
 
 // Atualizar a cada 30 segundos
