@@ -70,10 +70,12 @@ function processMetrics(data) {
     // Filtrar apenas registros com "Status Cliente" = ATIVA
     const activeData = data.filter(item => {
         const status = item.status.toLowerCase().trim();
-        return status === 'ativo' || status === 'ativa';
+        const isActive = status === 'ativo' || status === 'ativa' || status === 'a';
+        return isActive;
     });
     
     console.log('Linhas com status ATIVA:', activeData.length);
+    console.log('Exemplos de status encontrados:', [...new Set(data.map(item => item.status.trim()).slice(0, 10))]);
     console.log('Primeiras linhas ativas:', activeData.slice(0, 3));
 
     // KPIs
