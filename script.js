@@ -196,8 +196,13 @@ function renderKPIs(metrics) {
 }
 
 // Renderizar tabela genérica com 3 linhas
-function renderTable(data, elementId) {
+function renderRankingTable(data, elementId) {
     const tbody = document.getElementById(elementId);
+    if (!tbody) {
+        console.warn(`Elemento não encontrado: ${elementId}`);
+        return;
+    }
+    
     tbody.innerHTML = '';
 
     if (data.length === 0) {
@@ -214,12 +219,12 @@ function renderTable(data, elementId) {
             valor = `${item.cidadesAtivas} cidades`;
         } else if (item.clientesAtivos !== undefined) {
             valor = `${item.clientesAtivos} clientes`;
-        } else {
+        } else if (item.impactos !== undefined) {
             valor = item.impactos.toLocaleString('pt-BR');
         }
         
         tr.innerHTML = `
-            <td><strong>${index + 1}</strong></td>
+            <td>${index + 1}</td>
             <td>${item.nome}</td>
             <td>${valor}</td>
         `;
@@ -249,10 +254,10 @@ async function loadDashboard() {
 
     // Renderizar tudo
     renderKPIs(metrics);
-    renderTable(metrics.clientesMaisAtivos, 'clientesList');
-    renderTable(metrics.pracasMaisAtivas, 'pracasList');
-    renderTable(metrics.exibidorasMaisAtivas, 'exibidorasList');
-    renderTable(metrics.rankingCidades, 'cidadesList');
+    renderRankingTable(metrics.clientesMaisAtivos, 'ranking-clientes');
+    renderRankingTable(metrics.pracasMaisAtivas, 'ranking-pracas');
+    renderRankingTable(metrics.exibidorasMaisAtivas, 'ranking-exibidoras');
+    renderRankingTable(metrics.rankingCidades, 'ranking-cidades');
     
     // Carregar mapa com dados
     loadMap(data);

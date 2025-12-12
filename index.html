@@ -11,34 +11,34 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Coluna Esquerda (40%) - Métricas em Boxes -->
+        <!-- Coluna Esquerda (40%) - Métricas e Rankings -->
         <div class="left-column">
-            <!-- KPIs Principais em Grid 2x2 -->
-            <section class="kpis">
-                <div class="kpi-card">
-                    <div class="kpi-title">Total de Impactos</div>
-                    <div class="kpi-value" id="totalImpactos">0</div>
+            <!-- Métricas (4 blocos - 2x2) -->
+            <div class="metricas-section">
+                <div class="metrica-card">
+                    <div class="metrica-valor" id="totalImpactos">--</div>
+                    <div class="metrica-label">Total de Impactos</div>
                 </div>
-                <div class="kpi-card">
-                    <div class="kpi-title">Clientes Ativos</div>
-                    <div class="kpi-value" id="totalClientes">0</div>
+                <div class="metrica-card">
+                    <div class="metrica-valor" id="totalClientes">--</div>
+                    <div class="metrica-label">Clientes Ativos</div>
                 </div>
-                <div class="kpi-card">
-                    <div class="kpi-title">Praças Ativas</div>
-                    <div class="kpi-value" id="totalPracas">0</div>
+                <div class="metrica-card">
+                    <div class="metrica-valor" id="totalPracas">--</div>
+                    <div class="metrica-label">Praças Ativas</div>
                 </div>
-                <div class="kpi-card">
-                    <div class="kpi-title">Exibidoras Ativas</div>
-                    <div class="kpi-value" id="totalExibidoras">0</div>
+                <div class="metrica-card">
+                    <div class="metrica-valor" id="totalExibidoras">--</div>
+                    <div class="metrica-label">Exibidoras Ativas</div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Rankings em Grid (2x2) -->
-            <section class="rankings-grid">
-                <!-- Ranking Clientes -->
-                <div class="ranking">
+            <!-- Rankings Grid 2x2 -->
+            <div class="rankings-grid">
+                <!-- Clientes Mais Ativos -->
+                <div class="ranking-card">
                     <h3>🏆 Clientes Mais Ativos</h3>
-                    <table id="clientesTable">
+                    <table class="ranking-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -46,16 +46,16 @@
                                 <th>Campanhas</th>
                             </tr>
                         </thead>
-                        <tbody id="clientesList">
-                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        <tbody id="ranking-clientes">
+                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Ranking Praças -->
-                <div class="ranking">
-                    <h3>🎯 Praças Mais Ativas</h3>
-                    <table id="pracasTable">
+                <!-- Praças Mais Ativas -->
+                <div class="ranking-card">
+                    <h3>📍 Praças Mais Ativas</h3>
+                    <table class="ranking-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -63,16 +63,16 @@
                                 <th>Campanhas</th>
                             </tr>
                         </thead>
-                        <tbody id="pracasList">
-                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        <tbody id="ranking-pracas">
+                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Ranking Exibidoras -->
-                <div class="ranking">
+                <!-- Exibidoras Mais Ativas -->
+                <div class="ranking-card">
                     <h3>📺 Exibidoras Mais Ativas</h3>
-                    <table id="exibidorasTable">
+                    <table class="ranking-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -80,16 +80,16 @@
                                 <th>Campanhas</th>
                             </tr>
                         </thead>
-                        <tbody id="exibidorasList">
-                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        <tbody id="ranking-exibidoras">
+                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Ranking por Cidade -->
-                <div class="ranking">
+                <div class="ranking-card">
                     <h3>🌍 Ranking por Cidade</h3>
-                    <table id="cidadesTable">
+                    <table class="ranking-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -97,12 +97,17 @@
                                 <th>Impactos</th>
                             </tr>
                         </thead>
-                        <tbody id="cidadesList">
-                            <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                        <tbody id="ranking-cidades">
+                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
                         </tbody>
                     </table>
                 </div>
-            </section>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer-info">
+                ⏱️ Dashboard atualizado automaticamente
+            </div>
         </div>
 
         <!-- Coluna Direita (60%) - Mapa -->
