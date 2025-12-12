@@ -86,24 +86,24 @@ function processMetrics(data) {
     const totalExibidoras = exibidorasUnicas.size;
 
     // === CLIENTES MAIS ATIVOS ===
-    // Ranking dos 3 clientes com mais cidades ativas
-    const clientesCidades = new Map();
+    // Ranking dos 3 clientes com mais impactos totais
+    const clientesImpactos = new Map();
     activeData.forEach(item => {
-        if (!clientesCidades.has(item.cliente)) {
-            clientesCidades.set(item.cliente, new Set());
+        if (!clientesImpactos.has(item.cliente)) {
+            clientesImpactos.set(item.cliente, { impactos: 0, cidades: new Set() });
         }
-        clientesCidades.get(item.cliente).add(item.cidade);
+        const cliente = clientesImpactos.get(item.cliente);
+        cliente.impactos += item.impactostotal;
+        cliente.cidades.add(item.cidade);
     });
 
-    const clientesMaisAtivos = Array.from(clientesCidades.entries())
-        .map(([nome, cidades]) => ({
+    const clientesMaisAtivos = Array.from(clientesImpactos.entries())
+        .map(([nome, dados]) => ({
             nome,
-            cidadesAtivas: cidades.size,
-            impactos: activeData
-                .filter(item => item.cliente === nome)
-                .reduce((sum, item) => sum + item.impactostotal, 0)
+            impactos: dados.impactos,
+            cidadesAtivas: dados.cidades.size
         }))
-        .sort((a, b) => b.cidadesAtivas - a.cidadesAtivas)
+        .sort((a, b) => b.impactos - a.impactos)
         .slice(0, 3);
 
     // === PRAÇAS MAIS ATIVAS ===
@@ -198,15 +198,14 @@ function renderTable(data, elementId) {
 
     data.forEach((item, index) => {
         const tr = document.createElement('tr');
-        const impactos = item.impactos || item.cidadesAtivas || item.clientesAtivos || 0;
-        const label = item.cidadesAtivas !== undefined ? `${item.cidadesAtivas} cidades` : 
-                      item.clientesAtivos !== undefined ? `${item.clientesAtivos} clientes` :
-                      impactos.toLocaleString('pt-BR');
+        // Prioriza mostrar impactos, se não tiver, mostra a contagem de relação (cidades/clientes)
+        const valor = item.impactos !== undefined ? item.impactos.toLocaleString('pt-BR') : 
+                      item.cidadesAtivas || item.clientesAtivos || '0';
         
         tr.innerHTML = `
             <td><strong>${index + 1}</strong></td>
             <td>${item.nome}</td>
-            <td>${label}</td>
+            <td>${valor}</td>
         `;
         tbody.appendChild(tr);
     });
