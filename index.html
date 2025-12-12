@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard OOH - Outdoor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>📊 Dashboard OOH - Outdoor</h1>
+            <p>Monitoramento em tempo real</p>
+            <p class="ultima-atualizacao">Última atualização: <span id="lastUpdate">--:--:--</span></p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- KPIs Principais -->
+        <section class="kpis">
+            <div class="kpi-card">
+                <div class="kpi-title">Total de Impactos</div>
+                <div class="kpi-value" id="totalImpactos">0</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Clientes Ativos</div>
+                <div class="kpi-value" id="totalClientes">0</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Praças Ativas</div>
+                <div class="kpi-value" id="totalPracas">0</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Exibidoras Ativas</div>
+                <div class="kpi-value" id="totalExibidoras">0</div>
+            </div>
+        </section>
+
+        <!-- Ranking Clientes -->
+        <section class="ranking">
+            <h2>🏆 Clientes Mais Ativos</h2>
+            <table id="clientesTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th>Impactos</th>
+                    </tr>
+                </thead>
+                <tbody id="clientesList">
+                    <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Ranking Praças -->
+        <section class="ranking">
+            <h2>🎯 Praças Mais Ativas</h2>
+            <table id="pracasTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Praça</th>
+                        <th>Impactos</th>
+                    </tr>
+                </thead>
+                <tbody id="pracasList">
+                    <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Ranking Exibidoras -->
+        <section class="ranking">
+            <h2>📺 Exibidoras Mais Ativas</h2>
+            <table id="exibidorasTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Exibidora</th>
+                        <th>Impactos</th>
+                    </tr>
+                </thead>
+                <tbody id="exibidorasList">
+                    <tr><td colspan="3" style="text-align: center;">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Ranking por Cidade -->
+        <section class="ranking">
+            <h2>🌍 Ranking de Impactos por Cidade</h2>
+            <table id="cidadesTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                        <th>Impactos</th>
+                    </tr>
+                </thead>
+                <tbody id="cidadesList">
+                    <tr><td colspan="4" style="text-align: center;">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Telaooh - Dashboard OOH</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
