@@ -27,20 +27,22 @@ function parseCSV(csv) {
     const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
     const data = [];
 
+    // Encontrar índices das colunas
+    const clienteIdx = headers.findIndex(h => h === 'cliente' || h === 'a');
+    const statusIdx = headers.findIndex(h => h === 'status cliente' || h === 'status' || h === 'b');
+    const cidadeIdx = headers.findIndex(h => h === 'cidade' || h === 'h');
+    const exibidoraIdx = headers.findIndex(h => h === 'exibidora' || h === 'i');
+    const impactosIdx = headers.findIndex(h => h === 'impactos total' || h === 'impactostotal' || h === 'n');
+
     for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',').map(v => v.trim());
         
-        const row = {};
-        headers.forEach((header, index) => {
-            row[header] = values[index] || '';
-        });
-
         data.push({
-            cliente: row.cliente || '',
-            cidade: row.cidade || row.praca || '',
-            exibidora: row.exibidora || '',
-            impactostotal: parseInt(row.impactostotal || '0', 10),
-            status: row.status ? row.status.toLowerCase() : 'inativo'
+            cliente: clienteIdx >= 0 ? values[clienteIdx] || '' : '',
+            status: statusIdx >= 0 ? values[statusIdx] || '' : '',
+            cidade: cidadeIdx >= 0 ? values[cidadeIdx] || '' : '',
+            exibidora: exibidoraIdx >= 0 ? values[exibidoraIdx] || '' : '',
+            impactostotal: impactosIdx >= 0 ? parseInt(values[impactosIdx] || '0', 10) : 0
         });
     }
 
@@ -49,8 +51,11 @@ function parseCSV(csv) {
 
 // Processar dados e calcular métricas
 function processMetrics(data) {
-    // Filtrar apenas registros ativos
-    const activeData = data.filter(item => item.status === 'ativo' || item.status === 'ativa');
+    // Filtrar apenas registros com "Status Cliente" ativo
+    const activeData = data.filter(item => {
+        const status = item.status.toLowerCase().trim();
+        return status === 'ativo' || status === 'ativa';
+    });
 
     // KPIs
     const totalImpactos = activeData.reduce((sum, item) => sum + item.impactostotal, 0);
