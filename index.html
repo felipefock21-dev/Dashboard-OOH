@@ -11,9 +11,9 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Coluna Esquerda (40%) - Métricas e Rankings -->
+        <!-- Coluna Esquerda (40%) - Métricas e Gráficos -->
         <div class="left-column">
-            <!-- Métricas (4 blocos - 2x2) -->
+            <!-- Métricas (3 blocos) -->
             <div class="metricas-section">
                 <div class="metrica-card">
                     <div class="metrica-valor" id="totalImpactos">--</div>
@@ -27,80 +27,21 @@
                     <div class="metrica-valor" id="totalPracas">--</div>
                     <div class="metrica-label">Praças Ativas</div>
                 </div>
-                <div class="metrica-card">
-                    <div class="metrica-valor" id="totalExibidoras">--</div>
-                    <div class="metrica-label">Exibidoras Ativas</div>
+            </div>
+
+            <!-- Gráfico: Top Clientes -->
+            <div class="grafico-section">
+                <h3>🏆 Clientes Mais Ativos</h3>
+                <div id="grafico-clientes" class="grafico-container">
+                    <div class="loading">Carregando...</div>
                 </div>
             </div>
 
-            <!-- Rankings Grid 2x2 -->
-            <div class="rankings-grid">
-                <!-- Clientes Mais Ativos -->
-                <div class="ranking-card">
-                    <h3>🏆 Clientes Mais Ativos</h3>
-                    <table class="ranking-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Cliente</th>
-                                <th>Campanhas</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ranking-clientes">
-                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Praças Mais Ativas -->
-                <div class="ranking-card">
-                    <h3>📍 Praças Mais Ativas</h3>
-                    <table class="ranking-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Praça</th>
-                                <th>Campanhas</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ranking-pracas">
-                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Exibidoras Mais Ativas -->
-                <div class="ranking-card">
-                    <h3>📺 Exibidoras Mais Ativas</h3>
-                    <table class="ranking-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Exibidora</th>
-                                <th>Campanhas</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ranking-exibidoras">
-                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Ranking por Cidade -->
-                <div class="ranking-card">
-                    <h3>🌍 Ranking por Cidade</h3>
-                    <table class="ranking-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Cidade</th>
-                                <th>Impactos</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ranking-cidades">
-                            <tr><td colspan="3" class="loading">Carregando...</td></tr>
-                        </tbody>
-                    </table>
+            <!-- Gráfico: Top Cidades -->
+            <div class="grafico-section">
+                <h3>� Top Cidades por Impactos</h3>
+                <div id="grafico-cidades" class="grafico-cidades-grade">
+                    <div class="loading">Carregando...</div>
                 </div>
             </div>
 
