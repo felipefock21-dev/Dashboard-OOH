@@ -228,6 +228,43 @@ function renderRankingList(data, elementId) {
     });
 }
 
+// Renderizar check-ins recentes na lateral do mapa
+function renderCheckinsRecentes(data) {
+    const container = document.getElementById('lista-checkins-lateral');
+    if (!container) return;
+    
+    container.innerHTML = '';
+
+    // Filtrar dados ativos e ordenar por último (pegamos últimos 10)
+    const activeData = data.filter(item => {
+        const status = item.status.toLowerCase().trim();
+        return status === 'ativo' || status === 'ativa' || status === 'a';
+    });
+
+    if (activeData.length === 0) {
+        container.innerHTML = '<div class="loading">Sem check-ins</div>';
+        return;
+    }
+
+    // Pegar os últimos registros (inversão da ordem)
+    const checkinsRecentes = activeData.slice(-10).reverse();
+
+    checkinsRecentes.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'checkin-item';
+        
+        div.innerHTML = `
+            <div class="checkin-header">
+                <span class="checkin-cliente">${item.cliente || 'N/A'}</span>
+                <span class="checkin-hora">Agora</span>
+            </div>
+            <div class="checkin-praca">${item.cidade || 'N/A'}</div>
+            <div class="checkin-exibidora">${item.exibidora || 'N/A'}</div>
+        `;
+        container.appendChild(div);
+    });
+}
+
 // Atualizar hora de última atualização
 function updateTime() {
     // Função removida
@@ -256,6 +293,9 @@ async function loadDashboard() {
     renderRankingList(metrics.pracasMaisAtivas, 'ranking-pracas');
     renderRankingList(metrics.exibidorasMaisAtivas, 'ranking-exibidoras');
     renderRankingList(metrics.rankingCidades, 'ranking-cidades');
+    
+    // Renderizar check-ins recentes ao lado do mapa
+    renderCheckinsRecentes(data);
     
     // Carregar mapa com dados
     loadMap(data);

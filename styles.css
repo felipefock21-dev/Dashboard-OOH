@@ -116,7 +116,7 @@ body {
 .mapa-content-wrapper {
     flex: 1;
     display: flex;
-    gap: 0;
+    gap: clamp(12px, 1.5vw, 20px);
     min-height: 0;
     width: 100%;
     padding: 0;
@@ -125,7 +125,7 @@ body {
 }
 
 #mapa-container {
-    flex: 1;
+    flex: 0 0 75%;
     position: relative;
     background: rgba(90, 95, 255, 0.08);
     border-radius: clamp(12px, 1.5vw, 20px);
@@ -167,6 +167,113 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 10;
+}
+
+/* Lista de Check-in Recentes Lateral (ao lado do mapa) */
+.checkins-lateral {
+    flex: 0 0 25%;
+    background: rgba(90, 95, 255, 0.08);
+    border-radius: clamp(12px, 1.5vw, 20px);
+    padding: clamp(12px, 1.5vw, 18px);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgba(90, 95, 255, 0.3);
+    min-height: 0;
+    backdrop-filter: blur(10px);
+}
+
+.checkins-lateral h4 {
+    font-size: clamp(12px, 1.5vw, 16px);
+    margin-bottom: clamp(8px, 1.2vh, 12px);
+    color: #5A5FFF;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.lista-lateral {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 1vh, 10px);
+    min-height: 0;
+}
+
+.lista-lateral::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lista-lateral::-webkit-scrollbar-track {
+    background: rgba(90, 95, 255, 0.08);
+    border-radius: 3px;
+}
+
+.lista-lateral::-webkit-scrollbar-thumb {
+    background: rgba(90, 95, 255, 0.3);
+    border-radius: 3px;
+}
+
+.lista-lateral::-webkit-scrollbar-thumb:hover {
+    background: rgba(90, 95, 255, 0.5);
+}
+
+.checkin-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: clamp(8px, 1vw, 12px);
+    padding: clamp(8px, 1.2vw, 12px);
+    border-left: 3px solid #E03D99;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 0.8vh, 6px);
+    transition: all 0.3s ease;
+}
+
+.checkin-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-left-color: #5A5FFF;
+    transform: translateX(4px);
+}
+
+.checkin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+}
+
+.checkin-cliente {
+    font-weight: 600;
+    font-size: clamp(11px, 1.3vw, 13px);
+    color: #E03D99;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.checkin-hora {
+    font-size: clamp(9px, 1vw, 11px);
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.checkin-praca {
+    font-size: clamp(10px, 1.2vw, 12px);
+    color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.checkin-exibidora {
+    font-size: clamp(9px, 1.1vw, 11px);
+    color: rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Lista de Inserções Lateral - REMOVIDA */
