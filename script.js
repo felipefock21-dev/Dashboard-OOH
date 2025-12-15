@@ -629,32 +629,20 @@ async function plotarPings(data, geojson) {
         }
     });
     
-    // Obter dimensões do container onde os PINGs serão posicionados
+    // Usar apenas o tamanho do container
     const containerWidth = mapaContainer.clientWidth;
     const containerHeight = mapaContainer.clientHeight;
     
-    // Obter dimensões reais do SVG renderizado
-    const mapaRect = mapaObject.getBoundingClientRect();
-    const containerRect = mapaContainer.getBoundingClientRect();
-    
-    // Calcular a proporção do SVG em relação ao container
-    const svgDisplayWidth = mapaRect.width;
-    const svgDisplayHeight = mapaRect.height;
-    
-    // Offset visual do SVG dentro do container (considerando transform, align, etc)
-    const svgOffsetX = mapaRect.left - containerRect.left;
-    const svgOffsetY = mapaRect.top - containerRect.top;
-    
-    console.log(`Container: ${containerWidth}x${containerHeight}, SVG renderizado: ${svgDisplayWidth}x${svgDisplayHeight}, Offset: (${svgOffsetX}, ${svgOffsetY})`);
-    
-    // Converter coordenadas geográficas para pixels no container
+    // Converter coordenadas geográficas em percentuais
     const lngToX = (lng) => {
-        const percentX = ((lng - minLng) / (maxLng - minLng));
-        return svgOffsetX + (percentX * svgDisplayWidth);
+        const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
+        // Ajustar 2% para compensar o translateX(2%)
+        const adjustedPercent = percentX + 2;
+        return (adjustedPercent / 100) * containerWidth;
     };
     const latToY = (lat) => {
-        const percentY = ((maxLat - lat) / (maxLat - minLat));
-        return svgOffsetY + (percentY * svgDisplayHeight);
+        const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
+        return (percentY / 100) * containerHeight;
     };
     
     // Filtrar cidades únicas com status ativo
