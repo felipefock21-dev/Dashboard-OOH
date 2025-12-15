@@ -161,9 +161,9 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100%;
-    padding: clamp(20px, 4vw, 40px);
-    overflow: hidden;
-    width: 85%;
+    padding: clamp(40px, 6vw, 60px);
+    overflow: visible;
+    width: 90%;
     margin: 0 auto;
 }
 }
