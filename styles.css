@@ -171,6 +171,7 @@ body {
     padding: clamp(30px, 5vw, 50px);
     overflow: hidden;
     width: 100%;
+    isolation: isolate;
 }
 }
 
@@ -202,6 +203,7 @@ body {
     height: 100%;
     pointer-events: auto;
     z-index: 10;
+    isolation: isolate;
 }
 
 /* Estilos para PINGs no mapa */

@@ -532,6 +532,16 @@ const geonamesCache = {
 
 const GEONAMES_USERNAME = 'kaike';
 
+// Função para normalizar nomes de cidades (remove acentos)
+function normalizeCityName(name) {
+    return name
+        .toLowerCase()
+        .trim()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+        .replace(/\s+/g, ' '); // Normaliza espaços
+}
+
 // Buscar coordenadas de uma cidade - usar apenas cache local
 async function getCoordinatesByCity(cityName) {
     // Verificar cache primeiro (inclui cidades pré-definidas)
@@ -539,12 +549,24 @@ async function getCoordinatesByCity(cityName) {
         return geonamesCache[cityName];
     }
 
-    // Tentar encontrar por correspondência parcial (remove acentos e espaços)
-    const cityNameNormalized = cityName.toLowerCase().trim();
+    // Normalizar o nome da cidade para busca
+    const cityNameNormalized = normalizeCityName(cityName);
     
+    // Procurar por correspondência exata (após normalização)
     for (const [cachedCity, coords] of Object.entries(geonamesCache)) {
-        if (cachedCity.toLowerCase().includes(cityNameNormalized) || 
-            cityNameNormalized.includes(cachedCity.toLowerCase())) {
+        const cachedCityNormalized = normalizeCityName(cachedCity);
+        if (cachedCityNormalized === cityNameNormalized) {
+            console.log(`Cidade encontrada (normalizada): ${cityName} -> ${cachedCity}`);
+            return coords;
+        }
+    }
+    
+    // Procurar por correspondência parcial (se for uma abreviação ou parte do nome)
+    for (const [cachedCity, coords] of Object.entries(geonamesCache)) {
+        const cachedCityNormalized = normalizeCityName(cachedCity);
+        if (cachedCityNormalized.includes(cityNameNormalized) || 
+            cityNameNormalized.includes(cachedCityNormalized)) {
+            console.log(`Cidade encontrada (parcial): ${cityName} -> ${cachedCity}`);
             return coords;
         }
     }
