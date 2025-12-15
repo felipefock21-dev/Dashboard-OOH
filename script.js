@@ -579,7 +579,8 @@ async function getCoordinatesByCity(cityName) {
 // Plotar PINGs no mapa (SVG)
 async function plotarPings(data, geojson) {
     const animacoesLayer = document.getElementById('animacoes-layer');
-    if (!animacoesLayer) return;
+    const mapaContainer = document.getElementById('mapa-container');
+    if (!animacoesLayer || !mapaContainer) return;
     
     // Limpar PINGs antigos
     animacoesLayer.innerHTML = '';
@@ -599,9 +600,14 @@ async function plotarPings(data, geojson) {
         }
     });
     
-    const padding = 80;
-    const width = 1200 - 2 * padding;
-    const height = 1000 - 2 * padding;
+    // Usar tamanho real do container em vez de valores hardcoded
+    const containerRect = mapaContainer.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
+    
+    const padding = 20; // Padding proporcional
+    const width = containerWidth - 2 * padding;
+    const height = containerHeight - 2 * padding;
     
     const lngToX = (lng) => ((lng - minLng) / (maxLng - minLng)) * width + padding;
     const latToY = (lat) => ((maxLat - lat) / (maxLat - minLat)) * height + padding;
