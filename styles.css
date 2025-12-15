@@ -138,6 +138,7 @@ body {
     padding: clamp(15px, 2vw, 20px);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(90, 95, 255, 0.4);
+    margin: 0 auto;
 }}
 
 #mapasvg {
@@ -177,7 +178,7 @@ body {
     top: clamp(12px, 1.5vw, 18px);
     bottom: clamp(12px, 1.5vw, 18px);
     width: clamp(200px, 13vw, 320px);
-    background: rgba(123, 44, 191, 0.08);
+    background: #001B4D;
     border-radius: clamp(12px, 1.5vw, 20px);
     padding: clamp(12px, 1.5vw, 18px);
     display: flex;
