@@ -161,8 +161,11 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100%;
-    padding: clamp(15px, 2vw, 20px);
+    padding: clamp(20px, 4vw, 40px);
     overflow: hidden;
+    width: 85%;
+    margin: 0 auto;
+}
 }
 
 #mapasvg {
