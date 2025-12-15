@@ -312,75 +312,26 @@ function loadMap(data) {
     // Apenas inicializa uma vez
     if (mapLoaded) {
         // Se já carregou, apenas atualizar os PINGs
-        if (geoJsonCache) {
-            plotarPings(data, geoJsonCache);
-        }
+        plotarPings(data, geoJsonCache);
         return;
     }
     mapLoaded = true;
     
-    // Carregar KML local do Brasil para plotar os PINGs
-    fetch('BRASIL.kml')
-        .then(response => response.text())
-        .then(kmlText => {
-            const parser = new DOMParser();
-            const kmlDom = parser.parseFromString(kmlText, 'text/xml');
-            
-            // Converter KML para GeoJSON
-            const geojson = kmlToGeoJson(kmlDom);
-            geoJsonCache = geojson;
-            
-            // Plotar PINGs das praças ativas
-            plotarPings(data, geojson);
-            console.log('Mapa do Brasil e PINGs carregados com sucesso');
-        })
-        .catch(error => {
-            console.error('Erro ao carregar dados do mapa:', error);
-        });
-}
-
-// Converter KML para GeoJSON
-function kmlToGeoJson(kmlDom) {
-    const placemarks = kmlDom.getElementsByTagName('Placemark');
-    const features = [];
-    
-    for (let placemark of placemarks) {
-        const polygon = placemark.getElementsByTagName('Polygon')[0];
-        
-        if (polygon) {
-            const outerBoundary = polygon.getElementsByTagName('outerBoundaryIs')[0];
-            if (outerBoundary) {
-                const linearRing = outerBoundary.getElementsByTagName('LinearRing')[0];
-                if (linearRing) {
-                    const coordinates = linearRing.getElementsByTagName('coordinates')[0];
-                    if (coordinates) {
-                        const coordsText = coordinates.textContent.trim();
-                        const coords = coordsText.split(/\s+/)
-                            .filter(c => c.includes(','))
-                            .map(c => {
-                                const [lng, lat] = c.split(',').map(v => parseFloat(v.trim()));
-                                return [lng, lat];
-                            });
-                        
-                        if (coords.length > 2) {
-                            features.push({
-                                type: 'Feature',
-                                geometry: {
-                                    type: 'Polygon',
-                                    coordinates: [coords]
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    return {
+    // Criar um GeoJSON mínimo apenas para os bounds do Brasil
+    geoJsonCache = {
         type: 'FeatureCollection',
-        features: features
+        features: [{
+            type: 'Feature',
+            geometry: {
+                type: 'Polygon',
+                coordinates: [[[-73, -33], [-32, -33], [-32, 5], [-73, 5], [-73, -33]]]
+            }
+        }]
     };
+    
+    // Plotar PINGs das praças ativas
+    plotarPings(data, geoJsonCache);
+    console.log('Mapa do Brasil e PINGs carregados com sucesso');
 }
 
 function loadMapFromKML(svg) {
@@ -514,12 +465,76 @@ function renderBrazilMap(svg, geojson) {
 }
 
 // Cache de coordenadas de cidades (para evitar múltiplas chamadas à API)
-const geonamesCache = {};
+const geonamesCache = {
+    // Principais cidades brasileiras com coordenadas pré-definidas
+    'São Paulo': { lat: -23.5505, lng: -46.6333 },
+    'Rio de Janeiro': { lat: -22.9068, lng: -43.1729 },
+    'Belo Horizonte': { lat: -19.9167, lng: -43.9345 },
+    'Brasília': { lat: -15.7975, lng: -47.8919 },
+    'Salvador': { lat: -12.9714, lng: -38.5014 },
+    'Fortaleza': { lat: 3.7314, lng: -38.5267 },
+    'Manaus': { lat: -3.1190, lng: -60.0217 },
+    'Curitiba': { lat: -25.4284, lng: -49.2733 },
+    'Recife': { lat: -8.0476, lng: -34.8770 },
+    'Porto Alegre': { lat: -30.0277, lng: -51.5005 },
+    'Goiânia': { lat: -15.7939, lng: -48.0693 },
+    'Belém': { lat: -1.4558, lng: -48.5044 },
+    'Campinas': { lat: -22.9068, lng: -47.0606 },
+    'Santos': { lat: -23.9608, lng: -46.3339 },
+    'Sorocaba': { lat: -23.5006, lng: -47.4522 },
+    'São Bernardo do Campo': { lat: -23.6953, lng: -46.5633 },
+    'Santo André': { lat: -23.6628, lng: -46.5361 },
+    'Osasco': { lat: -23.5309, lng: -46.7914 },
+    'Mauá': { lat: -23.6678, lng: -46.4514 },
+    'Diadema': { lat: -23.6845, lng: -46.6136 },
+    'Guarulhos': { lat: -23.4615, lng: -46.4731 },
+    'Campina Grande': { lat: -7.2300, lng: -35.8804 },
+    'João Pessoa': { lat: -7.1496, lng: -34.8450 },
+    'Maceió': { lat: -9.6400, lng: -35.7347 },
+    'Aracaju': { lat: -10.9111, lng: -37.0734 },
+    'Teresina': { lat: -5.0892, lng: -42.8019 },
+    'São Luís': { lat: -2.5387, lng: -44.2829 },
+    'Natal': { lat: -5.7975, lng: -35.2094 },
+    'Campo Grande': { lat: -20.4697, lng: -54.6201 },
+    'Cuiabá': { lat: -15.5939, lng: -56.0911 },
+    'Palmas': { lat: -10.1753, lng: -48.3382 },
+    'Porto Velho': { lat: -8.7619, lng: -63.9039 },
+    'Rio Branco': { lat: -9.9761, lng: -67.8102 },
+    'Boa Vista': { lat: 2.8235, lng: -60.6758 },
+    'Macapá': { lat: 0.3510, lng: -51.0695 },
+    'Pirassununga': { lat: -21.9933, lng: -47.4333 },
+    'Araraquara': { lat: -21.7939, lng: -48.1840 },
+    'Bauru': { lat: -22.3142, lng: -49.0656 },
+    'Ribeirão Preto': { lat: -21.1797, lng: -47.8103 },
+    'Marília': { lat: -22.2141, lng: -49.9459 },
+    'Piracicaba': { lat: -22.7297, lng: -47.6500 },
+    'Franca': { lat: -20.5350, lng: -47.4047 },
+    'Londrina': { lat: -23.3100, lng: -51.1628 },
+    'Maringá': { lat: -23.4250, lng: -51.4664 },
+    'Ponta Grossa': { lat: -25.0955, lng: -50.1618 },
+    'Cascavel': { lat: -24.9547, lng: -53.4581 },
+    'Foz do Iguaçu': { lat: -25.5951, lng: -54.5793 },
+    'Blumenau': { lat: -26.8791, lng: -49.0694 },
+    'Joinville': { lat: -26.3045, lng: -48.8487 },
+    'Chapecó': { lat: -27.1002, lng: -52.6169 },
+    'Caxias do Sul': { lat: -29.1767, lng: -51.1800 },
+    'Pelotas': { lat: -31.7683, lng: -52.3406 },
+    'Santa Cruz do Sul': { lat: -29.7167, lng: -52.4333 },
+    'Santa Maria': { lat: -29.6843, lng: -53.8066 },
+    'Uruguaiana': { lat: -32.3582, lng: -56.4133 },
+    'Jundiaí': { lat: -23.1811, lng: -46.8778 },
+    'Taubaté': { lat: -23.0277, lng: -45.5555 },
+    'São José dos Campos': { lat: -23.1798, lng: -45.8903 },
+    'Itabuna': { lat: -14.7867, lng: -39.2800 },
+    'Vitória da Conquista': { lat: -14.8627, lng: -40.8394 },
+    'Ilhéus': { lat: -14.7889, lng: -39.0347 }
+};
+
 const GEONAMES_USERNAME = 'fock';
 
-// Buscar coordenadas de uma cidade usando Geonames
+// Buscar coordenadas de uma cidade usando Geonames com fallback
 async function getCoordinatesByCity(cityName) {
-    // Verificar cache primeiro
+    // Verificar cache primeiro (inclui cidades pré-definidas)
     if (geonamesCache[cityName]) {
         return geonamesCache[cityName];
     }
