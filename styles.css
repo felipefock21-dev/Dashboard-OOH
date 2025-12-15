@@ -144,7 +144,7 @@ body {
 
 /* Mapa e Fundo - direita grudado */
 .mapa-fundo-container {
-    flex: 1;
+    flex: 0 0 auto;
     display: flex;
     position: relative;
     background: rgba(90, 95, 255, 0.08);
@@ -152,6 +152,10 @@ body {
     overflow: hidden;
     border-top-left-radius: clamp(12px, 1.5vw, 20px);
     border-bottom-left-radius: clamp(12px, 1.5vw, 20px);
+    width: 75%;
+    height: 85%;
+    margin: auto;
+    align-self: center;
 }
 
 #mapa-container {
@@ -161,10 +165,9 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100%;
-    padding: clamp(40px, 6vw, 60px);
-    overflow: visible;
-    width: 90%;
-    margin: 0 auto;
+    padding: clamp(30px, 5vw, 50px);
+    overflow: hidden;
+    width: 100%;
 }
 }
 
