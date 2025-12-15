@@ -637,8 +637,9 @@ async function plotarPings(data, geojson) {
     // Considerando que o SVG ocupa todo o container com transform: translateX(4%)
     const lngToX = (lng) => {
         const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
-        // Sem ajuste - usar coordenada natural
-        return (percentX / 100) * containerWidth;
+        // Ajustar para o transform: translateX(5%)
+        const adjustedPercent = percentX + 5;
+        return (adjustedPercent / 100) * containerWidth;
     };
     const latToY = (lat) => {
         const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
