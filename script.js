@@ -637,8 +637,12 @@ async function plotarPings(data, geojson) {
     // Calcular a escala e offset do SVG dentro do container
     const svgWidth = mapaRect.width;
     const svgHeight = mapaRect.height;
-    const svgOffsetX = mapaRect.left - containerParentRect.left;
+    let svgOffsetX = mapaRect.left - containerParentRect.left;
     const svgOffsetY = mapaRect.top - containerParentRect.top;
+    
+    // Ajustar offset para considerar o transform: translateX(4%)
+    const translateXPercent = 4; // 4% do svgWidth
+    svgOffsetX += (svgWidth * translateXPercent) / 100;
     
     // Converter coordenadas geográficas para pixels SVG (relativos ao animacoes-layer)
     const lngToX = (lng) => {

@@ -377,6 +377,8 @@ body {
     min-height: 0;
     overflow-y: auto;
     margin-left: 0;
+    max-height: 400px;
+
 
 }
 
@@ -403,7 +405,6 @@ body {
     flex-direction: column;
     gap: 3px;
     min-height: 0;
-    max-height: 230px;
     transition: all 0.3s ease;
 }
 
