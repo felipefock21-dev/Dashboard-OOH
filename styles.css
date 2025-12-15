@@ -152,6 +152,8 @@ body {
     overflow: hidden;
     border-top-left-radius: clamp(12px, 1.5vw, 20px);
     border-bottom-left-radius: clamp(12px, 1.5vw, 20px);
+    border-top-right-radius: clamp(12px, 1.5vw, 20px);
+    border-bottom-right-radius: clamp(12px, 1.5vw, 20px);
     width: 72%;
     height: 95%;
     margin: auto;
@@ -217,7 +219,7 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 1vh, 10px);
+    gap: clamp(4px, 5px, 10px);
     min-height: 0;
 }
 

@@ -246,7 +246,7 @@ function renderCheckinsRecentes(data) {
         return;
     }
 
-    // Pegar os últimos registros (inversão da ordem)
+    // Pegar os últimos 10 registros (inversão da ordem)
     const checkinsRecentes = activeData.slice(-10).reverse();
 
     checkinsRecentes.forEach((item) => {
