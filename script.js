@@ -629,21 +629,26 @@ async function plotarPings(data, geojson) {
         }
     });
     
-    // Obter dimensões do container (onde os PINGs serão posicionados)
-    const containerWidth = mapaContainer.clientWidth;
-    const containerHeight = mapaContainer.clientHeight;
+    // Obter dimensões reais do SVG renderizado
+    const mapaRect = mapaObject.getBoundingClientRect();
+    const containerRect = mapaContainer.getBoundingClientRect();
     
-    // Converter coordenadas geográficas para pixels do container
-    // Considerando que o SVG ocupa todo o container com transform: translateX(4%)
+    // Dimensões do SVG renderizado
+    const svgWidth = mapaRect.width;
+    const svgHeight = mapaRect.height;
+    
+    // Posição do SVG relativa ao container
+    const svgOffsetX = mapaRect.left - containerRect.left;
+    const svgOffsetY = mapaRect.top - containerRect.top;
+    
+    // Converter coordenadas geográficas para pixels do SVG renderizado
     const lngToX = (lng) => {
-        const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
-        // Ajustar para o transform: translateX(5%)
-        const adjustedPercent = percentX + 5;
-        return (adjustedPercent / 100) * containerWidth;
+        const percentX = ((lng - minLng) / (maxLng - minLng));
+        return svgOffsetX + (percentX * svgWidth);
     };
     const latToY = (lat) => {
-        const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
-        return (percentY / 100) * containerHeight;
+        const percentY = ((maxLat - lat) / (maxLat - minLat));
+        return svgOffsetY + (percentY * svgHeight);
     };
     
     // Filtrar cidades únicas com status ativo
