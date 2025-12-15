@@ -319,11 +319,17 @@ function loadMap(data) {
     }
     mapLoaded = true;
     
-    // Carregar GeoJSON do Brasil para plotar os PINGs
-    fetch('https://raw.githubusercontent.com/brunocs/brasil-geojson/master/brasil.json')
-        .then(response => response.json())
-        .then(geojson => {
+    // Carregar KML local do Brasil para plotar os PINGs
+    fetch('BRASIL.kml')
+        .then(response => response.text())
+        .then(kmlText => {
+            const parser = new DOMParser();
+            const kmlDom = parser.parseFromString(kmlText, 'text/xml');
+            
+            // Converter KML para GeoJSON
+            const geojson = kmlToGeoJson(kmlDom);
             geoJsonCache = geojson;
+            
             // Plotar PINGs das praças ativas
             plotarPings(data, geojson);
             console.log('Mapa do Brasil e PINGs carregados com sucesso');
@@ -331,6 +337,50 @@ function loadMap(data) {
         .catch(error => {
             console.error('Erro ao carregar dados do mapa:', error);
         });
+}
+
+// Converter KML para GeoJSON
+function kmlToGeoJson(kmlDom) {
+    const placemarks = kmlDom.getElementsByTagName('Placemark');
+    const features = [];
+    
+    for (let placemark of placemarks) {
+        const polygon = placemark.getElementsByTagName('Polygon')[0];
+        
+        if (polygon) {
+            const outerBoundary = polygon.getElementsByTagName('outerBoundaryIs')[0];
+            if (outerBoundary) {
+                const linearRing = outerBoundary.getElementsByTagName('LinearRing')[0];
+                if (linearRing) {
+                    const coordinates = linearRing.getElementsByTagName('coordinates')[0];
+                    if (coordinates) {
+                        const coordsText = coordinates.textContent.trim();
+                        const coords = coordsText.split(/\s+/)
+                            .filter(c => c.includes(','))
+                            .map(c => {
+                                const [lng, lat] = c.split(',').map(v => parseFloat(v.trim()));
+                                return [lng, lat];
+                            });
+                        
+                        if (coords.length > 2) {
+                            features.push({
+                                type: 'Feature',
+                                geometry: {
+                                    type: 'Polygon',
+                                    coordinates: [coords]
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return {
+        type: 'FeatureCollection',
+        features: features
+    };
 }
 
 function loadMapFromKML(svg) {
