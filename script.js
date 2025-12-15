@@ -580,7 +580,8 @@ async function getCoordinatesByCity(cityName) {
 async function plotarPings(data, geojson) {
     const animacoesLayer = document.getElementById('animacoes-layer');
     const mapaContainer = document.getElementById('mapa-container');
-    if (!animacoesLayer || !mapaContainer) return;
+    const mapaObject = document.getElementById('mapa-object');
+    if (!animacoesLayer || !mapaContainer || !mapaObject) return;
     
     // Limpar PINGs antigos
     animacoesLayer.innerHTML = '';
@@ -600,17 +601,28 @@ async function plotarPings(data, geojson) {
         }
     });
     
-    // Usar tamanho real do container em vez de valores hardcoded
-    const containerRect = mapaContainer.getBoundingClientRect();
-    const containerWidth = containerRect.width;
-    const containerHeight = containerRect.height;
+    // Obter dimensões reais do SVG renderizado
+    const mapaRect = mapaObject.getBoundingClientRect();
+    const containerRect = animacoesLayer.getBoundingClientRect();
+    const containerParentRect = mapaContainer.getBoundingClientRect();
     
-    const padding = 20; // Padding proporcional
-    const width = containerWidth - 2 * padding;
-    const height = containerHeight - 2 * padding;
+    // Calcular a escala e offset do SVG dentro do container
+    const svgWidth = mapaRect.width;
+    const svgHeight = mapaRect.height;
+    const svgOffsetX = mapaRect.left - containerParentRect.left;
+    const svgOffsetY = mapaRect.top - containerParentRect.top;
     
-    const lngToX = (lng) => ((lng - minLng) / (maxLng - minLng)) * width + padding;
-    const latToY = (lat) => ((maxLat - lat) / (maxLat - minLat)) * height + padding;
+    // Converter coordenadas geográficas para pixels SVG (relativos ao animacoes-layer)
+    const lngToX = (lng) => {
+        const x = ((lng - minLng) / (maxLng - minLng)) * svgWidth + svgOffsetX;
+        // Retornar relativo ao animacoes-layer (que é absolute dentro de mapa-container)
+        return x - (containerRect.left - containerParentRect.left);
+    };
+    const latToY = (lat) => {
+        const y = ((maxLat - lat) / (maxLat - minLat)) * svgHeight + svgOffsetY;
+        // Retornar relativo ao animacoes-layer
+        return y - (containerRect.top - containerParentRect.top);
+    };
     
     // Filtrar cidades únicas com status ativo
     const activeData = data.filter(item => {
