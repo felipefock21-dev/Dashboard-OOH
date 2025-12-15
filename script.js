@@ -530,40 +530,28 @@ const geonamesCache = {
     'Ilhéus': { lat: -14.7889, lng: -39.0347 }
 };
 
-const GEONAMES_USERNAME = 'fock';
+const GEONAMES_USERNAME = 'kaike';
 
-// Buscar coordenadas de uma cidade usando Geonames com fallback
+// Buscar coordenadas de uma cidade - usar apenas cache local
 async function getCoordinatesByCity(cityName) {
     // Verificar cache primeiro (inclui cidades pré-definidas)
     if (geonamesCache[cityName]) {
         return geonamesCache[cityName];
     }
 
-    try {
-        const response = await fetch(
-            `https://secure.geonames.org/searchJSON?q=${encodeURIComponent(cityName)}&featureClass=P&maxRows=1&username=${GEONAMES_USERNAME}`
-        );
-        
-        if (!response.ok) throw new Error('Erro ao buscar coordenadas');
-        
-        const data = await response.json();
-        
-        if (data.geonames && data.geonames.length > 0) {
-            const coords = {
-                lat: parseFloat(data.geonames[0].lat),
-                lng: parseFloat(data.geonames[0].lng)
-            };
-            
-            // Armazenar em cache
-            geonamesCache[cityName] = coords;
+    // Tentar encontrar por correspondência parcial (remove acentos e espaços)
+    const cityNameNormalized = cityName.toLowerCase().trim();
+    
+    for (const [cachedCity, coords] of Object.entries(geonamesCache)) {
+        if (cachedCity.toLowerCase().includes(cityNameNormalized) || 
+            cityNameNormalized.includes(cachedCity.toLowerCase())) {
             return coords;
         }
-        
-        return null;
-    } catch (error) {
-        console.error('Erro ao buscar coordenadas de', cityName, ':', error);
-        return null;
     }
+
+    // Se não encontrar, retornar null (não plotar PING)
+    console.warn(`Cidade não encontrada no cache: ${cityName}`);
+    return null;
 }
 
 // Plotar PINGs no mapa (SVG)
