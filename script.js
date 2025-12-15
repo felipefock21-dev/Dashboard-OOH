@@ -557,6 +557,17 @@ const geonamesCache = {
     'Jequié': { lat: -13.8619, lng: -40.0797 }
 };
 
+// Criar cache normalizado para busca sem acentos
+const geonamesCacheNormalized = {};
+Object.entries(geonamesCache).forEach(([city, coords]) => {
+    const normalizedKey = city
+        .toLowerCase()
+        .trim()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    geonamesCacheNormalized[normalizedKey] = coords;
+});
+
 const GEONAMES_USERNAME = 'kaike';
 
 // Função para normalizar nomes de cidades (remove acentos)
@@ -572,35 +583,22 @@ function normalizeCityName(name) {
 
 // Buscar coordenadas de uma cidade - usar apenas cache local
 async function getCoordinatesByCity(cityName) {
-    // Verificar cache primeiro (inclui cidades pré-definidas)
-    if (geonamesCache[cityName]) {
-        return geonamesCache[cityName];
-    }
-
     // Normalizar o nome da cidade para busca
-    const cityNameNormalized = normalizeCityName(cityName);
+    const cityNameNormalized = cityName
+        .toLowerCase()
+        .trim()
+        .replace(/^"|"$/g, '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
     
-    // Procurar por correspondência exata (após normalização)
-    for (const [cachedCity, coords] of Object.entries(geonamesCache)) {
-        const cachedCityNormalized = normalizeCityName(cachedCity);
-        if (cachedCityNormalized === cityNameNormalized) {
-            console.log(`Cidade encontrada (normalizada): ${cityName} -> ${cachedCity}`);
-            return coords;
-        }
-    }
-    
-    // Procurar por correspondência parcial (se for uma abreviação ou parte do nome)
-    for (const [cachedCity, coords] of Object.entries(geonamesCache)) {
-        const cachedCityNormalized = normalizeCityName(cachedCity);
-        if (cachedCityNormalized.includes(cityNameNormalized) || 
-            cityNameNormalized.includes(cachedCityNormalized)) {
-            console.log(`Cidade encontrada (parcial): ${cityName} -> ${cachedCity}`);
-            return coords;
-        }
+    // Procurar no cache normalizado (sem acentos)
+    if (geonamesCacheNormalized[cityNameNormalized]) {
+        console.log(`✅ Cidade encontrada: ${cityName}`);
+        return geonamesCacheNormalized[cityNameNormalized];
     }
 
     // Se não encontrar, retornar null (não plotar PING)
-    console.warn(`Cidade não encontrada no cache: ${cityName}`);
+    console.warn(`⚠️ Cidade não encontrada no cache: ${cityName}`);
     return null;
 }
 
