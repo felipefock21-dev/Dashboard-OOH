@@ -554,7 +554,40 @@ const geonamesCache = {
     'Paragominas': { lat: -2.9192, lng: -47.9264 },
     'Timbó': { lat: -26.8278, lng: -49.0628 },
     'Feira de Santana': { lat: -12.2625, lng: -38.9603 },
-    'Jequié': { lat: -13.8619, lng: -40.0797 }
+    'Jequié': { lat: -13.8619, lng: -40.0797 },
+    
+    // Cidades adicionais faltantes
+    'Juazeiro': { lat: -9.4122, lng: -40.4725 },
+    'Marabá': { lat: -5.3697, lng: -49.3087 },
+    'Tomé Açu': { lat: -2.2858, lng: -48.3461 },
+    'Parauapebas': { lat: -6.0744, lng: -49.9067 },
+    'Lages': { lat: -27.8097, lng: -50.3314 },
+    'Tubarão': { lat: -28.4737, lng: -49.0017 },
+    'Lajeado': { lat: -29.4566, lng: -51.9706 },
+    'Betim': { lat: -19.9689, lng: -44.1908 },
+    'Contagem': { lat: -19.9328, lng: -44.0539 },
+    'Juiz de Fora': { lat: -21.7639, lng: -43.3489 },
+    'Sete Lagoas': { lat: -19.4615, lng: -44.2864 },
+    'Vespasiano': { lat: -19.8419, lng: -43.8203 },
+    'Florianópolis': { lat: -27.5965, lng: -48.5493 },
+    'Pato Branco': { lat: -26.2306, lng: -51.0831 },
+    'Timbiras': { lat: -5.0258, lng: -43.4531 },
+    'Santo Antônio de Jesus': { lat: -13.2608, lng: -39.2692 },
+    'Paulo Afonso': { lat: -9.1089, lng: -38.2261 },
+    'São Jerônimo': { lat: -29.8572, lng: -51.7139 },
+    'Monte Negro': { lat: -8.7736, lng: -63.3136 },
+    'Alegrete': { lat: -29.7837, lng: -55.7914 },
+    'Camaquã': { lat: -30.4811, lng: -51.8064 },
+    'Gramado': { lat: -29.3731, lng: -50.8787 },
+    'Castanhal': { lat: -1.2889, lng: -47.9331 },
+    'Balneário Camboriú': { lat: -26.9901, lng: -48.6304 },
+    'Piçarras': { lat: -26.9206, lng: -48.6414 },
+    'São Carlos': { lat: -22.0175, lng: -47.8945 },
+    'Cajamar': { lat: -23.3658, lng: -46.8833 },
+    'Uberaba': { lat: -19.7681, lng: -47.9487 },
+    'São Lourenço do Sul': { lat: -31.3589, lng: -52.2117 },
+    'Porto Seguro': { lat: -16.4344, lng: -39.0756 },
+    'Serrinha': { lat: -13.6569, lng: -38.9659 }
 };
 
 // Criar cache normalizado para busca sem acentos
@@ -570,6 +603,28 @@ Object.entries(geonamesCache).forEach(([city, coords]) => {
 
 const GEONAMES_USERNAME = 'kaike';
 
+// Função de distância de Levenshtein (similar, para fuzzy matching)
+function levenshteinDistance(str1, str2) {
+    const arr = [];
+    for (let i = 0; i <= str2.length; i++) {
+        arr[i] = [i];
+    }
+    for (let j = 0; j <= str1.length; j++) {
+        arr[0][j] = j;
+    }
+    for (let i = 1; i <= str2.length; i++) {
+        for (let j = 1; j <= str1.length; j++) {
+            const marker = str1[j - 1] === str2[i - 1] ? 0 : 1;
+            arr[i][j] = Math.min(
+                arr[i][j - 1] + 1, // deletion
+                arr[i - 1][j] + 1, // insertion
+                arr[i - 1][j - 1] + marker // substitution
+            );
+        }
+    }
+    return arr[str2.length][str1.length];
+}
+
 // Função para normalizar nomes de cidades (remove acentos)
 function normalizeCityName(name) {
     return name
@@ -581,24 +636,41 @@ function normalizeCityName(name) {
         .replace(/\s+/g, ' '); // Normaliza espaços
 }
 
-// Buscar coordenadas de uma cidade - usar apenas cache local
+// Buscar coordenadas de uma cidade - usar cache local com fuzzy matching
 async function getCoordinatesByCity(cityName) {
     // Normalizar o nome da cidade para busca
-    const cityNameNormalized = cityName
-        .toLowerCase()
-        .trim()
-        .replace(/^"|"$/g, '')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
+    const cityNameNormalized = normalizeCityName(cityName);
     
-    // Procurar no cache normalizado (sem acentos)
+    // Procurar no cache normalizado (sem acentos) - MATCH EXATO
     if (geonamesCacheNormalized[cityNameNormalized]) {
-        console.log(`✅ Cidade encontrada: ${cityName}`);
+        console.log(`✅ Cidade encontrada (exato): ${cityName}`);
         return geonamesCacheNormalized[cityNameNormalized];
     }
 
+    // Se não encontrar match exato, fazer fuzzy matching
+    let bestMatch = null;
+    let bestScore = 0;
+    const threshold = 0.75; // 75% de similaridade
+    
+    for (const [normalizedCityInCache, coords] of Object.entries(geonamesCacheNormalized)) {
+        // Calcular similaridade usando Levenshtein
+        const distance = levenshteinDistance(cityNameNormalized, normalizedCityInCache);
+        const maxLen = Math.max(cityNameNormalized.length, normalizedCityInCache.length);
+        const similarity = 1 - (distance / maxLen);
+        
+        if (similarity > bestScore && similarity >= threshold) {
+            bestScore = similarity;
+            bestMatch = coords;
+        }
+    }
+    
+    if (bestMatch) {
+        console.log(`✅ Cidade encontrada (fuzzy match ${(bestScore * 100).toFixed(0)}%): ${cityName}`);
+        return bestMatch;
+    }
+
     // Se não encontrar, retornar null (não plotar PING)
-    console.warn(`⚠️ Cidade não encontrada no cache: ${cityName}`);
+    console.warn(`⚠️ Cidade não encontrada no cache: "${cityName}"`);
     return null;
 }
 
