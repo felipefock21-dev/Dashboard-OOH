@@ -527,7 +527,34 @@ const geonamesCache = {
     'São José dos Campos': { lat: -23.1798, lng: -45.8903 },
     'Itabuna': { lat: -14.7867, lng: -39.2800 },
     'Vitória da Conquista': { lat: -14.8627, lng: -40.8394 },
-    'Ilhéus': { lat: -14.7889, lng: -39.0347 }
+    'Ilhéus': { lat: -14.7889, lng: -39.0347 },
+    'Barra do Ribeiro': { lat: -30.2489, lng: -51.2983 },
+    'Tapes': { lat: -30.6778, lng: -51.3817 },
+    'Canguçu': { lat: -31.3819, lng: -52.6731 },
+    'Piratini': { lat: -31.7428, lng: -52.8922 },
+    'São José do Norte': { lat: -32.0144, lng: -52.1014 },
+    'Vacaria': { lat: -28.5061, lng: -50.7525 },
+    'Sorriso': { lat: -12.5075, lng: -55.7169 },
+    'Lucas do Rio Verde': { lat: -12.7623, lng: -55.9025 },
+    'Sinop': { lat: -11.8650, lng: -55.4897 },
+    'Campo Novo do Parecis': { lat: -13.6403, lng: -57.8761 },
+    'Rio Verde': { lat: -17.7889, lng: -50.9219 },
+    'Formosa': { lat: -15.5281, lng: -47.3281 },
+    'Dourados': { lat: -22.2231, lng: -54.8028 },
+    'Dom Pedrito': { lat: -31.0281, lng: -53.7472 },
+    'Balsas': { lat: -7.5328, lng: -46.7653 },
+    'Unaí': { lat: -16.3789, lng: -46.5553 },
+    'Uberlândia': { lat: -18.9147, lng: -48.2744 },
+    'Barreiras': { lat: -12.1544, lng: -44.9944 },
+    'Passo Fundo': { lat: -28.2603, lng: -52.4084 },
+    'Lagoa da Confusão': { lat: -10.0628, lng: -49.3669 },
+    'Catalão': { lat: -18.1644, lng: -47.9431 },
+    'Luís Eduardo Magalhães': { lat: -12.1544, lng: -45.8508 },
+    'Jataí': { lat: -17.8789, lng: -51.7172 },
+    'Paragominas': { lat: -2.9192, lng: -47.9264 },
+    'Timbó': { lat: -26.8278, lng: -49.0628 },
+    'Feira de Santana': { lat: -12.2625, lng: -38.9603 },
+    'Jequié': { lat: -13.8619, lng: -40.0797 }
 };
 
 const GEONAMES_USERNAME = 'kaike';
@@ -537,6 +564,7 @@ function normalizeCityName(name) {
     return name
         .toLowerCase()
         .trim()
+        .replace(/^"|"$/g, '') // Remove aspas no início ou fim
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '') // Remove acentos
         .replace(/\s+/g, ' '); // Normaliza espaços
