@@ -174,8 +174,8 @@ body {
 #mapa-object {
     width: auto;
     height: auto;
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 70%;
+    max-height: 70%;
     object-fit: contain;
     object-position: center;
 }
@@ -320,7 +320,7 @@ body {
 .metricas-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(4px, 0.6vw, 8px);
+    gap: clamp(2px, 0.4vw, 4px);
     flex: 0 0 auto;
     padding: 0;
     margin: 0;
@@ -330,12 +330,12 @@ body {
 
 .metrica-card {
     background: rgba(90, 95, 255, 0.08);
-    border-radius: clamp(8px, 1vw, 12px);
-    padding: clamp(6px, 0.8vw, 10px);
+    border-radius: clamp(6px, 0.8vw, 10px);
+    padding: clamp(4px, 0.6vw, 8px);
     text-align: center;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(90, 95, 255, 0.3);
-    min-height: clamp(60px, 10vh, 100px);
+    min-height: clamp(48px, 8vh, 75px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -353,15 +353,15 @@ body {
 .metrica-valor {
     color: #E03D99;
     font-weight: 700;
-    font-size: clamp(14px, 2.2vw, 28px);
+    font-size: clamp(11px, 1.6vw, 20px);
     line-height: 1;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .metrica-label {
-    font-size: clamp(8px, 0.8vw, 11px);
+    font-size: clamp(7px, 0.65vw, 9px);
     color: rgba(255, 255, 255, 0.7);
-    line-height: 1.1;
+    line-height: 1;
     font-weight: 500;
 }
 
