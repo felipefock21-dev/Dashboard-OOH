@@ -137,6 +137,7 @@ body {
     padding: clamp(15px, 2vw, 20px);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(90, 95, 255, 0.4);
+    order: 2;
 }}
 
 #mapasvg {
@@ -180,6 +181,7 @@ body {
     border: 2px solid rgba(90, 95, 255, 0.3);
     min-height: 0;
     backdrop-filter: blur(10px);
+    order: 1;
 }
 
 .checkins-lateral h4 {
