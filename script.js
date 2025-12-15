@@ -746,86 +746,67 @@ async function plotarPings(data, geojson) {
     
     const cidadesUnicas = [...new Set(activeData.map(item => item.cidade))];
     
-    // Plotar PINGs em lotes para não bloquear o UI thread
-    let pingIndex = 0;
-    const batchSize = 10; // Processar 10 PINGs por frame
-    
-    async function processarLotePings() {
-        const endIndex = Math.min(pingIndex + batchSize, cidadesUnicas.length);
+    // Plotar PING para cada cidade ativa
+    for (const cidade of cidadesUnicas) {
+        if (!cidade || cidade === 'N/A') continue;
         
-        for (let i = pingIndex; i < endIndex; i++) {
-            const cidade = cidadesUnicas[i];
-            if (!cidade || cidade === 'N/A') continue;
+        const coords = await getCoordinatesByCity(cidade);
+        
+        if (coords) {
+            const x = lngToX(coords.lng);
+            const y = latToY(coords.lat);
             
-            const coords = await getCoordinatesByCity(cidade);
-            
-            if (coords) {
-                const x = lngToX(coords.lng);
-                const y = latToY(coords.lat);
-                
-                // Validar se coordenadas estão dentro dos limites
-                if (x === null || y === null) {
-                    console.warn(`⚠️ PING descartado: ${cidade} (fora dos limites do mapa)`);
-                    continue;
-                }
-                
-                // Criar SVG do PING - centralizar no ponto
-                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                svg.className = 'pinga';
-                svg.style.left = (x - 12) + 'px';
-                svg.style.top = (y - 12) + 'px';
-                svg.setAttribute('width', '24');
-                svg.setAttribute('height', '24');
-                svg.setAttribute('viewBox', '0 0 24 24');
-                
-                // Círculo principal
-                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                circle.setAttribute('cx', '12');
-                circle.setAttribute('cy', '12');
-                circle.setAttribute('r', '6');
-                circle.setAttribute('fill', '#E03D99');
-                circle.setAttribute('filter', 'drop-shadow(0 0 10px #E03D99)');
-                svg.appendChild(circle);
-                
-                // Ripple (onda) - otimizado com transform
-                const ripple = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                ripple.setAttribute('cx', '12');
-                ripple.setAttribute('cy', '12');
-                ripple.setAttribute('r', '6');
-                ripple.setAttribute('fill', 'none');
-                ripple.setAttribute('stroke', '#5A5FFF');
-                ripple.setAttribute('stroke-width', '1');
-                ripple.className = 'pinga-ripple';
-                svg.appendChild(ripple);
-                
-                // Tooltip ao hover
-                svg.addEventListener('mouseenter', (e) => {
-                    const tooltip = document.getElementById('tooltip');
-                    tooltip.innerHTML = `<div class="tooltip-content"><strong>${cidade}</strong><div>Praça Ativa</div></div>`;
-                    tooltip.style.left = (e.pageX + 10) + 'px';
-                    tooltip.style.top = (e.pageY + 10) + 'px';
-                    tooltip.classList.remove('hidden');
-                });
-                
-                svg.addEventListener('mouseleave', () => {
-                    document.getElementById('tooltip').classList.add('hidden');
-                });
-                
-                animacoesLayer.appendChild(svg);
-                console.log(`PING plotado: ${cidade} (${coords.lat}, ${coords.lng})`);
+            // Validar se coordenadas estão dentro dos limites
+            if (x === null || y === null) {
+                console.warn(`⚠️ PING descartado: ${cidade} (fora dos limites do mapa)`);
+                continue;
             }
-        }
-        
-        pingIndex = endIndex;
-        
-        // Se ainda houver PINGs para processar, agendar o próximo lote
-        if (pingIndex < cidadesUnicas.length) {
-            requestAnimationFrame(processarLotePings);
+            
+            // Criar SVG do PING - centralizar no ponto (offset de -50%)
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'pinga');
+            svg.setAttribute('style', `left: calc(${x}px - 4.5px); top: calc(${y}px - 4.5px);`);
+            svg.setAttribute('width', '9');
+            svg.setAttribute('height', '9');
+            svg.setAttribute('viewBox', '0 0 24 24');
+            
+            // Círculo principal
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '12');
+            circle.setAttribute('cy', '12');
+            circle.setAttribute('r', '6');
+            circle.setAttribute('fill', '#E03D99');
+            circle.setAttribute('filter', 'drop-shadow(0 0 10px #E03D99)');
+            svg.appendChild(circle);
+            
+            // Ripple (onda)
+            const ripple = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            ripple.setAttribute('cx', '12');
+            ripple.setAttribute('cy', '12');
+            ripple.setAttribute('r', '6');
+            ripple.setAttribute('fill', 'none');
+            ripple.setAttribute('stroke', '#5A5FFF');
+            ripple.setAttribute('stroke-width', '1');
+            ripple.setAttribute('class', 'pinga-ripple');
+            svg.appendChild(ripple);
+            
+            // Tooltip ao hover
+            svg.addEventListener('mouseenter', (e) => {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.innerHTML = `<div class="tooltip-content"><strong>${cidade}</strong><div>Praça Ativa</div></div>`;
+                tooltip.style.left = (e.pageX + 10) + 'px';
+                tooltip.style.top = (e.pageY + 10) + 'px';
+                tooltip.classList.remove('hidden');
+            });
+            
+            svg.addEventListener('mouseleave', () => {
+                document.getElementById('tooltip').classList.add('hidden');
+            });
+            
+            animacoesLayer.appendChild(svg);
+            console.log(`PING plotado: ${cidade} (${coords.lat}, ${coords.lng})`);
         }
     }
-    
-    // Começar a processar os PINGs
-    processarLotePings();
 }
 
 // Atualizar a cada 30 segundos
