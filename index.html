@@ -74,16 +74,17 @@
             <!-- Seção do Mapa (100% altura) -->
             <div class="mapa-section">
                 <div class="mapa-content-wrapper">
-                    <!-- Lista de Check-in Recentes (25% da largura - esquerda) -->
-                    <div class="checkins-lateral">
-                        <h4>Check-in Recentes</h4>
-                        <div id="lista-checkins-lateral" class="lista-lateral">
-                            <div class="loading">Carregando...</div>
-                        </div>
-                    </div>
-
-                    <!-- Mapa (75% da largura) -->
+                    <!-- Mapa (com check-ins dentro) -->
                     <div id="mapa-container">
+                        <!-- Lista de Check-in Recentes (esquerda do mapa) -->
+                        <div class="checkins-lateral">
+                            <h4>Check-in Recentes</h4>
+                            <div id="lista-checkins-lateral" class="lista-lateral">
+                                <div class="loading">Carregando...</div>
+                            </div>
+                        </div>
+
+                        <!-- Mapa SVG -->
                         <object id="mapa-object" data="mapa-brasil.svg" type="image/svg+xml" style="width: 100%; height: 100%; display: block;"></object>
                         <!-- Container de animações -->
                         <div id="animacoes-layer"></div>

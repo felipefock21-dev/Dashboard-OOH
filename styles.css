@@ -116,7 +116,7 @@ body {
 .mapa-content-wrapper {
     flex: 1;
     display: flex;
-    gap: clamp(12px, 1.5vw, 20px);
+    gap: 0;
     min-height: 0;
     width: 100%;
     padding: 0;
@@ -125,7 +125,7 @@ body {
 }
 
 #mapa-container {
-    flex: 0 0 75%;
+    flex: 1;
     position: relative;
     background: rgba(90, 95, 255, 0.08);
     border-radius: clamp(12px, 1.5vw, 20px);
@@ -137,7 +137,6 @@ body {
     padding: clamp(15px, 2vw, 20px);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(90, 95, 255, 0.4);
-    order: 2;
 }}
 
 #mapasvg {
@@ -170,18 +169,22 @@ body {
     z-index: 10;
 }
 
-/* Lista de Check-in Recentes Lateral (ao lado do mapa) */
+/* Lista de Check-in Recentes Lateral (overlay dentro do mapa) */
 .checkins-lateral {
-    flex: 0 0 25%;
-    background: rgba(90, 95, 255, 0.08);
+    position: absolute;
+    left: clamp(12px, 1.5vw, 18px);
+    top: clamp(12px, 1.5vw, 18px);
+    bottom: clamp(12px, 1.5vw, 18px);
+    width: clamp(200px, 25vw, 320px);
+    background: rgba(90, 95, 255, 0.12);
     border-radius: clamp(12px, 1.5vw, 20px);
     padding: clamp(12px, 1.5vw, 18px);
     display: flex;
     flex-direction: column;
-    border: 2px solid rgba(90, 95, 255, 0.3);
+    border: 2px solid rgba(90, 95, 255, 0.4);
     min-height: 0;
-    backdrop-filter: blur(10px);
-    order: 1;
+    backdrop-filter: blur(15px);
+    z-index: 20;
 }
 
 .checkins-lateral h4 {
