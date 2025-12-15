@@ -394,13 +394,13 @@ body {
 
 .ranking-card {
     background: rgba(224, 61, 153, 0.08);
-    border-radius: 16px;
-    padding: clamp(8px, 1.5vw, 12px);
+    border-radius: 12px;
+    padding: clamp(6px, 0.8vw, 10px);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(224, 61, 153, 0.3);
     display: flex;
     flex-direction: column;
-    gap: clamp(4px, 1vw, 8px);
+    gap: clamp(3px, 0.5vw, 6px);
     min-height: 0;
     transition: all 0.3s ease;
 }
@@ -412,18 +412,18 @@ body {
 }
 
 .ranking-titulo {
-    font-size: clamp(11px, 1.3vw, 14px);
+    font-size: clamp(9px, 1vw, 12px);
     font-weight: 600;
     color: #E03D99;
     margin: 0;
-    padding-bottom: 4px;
+    padding-bottom: 3px;
     border-bottom: 1px solid rgba(224, 61, 153, 0.2);
 }
 
 .ranking-lista {
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 1vw, 10px);
+    gap: clamp(3px, 0.6vw, 6px);
     flex: 1;
     overflow-y: auto;
     min-height: 0;
@@ -440,25 +440,25 @@ body {
 
 .ranking-item {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: clamp(8px, 1.2vw, 12px);
+    border-radius: 6px;
+    padding: clamp(5px, 0.8vw, 8px);
     border-left: 3px solid #5A5FFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .ranking-item-posicao {
     font-weight: 700;
     color: #E03D99;
-    font-size: clamp(11px, 1.3vw, 13px);
-    min-width: 24px;
+    font-size: clamp(9px, 1vw, 11px);
+    min-width: 20px;
 }
 
 .ranking-item-nome {
     flex: 1;
-    font-size: clamp(10px, 1.2vw, 12px);
+    font-size: clamp(8px, 0.9vw, 10px);
     color: rgba(255, 255, 255, 0.85);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -468,7 +468,7 @@ body {
 .ranking-item-valor {
     font-weight: 600;
     color: #5A5FFF;
-    font-size: clamp(10px, 1.2vw, 12px);
+    font-size: clamp(8px, 0.9vw, 10px);
     text-align: right;
 }
 
