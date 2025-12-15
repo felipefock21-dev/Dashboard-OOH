@@ -106,7 +106,7 @@ body {
     display: flex;
     gap: 0;
     min-height: 0;
-    width: 100%;
+    width: 98%;
     padding: 0;
     background: rgba(224, 61, 153, 0.08);
     border-radius: clamp(12px, 1.5vw, 20px);
