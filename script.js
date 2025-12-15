@@ -631,9 +631,21 @@ async function plotarPings(data, geojson) {
     
     console.log(`📍 Bounds calculados do GeoJSON: Lng [${minLng.toFixed(2)}, ${maxLng.toFixed(2)}], Lat [${minLat.toFixed(2)}, ${maxLat.toFixed(2)}]`);
     
+    // Obter dimensões e posição reais do SVG renderizado
+    const mapaRect = mapaObject.getBoundingClientRect();
+    const containerRect = mapaContainer.getBoundingClientRect();
+    
     // Dimensões do container
     const containerWidth = mapaContainer.clientWidth;
     const containerHeight = mapaContainer.clientHeight;
+    
+    // Posição do SVG relativa ao container (para compensar offsets de renderização)
+    const svgOffsetX = mapaRect.left - containerRect.left;
+    const svgOffsetY = mapaRect.top - containerRect.top;
+    const svgWidth = mapaRect.width;
+    const svgHeight = mapaRect.height;
+    
+    console.log(`🗺️ SVG renderizado: ${svgWidth.toFixed(0)}x${svgHeight.toFixed(0)}, Offset: (${svgOffsetX.toFixed(0)}, ${svgOffsetY.toFixed(0)})`);
     
     // Converter coordenadas geográficas para pixels com validação de limites
     const lngToX = (lng) => {
@@ -642,8 +654,8 @@ async function plotarPings(data, geojson) {
             console.warn(`⚠️ Longitude FORA dos limites: ${lng.toFixed(2)} (min: ${minLng.toFixed(2)}, max: ${maxLng.toFixed(2)})`);
             return null;
         }
-        const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
-        return (percentX / 100) * containerWidth;
+        const percentX = ((lng - minLng) / (maxLng - minLng));
+        return svgOffsetX + (percentX * svgWidth);
     };
     const latToY = (lat) => {
         // Validar se está dentro dos limites
@@ -651,8 +663,8 @@ async function plotarPings(data, geojson) {
             console.warn(`⚠️ Latitude FORA dos limites: ${lat.toFixed(2)} (min: ${minLat.toFixed(2)}, max: ${maxLat.toFixed(2)})`);
             return null;
         }
-        const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
-        return (percentY / 100) * containerHeight;
+        const percentY = ((maxLat - lat) / (maxLat - minLat));
+        return svgOffsetY + (percentY * svgHeight);
     };
     
     // Filtrar cidades únicas com status ativo
