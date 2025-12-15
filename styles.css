@@ -368,11 +368,11 @@ body {
 /* Grid de Rankings - 2x2 */
 .rankings-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 4px;
-    flex: 0 0 auto;
-    max-height: 180px;
-    padding: 6px;
+    flex: 1;
+    max-height: none;
+    padding: 8px;
     margin: 0;
     min-height: 0;
     overflow-y: auto;
@@ -395,14 +395,15 @@ body {
 
 .ranking-card {
     background: rgba(224, 61, 153, 0.08);
-    border-radius: 8px;
-    padding: 4px;
+    border-radius: 10px;
+    padding: 6px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(224, 61, 153, 0.3);
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 3px;
     min-height: 0;
+    max-height: 80vh;
     transition: all 0.3s ease;
 }
 
@@ -413,18 +414,18 @@ body {
 }
 
 .ranking-titulo {
-    font-size: 8px;
+    font-size: 11px;
     font-weight: 600;
     color: #E03D99;
     margin: 0;
-    padding-bottom: 1px;
+    padding-bottom: 2px;
     border-bottom: 1px solid rgba(224, 61, 153, 0.2);
-}}
+}
 
 .ranking-lista {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     flex: 1;
     overflow-y: auto;
     min-height: 0;
@@ -442,7 +443,7 @@ body {
 .ranking-item {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 4px;
-    padding: 4px 6px;
+    padding: 5px 7px;
     border-left: 2px solid #5A5FFF;
     display: flex;
     justify-content: space-between;
@@ -453,13 +454,13 @@ body {
 .ranking-item-posicao {
     font-weight: 700;
     color: #E03D99;
-    font-size: 9px;
+    font-size: 10px;
     min-width: 18px;
 }
 
 .ranking-item-nome {
     flex: 1;
-    font-size: 8px;
+    font-size: 9px;
     color: rgba(255, 255, 255, 0.85);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -469,7 +470,7 @@ body {
 .ranking-item-valor {
     font-weight: 600;
     color: #5A5FFF;
-    font-size: 8px;
+    font-size: 9px;
     text-align: right;
 }
 
