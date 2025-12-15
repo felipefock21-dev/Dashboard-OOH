@@ -175,8 +175,8 @@ body {
 #mapa-object {
     width: auto;
     height: auto;
-    max-width: 85%;
-    max-height: 85%;
+    max-width: 50%;
+    max-height: 50%;
     object-fit: contain;
     object-position: center;
 }
@@ -370,38 +370,28 @@ body {
 .rankings-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(12px, 2vw, 20px);
+    gap: clamp(2px, 0.4vw, 4px);
     flex: 1;
-    padding: clamp(30px, 2vw, 20px);
+    padding: 0;
     margin: 0;
     min-height: 0;
-    overflow-y: auto;
+    overflow: visible;
 }
 
-.rankings-grid::-webkit-scrollbar {
-    width: 6px;
-}
 
-.rankings-grid::-webkit-scrollbar-track {
-    background: rgba(90, 95, 255, 0.08);
-}
-
-.rankings-grid::-webkit-scrollbar-thumb {
-    background: rgba(90, 95, 255, 0.3);
-    border-radius: 3px;
-}
 
 .ranking-card {
     background: rgba(224, 61, 153, 0.08);
-    border-radius: 16px;
-    padding: clamp(12px, 2vw, 16px);
+    border-radius: clamp(6px, 0.8vw, 10px);
+    padding: clamp(4px, 0.6vw, 8px);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(224, 61, 153, 0.3);
     display: flex;
     flex-direction: column;
-    gap: clamp(8px, 1.5vw, 12px);
-    min-height: 0;
+    gap: clamp(2px, 0.4vw, 4px);
+    min-height: clamp(48px, 8vh, 75px);
     transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .ranking-card:hover {
@@ -422,53 +412,50 @@ body {
 .ranking-lista {
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 1vw, 10px);
+    gap: clamp(2px, 0.4vw, 4px);
     flex: 1;
-    overflow-y: auto;
+    overflow: visible;
     min-height: 0;
 }
 
-.ranking-lista::-webkit-scrollbar {
-    width: 4px;
-}
 
-.ranking-lista::-webkit-scrollbar-thumb {
-    background: rgba(90, 95, 255, 0.3);
-    border-radius: 2px;
-}
 
 .ranking-item {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: clamp(8px, 1.2vw, 12px);
+    border-radius: clamp(6px, 0.8vw, 10px);
+    padding: clamp(4px, 0.6vw, 8px);
     border-left: 3px solid #5A5FFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .ranking-item-posicao {
     font-weight: 700;
     color: #E03D99;
-    font-size: clamp(11px, 1.3vw, 13px);
-    min-width: 24px;
+    font-size: clamp(9px, 1vw, 12px);
+    min-width: 16px;
 }
 
 .ranking-item-nome {
     flex: 1;
-    font-size: clamp(10px, 1.2vw, 12px);
+    font-size: clamp(8px, 0.9vw, 11px);
     color: rgba(255, 255, 255, 0.85);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-width: 0;
 }
 
 .ranking-item-valor {
     font-weight: 600;
     color: #5A5FFF;
-    font-size: clamp(10px, 1.2vw, 12px);
+    font-size: clamp(8px, 0.9vw, 11px);
     text-align: right;
+    white-space: nowrap;
 }
 
 /* Classes antigas de gráficos removidas */
