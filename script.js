@@ -306,10 +306,17 @@ async function loadDashboard() {
 
 // Inicializar mapa do Brasil (estático em SVG)
 let mapLoaded = false;
+let geoJsonCache = null;
 
 function loadMap(data) {
     // Apenas inicializa uma vez
-    if (mapLoaded) return;
+    if (mapLoaded) {
+        // Se já carregou, apenas atualizar os PINGs
+        if (geoJsonCache) {
+            plotarPings(data, geoJsonCache);
+        }
+        return;
+    }
     mapLoaded = true;
     
     const svg = document.getElementById('mapasvg');
@@ -318,13 +325,16 @@ function loadMap(data) {
     fetch('https://raw.githubusercontent.com/brunocs/brasil-geojson/master/brasil.json')
         .then(response => response.json())
         .then(geojson => {
+            geoJsonCache = geojson;
             renderBrazilMap(svg, geojson);
+            // Plotar PINGs das praças ativas
+            plotarPings(data, geojson);
             console.log('Mapa do Brasil carregado com sucesso');
         })
         .catch(error => {
             console.error('Erro ao carregar mapa:', error);
             // Fallback: carregar do KML local
-            loadMapFromKML(svg);
+            loadMapFromKML(svg, data);
         });
 }
 
@@ -456,6 +466,139 @@ function renderBrazilMap(svg, geojson) {
             });
         }
     });
+}
+
+// Cache de coordenadas de cidades (para evitar múltiplas chamadas à API)
+const geonamesCache = {};
+const GEONAMES_USERNAME = 'fock';
+
+// Buscar coordenadas de uma cidade usando Geonames
+async function getCoordinatesByCity(cityName) {
+    // Verificar cache primeiro
+    if (geonamesCache[cityName]) {
+        return geonamesCache[cityName];
+    }
+
+    try {
+        const response = await fetch(
+            `https://secure.geonames.org/searchJSON?q=${encodeURIComponent(cityName)}&featureClass=P&maxRows=1&username=${GEONAMES_USERNAME}`
+        );
+        
+        if (!response.ok) throw new Error('Erro ao buscar coordenadas');
+        
+        const data = await response.json();
+        
+        if (data.geonames && data.geonames.length > 0) {
+            const coords = {
+                lat: parseFloat(data.geonames[0].lat),
+                lng: parseFloat(data.geonames[0].lng)
+            };
+            
+            // Armazenar em cache
+            geonamesCache[cityName] = coords;
+            return coords;
+        }
+        
+        return null;
+    } catch (error) {
+        console.error('Erro ao buscar coordenadas de', cityName, ':', error);
+        return null;
+    }
+}
+
+// Plotar PINGs no mapa (SVG)
+async function plotarPings(data, geojson) {
+    const animacoesLayer = document.getElementById('animacoes-layer');
+    if (!animacoesLayer) return;
+    
+    // Limpar PINGs antigos
+    animacoesLayer.innerHTML = '';
+    
+    // Calcular bounds para converter coordenadas geográficas em pixels
+    let minLng = 180, maxLng = -180;
+    let minLat = 90, maxLat = -90;
+    
+    geojson.features.forEach(feature => {
+        if (feature.geometry.type === 'Polygon') {
+            feature.geometry.coordinates[0].forEach(coord => {
+                minLng = Math.min(minLng, coord[0]);
+                maxLng = Math.max(maxLng, coord[0]);
+                minLat = Math.min(minLat, coord[1]);
+                maxLat = Math.max(maxLat, coord[1]);
+            });
+        }
+    });
+    
+    const padding = 80;
+    const width = 1200 - 2 * padding;
+    const height = 1000 - 2 * padding;
+    
+    const lngToX = (lng) => ((lng - minLng) / (maxLng - minLng)) * width + padding;
+    const latToY = (lat) => ((maxLat - lat) / (maxLat - minLat)) * height + padding;
+    
+    // Filtrar cidades únicas com status ativo
+    const activeData = data.filter(item => {
+        const status = item.status.toLowerCase().trim();
+        return status === 'ativo' || status === 'ativa' || status === 'a';
+    });
+    
+    const cidadesUnicas = [...new Set(activeData.map(item => item.cidade))];
+    
+    // Plotar PING para cada cidade ativa
+    for (const cidade of cidadesUnicas) {
+        if (!cidade || cidade === 'N/A') continue;
+        
+        const coords = await getCoordinatesByCity(cidade);
+        
+        if (coords) {
+            const x = lngToX(coords.lng);
+            const y = latToY(coords.lat);
+            
+            // Criar SVG do PING
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'pinga');
+            svg.setAttribute('style', `left: ${x}px; top: ${y}px;`);
+            svg.setAttribute('width', '24');
+            svg.setAttribute('height', '24');
+            svg.setAttribute('viewBox', '0 0 24 24');
+            
+            // Círculo principal
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '12');
+            circle.setAttribute('cy', '12');
+            circle.setAttribute('r', '6');
+            circle.setAttribute('fill', '#E03D99');
+            circle.setAttribute('filter', 'drop-shadow(0 0 10px #E03D99)');
+            svg.appendChild(circle);
+            
+            // Ripple (onda)
+            const ripple = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            ripple.setAttribute('cx', '12');
+            ripple.setAttribute('cy', '12');
+            ripple.setAttribute('r', '6');
+            ripple.setAttribute('fill', 'none');
+            ripple.setAttribute('stroke', '#5A5FFF');
+            ripple.setAttribute('stroke-width', '1');
+            ripple.setAttribute('class', 'pinga-ripple');
+            svg.appendChild(ripple);
+            
+            // Tooltip ao hover
+            svg.addEventListener('mouseenter', (e) => {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.innerHTML = `<div class="tooltip-content"><strong>${cidade}</strong><div>Praça Ativa</div></div>`;
+                tooltip.style.left = (e.pageX + 10) + 'px';
+                tooltip.style.top = (e.pageY + 10) + 'px';
+                tooltip.classList.remove('hidden');
+            });
+            
+            svg.addEventListener('mouseleave', () => {
+                document.getElementById('tooltip').classList.add('hidden');
+            });
+            
+            animacoesLayer.appendChild(svg);
+            console.log(`PING plotado: ${cidade} (${coords.lat}, ${coords.lng})`);
+        }
+    }
 }
 
 // Atualizar a cada 30 segundos

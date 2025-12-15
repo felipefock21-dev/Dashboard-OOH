@@ -200,8 +200,42 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 10;
+}
+
+/* Estilos para PINGs no mapa */
+.pinga {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    margin-top: -12px;
+    pointer-events: auto;
+    cursor: pointer;
+    filter: drop-shadow(0 0 8px rgba(224, 61, 153, 0.6));
+}
+
+.pinga-ripple {
+    animation: pinga-pulse 2s ease-in-out infinite;
+}
+
+@keyframes pinga-pulse {
+    0% {
+        r: 6px;
+        stroke-width: 1;
+        opacity: 1;
+    }
+    50% {
+        r: 12px;
+        stroke-width: 0.5;
+        opacity: 0.5;
+    }
+    100% {
+        r: 18px;
+        stroke-width: 0;
+        opacity: 0;
+    }
 }
 
 .checkins-lateral h4 {
@@ -224,21 +258,16 @@ body {
 }
 
 .lista-lateral::-webkit-scrollbar {
-    width: 6px;
+    width: 0;
+    display: none;
 }
 
 .lista-lateral::-webkit-scrollbar-track {
-    background: rgba(90, 95, 255, 0.08);
-    border-radius: 3px;
+    background: transparent;
 }
 
 .lista-lateral::-webkit-scrollbar-thumb {
-    background: rgba(90, 95, 255, 0.3);
-    border-radius: 3px;
-}
-
-.lista-lateral::-webkit-scrollbar-thumb:hover {
-    background: rgba(90, 95, 255, 0.5);
+    background: transparent;
 }
 
 .checkin-item {
