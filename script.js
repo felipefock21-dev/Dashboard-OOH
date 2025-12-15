@@ -637,8 +637,8 @@ async function plotarPings(data, geojson) {
     // Considerando que o SVG ocupa todo o container com transform: translateX(4%)
     const lngToX = (lng) => {
         const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
-        // Ajustar para o translateX(4%)
-        const adjustedPercent = percentX + 4;
+        // Deslocar mais para esquerda (reduzir o offset)
+        const adjustedPercent = percentX - 2;
         return (adjustedPercent / 100) * containerWidth;
     };
     const latToY = (lat) => {
@@ -668,8 +668,8 @@ async function plotarPings(data, geojson) {
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('class', 'pinga');
             svg.setAttribute('style', `left: ${x}px; top: ${y}px;`);
-            svg.setAttribute('width', '24');
-            svg.setAttribute('height', '24');
+            svg.setAttribute('width', '17');
+            svg.setAttribute('height', '17');
             svg.setAttribute('viewBox', '0 0 24 24');
             
             // Círculo principal
