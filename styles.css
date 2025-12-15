@@ -152,10 +152,11 @@ body {
     overflow: hidden;
     border-top-left-radius: clamp(12px, 1.5vw, 20px);
     border-bottom-left-radius: clamp(12px, 1.5vw, 20px);
-    width: 75%;
-    height: 85%;
+    width: 72%;
+    height: 95%;
     margin: auto;
     align-self: center;
+    border: 2px solid rgba(90, 95, 255, 0.4);
 }
 
 #mapa-container {
