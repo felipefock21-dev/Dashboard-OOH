@@ -135,7 +135,10 @@ body {
     padding: clamp(12px, 1.5vw, 18px);
     display: flex;
     flex-direction: column;
-    border-right: 2px solid rgba(224, 61, 153, 0.3);
+    border-right: 3px solid rgba(224, 61, 153, 0.3);
+    border-right-width: 2px;
+    border-top-right-radius: clamp(12px, 1.5vw, 20px);
+    border-bottom-right-radius: clamp(12px, 1.5vw, 20px);
     min-height: 0;
 }
 
@@ -147,6 +150,8 @@ body {
     background: rgba(90, 95, 255, 0.08);
     min-height: 0;
     overflow: hidden;
+    border-top-left-radius: clamp(12px, 1.5vw, 20px);
+    border-bottom-left-radius: clamp(12px, 1.5vw, 20px);
 }
 
 #mapa-container {
