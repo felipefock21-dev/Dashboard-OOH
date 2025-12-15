@@ -71,19 +71,19 @@
 
         <!-- Coluna Direita (60%) - Mapa -->
         <div class="right-column">
-            <!-- Seção do Mapa (100% altura) -->
-            <div class="mapa-section">
-                <div class="mapa-content-wrapper">
-                    <!-- Mapa (com check-ins dentro) -->
-                    <div id="mapa-container">
-                        <!-- Lista de Check-in Recentes (esquerda do mapa) -->
-                        <div class="checkins-lateral">
-                            <h4>Check-in Recentes</h4>
-                            <div id="lista-checkins-lateral" class="lista-lateral">
-                                <div class="loading">Carregando...</div>
-                            </div>
-                        </div>
+            <!-- Border Radius Container (engloba tudo) -->
+            <div class="mapa-border-container">
+                <!-- Check-in Recentes (esquerda - grudado) -->
+                <div class="checkins-lateral">
+                    <h4>Check-in Recentes</h4>
+                    <div id="lista-checkins-lateral" class="lista-lateral">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
 
+                <!-- Mapa e Fundo (direita - grudado) -->
+                <div class="mapa-fundo-container">
+                    <div id="mapa-container">
                         <!-- Mapa SVG -->
                         <object id="mapa-object" data="mapa-brasil.svg" type="image/svg+xml" style="width: 100%; height: 100%; display: block;"></object>
                         <!-- Container de animações -->
