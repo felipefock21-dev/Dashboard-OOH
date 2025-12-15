@@ -500,7 +500,7 @@ const geonamesCache = {
     'Palmas': { lat: -10.1753, lng: -48.3382 },
     'Porto Velho': { lat: -8.7619, lng: -63.9039 },
     'Rio Branco': { lat: -9.9761, lng: -67.8102 },
-    'Boa Vista': { lat: 2.8235, lng: -60.6758 },
+    'Boa Vista': { lat: 2.82, lng: -60.6758 },
     'Macapá': { lat: -0.0350, lng: -51.0695 },
     'Pirassununga': { lat: -21.9933, lng: -47.4333 },
     'Araraquara': { lat: -21.7939, lng: -48.1840 },
@@ -521,7 +521,7 @@ const geonamesCache = {
     'Pelotas': { lat: -31.7683, lng: -52.3406 },
     'Santa Cruz do Sul': { lat: -29.7167, lng: -52.4333 },
     'Santa Maria': { lat: -29.6843, lng: -53.8066 },
-    'Uruguaiana': { lat: -32.3582, lng: -56.4133 },
+    'Uruguaiana': { lat: -31.55, lng: -56.4133 },
     'Jundiaí': { lat: -23.1811, lng: -46.8778 },
     'Taubaté': { lat: -23.0277, lng: -45.5555 },
     'São José dos Campos': { lat: -23.1798, lng: -45.8903 },
@@ -614,12 +614,22 @@ async function plotarPings(data, geojson) {
     // Limpar PINGs antigos
     animacoesLayer.innerHTML = '';
     
-    // Bounds geográficos do SVG (do atributo mapsvg:geoViewBox)
-    // Estes são os limites exatos do mapa Brasil
-    const minLng = -74.008595;   // Oeste (esquerda)
-    const maxLng = -34.789914;   // Leste (direita)
-    const maxLat = 5.275696;     // Norte (topo)
-    const minLat = -33.743888;   // Sul (base)
+    // Calcular bounds reais do GeoJSON (não usar valores fixos)
+    let minLng = 180, maxLng = -180;
+    let minLat = 90, maxLat = -90;
+    
+    geojson.features.forEach(feature => {
+        if (feature.geometry.type === 'Polygon') {
+            feature.geometry.coordinates[0].forEach(coord => {
+                minLng = Math.min(minLng, coord[0]);
+                maxLng = Math.max(maxLng, coord[0]);
+                minLat = Math.min(minLat, coord[1]);
+                maxLat = Math.max(maxLat, coord[1]);
+            });
+        }
+    });
+    
+    console.log(`📍 Bounds calculados do GeoJSON: Lng [${minLng.toFixed(2)}, ${maxLng.toFixed(2)}], Lat [${minLat.toFixed(2)}, ${maxLat.toFixed(2)}]`);
     
     // Dimensões do container
     const containerWidth = mapaContainer.clientWidth;
@@ -629,7 +639,7 @@ async function plotarPings(data, geojson) {
     const lngToX = (lng) => {
         // Validar se está dentro dos limites
         if (lng < minLng || lng > maxLng) {
-            console.warn(`⚠️ Longitude FORA dos limites: ${lng} (min: ${minLng}, max: ${maxLng})`);
+            console.warn(`⚠️ Longitude FORA dos limites: ${lng.toFixed(2)} (min: ${minLng.toFixed(2)}, max: ${maxLng.toFixed(2)})`);
             return null;
         }
         const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
@@ -638,7 +648,7 @@ async function plotarPings(data, geojson) {
     const latToY = (lat) => {
         // Validar se está dentro dos limites
         if (lat < minLat || lat > maxLat) {
-            console.warn(`⚠️ Latitude FORA dos limites: ${lat} (min: ${minLat}, max: ${maxLat})`);
+            console.warn(`⚠️ Latitude FORA dos limites: ${lat.toFixed(2)} (min: ${minLat.toFixed(2)}, max: ${maxLat.toFixed(2)})`);
             return null;
         }
         const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
