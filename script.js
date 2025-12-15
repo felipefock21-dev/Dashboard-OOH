@@ -581,6 +581,7 @@ const geonamesCache = {
     'Gramado': { lat: -29.3731, lng: -50.8787 },
     'Castanhal': { lat: -1.2889, lng: -47.9331 },
     'Balneário Camboriú': { lat: -26.9901, lng: -48.6304 },
+    'Bal. Camboriú': { lat: -26.9901, lng: -48.6304 }, // Abreviação comum
     'Piçarras': { lat: -26.9206, lng: -48.6414 },
     'São Carlos': { lat: -22.0175, lng: -47.8945 },
     'Cajamar': { lat: -23.3658, lng: -46.8833 },
