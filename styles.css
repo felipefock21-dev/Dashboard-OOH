@@ -176,8 +176,8 @@ body {
     max-width: 95%;
     max-height: 95%;
     object-fit: contain;
-    object-position: center top;
-    transform: translateX(2%);
+    object-position: center;
+    transform: translateX(0%);
 }
 
 #animacoes-layer {

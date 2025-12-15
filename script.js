@@ -627,9 +627,8 @@ async function plotarPings(data, geojson) {
     // Converter coordenadas geográficas para pixels com precisão
     const lngToX = (lng) => {
         const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
-        // Ajustar 2% para compensar o translateX(2%)
-        const adjustedPercent = percentX + 2;
-        return (adjustedPercent / 100) * containerWidth;
+        // Sem ajuste - usar coordenada exata
+        return (percentX / 100) * containerWidth;
     };
     const latToY = (lat) => {
         const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
