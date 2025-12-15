@@ -615,22 +615,32 @@ async function plotarPings(data, geojson) {
     animacoesLayer.innerHTML = '';
     
     // Bounds geográficos do SVG (do atributo mapsvg:geoViewBox)
-    const minLng = -74.008595;
-    const maxLng = -34.789914;
-    const maxLat = 5.275696;
-    const minLat = -33.743888;
+    // Estes são os limites exatos do mapa Brasil
+    const minLng = -74.008595;   // Oeste (esquerda)
+    const maxLng = -34.789914;   // Leste (direita)
+    const maxLat = 5.275696;     // Norte (topo)
+    const minLat = -33.743888;   // Sul (base)
     
     // Dimensões do container
     const containerWidth = mapaContainer.clientWidth;
     const containerHeight = mapaContainer.clientHeight;
     
-    // Converter coordenadas geográficas para pixels com precisão
+    // Converter coordenadas geográficas para pixels com validação de limites
     const lngToX = (lng) => {
+        // Validar se está dentro dos limites
+        if (lng < minLng || lng > maxLng) {
+            console.warn(`⚠️ Longitude FORA dos limites: ${lng} (min: ${minLng}, max: ${maxLng})`);
+            return null;
+        }
         const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
-        // Sem ajuste - usar coordenada exata
         return (percentX / 100) * containerWidth;
     };
     const latToY = (lat) => {
+        // Validar se está dentro dos limites
+        if (lat < minLat || lat > maxLat) {
+            console.warn(`⚠️ Latitude FORA dos limites: ${lat} (min: ${minLat}, max: ${maxLat})`);
+            return null;
+        }
         const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
         return (percentY / 100) * containerHeight;
     };
@@ -652,6 +662,12 @@ async function plotarPings(data, geojson) {
         if (coords) {
             const x = lngToX(coords.lng);
             const y = latToY(coords.lat);
+            
+            // Validar se coordenadas estão dentro dos limites
+            if (x === null || y === null) {
+                console.warn(`⚠️ PING descartado: ${cidade} (fora dos limites do mapa)`);
+                continue;
+            }
             
             // Criar SVG do PING - centralizar no ponto (offset de -50%)
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
