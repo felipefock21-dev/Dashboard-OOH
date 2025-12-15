@@ -175,8 +175,8 @@ body {
 #mapa-object {
     width: auto;
     height: auto;
-    max-width: 50%;
-    max-height: 50%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
     object-position: center;
 }
@@ -370,26 +370,27 @@ body {
 .rankings-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(2px, 0.4vw, 4px);
-    flex: 1;
-    padding: 0;
+    gap: clamp(2px, 0.3vw, 3px);
+    flex: 0 0 auto;
+    padding: clamp(2px, 0.2vw, 3px);
     margin: 0;
     min-height: 0;
     overflow: visible;
+    max-height: fit-content;
 }
 
 
 
 .ranking-card {
-    background: rgba(224, 61, 153, 0.08);
-    border-radius: clamp(6px, 0.8vw, 10px);
-    padding: clamp(4px, 0.6vw, 8px);
+    background: rgba(224, 61, 153, 0.06);
+    border-radius: clamp(3px, 0.3vw, 4px);
+    padding: clamp(1px, 0.15vw, 2px);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(224, 61, 153, 0.3);
+    border: 1px solid rgba(224, 61, 153, 0.15);
     display: flex;
     flex-direction: column;
-    gap: clamp(2px, 0.4vw, 4px);
-    min-height: clamp(48px, 8vh, 75px);
+    gap: clamp(0px, 0.1vw, 1px);
+    min-height: auto;
     transition: all 0.3s ease;
     overflow: hidden;
 }
@@ -401,34 +402,35 @@ body {
 }
 
 .ranking-titulo {
-    font-size: clamp(12px, 1.5vw, 16px);
+    font-size: clamp(8px, 0.6vw, 10px);
     font-weight: 600;
     color: #E03D99;
     margin: 0;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(224, 61, 153, 0.2);
+    padding-bottom: 1px;
+    border-bottom: none;
+    line-height: 1;
 }
 
 .ranking-lista {
     display: flex;
     flex-direction: column;
-    gap: clamp(2px, 0.4vw, 4px);
+    gap: clamp(1px, 0.1vw, 1px);
     flex: 1;
-    overflow: visible;
+    overflow: hidden;
     min-height: 0;
 }
 
 
 
 .ranking-item {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: clamp(6px, 0.8vw, 10px);
-    padding: clamp(4px, 0.6vw, 8px);
-    border-left: 3px solid #5A5FFF;
+    background: transparent;
+    border-radius: clamp(2px, 0.2vw, 3px);
+    padding: clamp(0px, 0.1vw, 1px);
+    border-left: 1px solid #5A5FFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 4px;
+    gap: 1px;
     min-width: 0;
     overflow: hidden;
 }
@@ -436,26 +438,29 @@ body {
 .ranking-item-posicao {
     font-weight: 700;
     color: #E03D99;
-    font-size: clamp(9px, 1vw, 12px);
-    min-width: 16px;
+    font-size: clamp(5px, 0.45vw, 7px);
+    min-width: 6px;
+    line-height: 1;
 }
 
 .ranking-item-nome {
     flex: 1;
-    font-size: clamp(8px, 0.9vw, 11px);
-    color: rgba(255, 255, 255, 0.85);
+    font-size: clamp(5px, 0.45vw, 7px);
+    color: rgba(255, 255, 255, 0.75);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
+    line-height: 1;
 }
 
 .ranking-item-valor {
     font-weight: 600;
     color: #5A5FFF;
-    font-size: clamp(8px, 0.9vw, 11px);
+    font-size: clamp(5px, 0.45vw, 7px);
     text-align: right;
     white-space: nowrap;
+    line-height: 1;
 }
 
 /* Classes antigas de gráficos removidas */
