@@ -629,31 +629,21 @@ async function plotarPings(data, geojson) {
         }
     });
     
-    // Obter dimensões reais do SVG renderizado
-    const mapaRect = mapaObject.getBoundingClientRect();
-    const containerRect = animacoesLayer.getBoundingClientRect();
-    const containerParentRect = mapaContainer.getBoundingClientRect();
+    // Obter dimensões do container (onde os PINGs serão posicionados)
+    const containerWidth = mapaContainer.clientWidth;
+    const containerHeight = mapaContainer.clientHeight;
     
-    // Calcular a escala e offset do SVG dentro do container
-    const svgWidth = mapaRect.width;
-    const svgHeight = mapaRect.height;
-    let svgOffsetX = mapaRect.left - containerParentRect.left;
-    const svgOffsetY = mapaRect.top - containerParentRect.top;
-    
-    // Ajustar offset para considerar o transform: translateX(4%)
-    const translateXPercent = 4; // 4% do svgWidth
-    svgOffsetX += (svgWidth * translateXPercent) / 100;
-    
-    // Converter coordenadas geográficas para pixels SVG (relativos ao animacoes-layer)
+    // Converter coordenadas geográficas para pixels do container
+    // Considerando que o SVG ocupa todo o container com transform: translateX(4%)
     const lngToX = (lng) => {
-        const x = ((lng - minLng) / (maxLng - minLng)) * svgWidth + svgOffsetX;
-        // Retornar relativo ao animacoes-layer (que é absolute dentro de mapa-container)
-        return x - (containerRect.left - containerParentRect.left);
+        const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
+        // Ajustar para o translateX(4%)
+        const adjustedPercent = percentX + 4;
+        return (adjustedPercent / 100) * containerWidth;
     };
     const latToY = (lat) => {
-        const y = ((maxLat - lat) / (maxLat - minLat)) * svgHeight + svgOffsetY;
-        // Retornar relativo ao animacoes-layer
-        return y - (containerRect.top - containerParentRect.top);
+        const percentY = ((maxLat - lat) / (maxLat - minLat)) * 100;
+        return (percentY / 100) * containerHeight;
     };
     
     // Filtrar cidades únicas com status ativo
