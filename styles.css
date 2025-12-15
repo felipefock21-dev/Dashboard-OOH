@@ -117,13 +117,12 @@ body {
 /* Check-in Recentes - esquerda grudado */
 .checkins-lateral {
     flex: 0 0 auto;
-    width: clamp(200px, 25%, 320px);
+    width: clamp(150px, 18%, 250px);
     background: #001B4D;
-    padding: clamp(12px, 1.5vw, 18px);
+    padding: clamp(8px, 1vw, 12px);
     display: flex;
     flex-direction: column;
-    border-right: 3px solid rgba(224, 61, 153, 0.3);
-    border-right-width: 2px;
+    border-right: 2px solid rgba(224, 61, 153, 0.3);
     border-top-right-radius: clamp(12px, 1.5vw, 20px);
     border-bottom-right-radius: clamp(12px, 1.5vw, 20px);
     min-height: 0;
@@ -136,7 +135,7 @@ body {
     position: relative;
     background: rgba(90, 95, 255, 0.08);
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
     border-top-left-radius: clamp(12px, 1.5vw, 20px);
     border-bottom-left-radius: clamp(12px, 1.5vw, 20px);
     border: 2px solid rgba(90, 95, 255, 0.4);
@@ -174,8 +173,8 @@ body {
 #mapa-object {
     width: auto;
     height: auto;
-    max-width: 75%;
-    max-height: 75%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
     object-position: center;
     transform: translateX(-8%);
