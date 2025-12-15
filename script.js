@@ -304,7 +304,7 @@ async function loadDashboard() {
     console.log('Dashboard atualizado!', metrics);
 }
 
-// Inicializar mapa do Brasil (estático em SVG)
+// Inicializar mapa do Brasil (estático em SVG via object tag)
 let mapLoaded = false;
 let geoJsonCache = null;
 
@@ -319,22 +319,17 @@ function loadMap(data) {
     }
     mapLoaded = true;
     
-    const svg = document.getElementById('mapasvg');
-    
-    // Usar SVG do Brasil pré-definido com qualidade
+    // Carregar GeoJSON do Brasil para plotar os PINGs
     fetch('https://raw.githubusercontent.com/brunocs/brasil-geojson/master/brasil.json')
         .then(response => response.json())
         .then(geojson => {
             geoJsonCache = geojson;
-            renderBrazilMap(svg, geojson);
             // Plotar PINGs das praças ativas
             plotarPings(data, geojson);
-            console.log('Mapa do Brasil carregado com sucesso');
+            console.log('Mapa do Brasil e PINGs carregados com sucesso');
         })
         .catch(error => {
-            console.error('Erro ao carregar mapa:', error);
-            // Fallback: carregar do KML local
-            loadMapFromKML(svg, data);
+            console.error('Erro ao carregar dados do mapa:', error);
         });
 }
 
