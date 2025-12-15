@@ -614,26 +614,17 @@ async function plotarPings(data, geojson) {
     // Limpar PINGs antigos
     animacoesLayer.innerHTML = '';
     
-    // Calcular bounds para converter coordenadas geográficas em pixels
-    let minLng = 180, maxLng = -180;
-    let minLat = 90, maxLat = -90;
+    // Bounds geográficos do SVG (do atributo mapsvg:geoViewBox)
+    const minLng = -74.008595;
+    const maxLng = -34.789914;
+    const maxLat = 5.275696;
+    const minLat = -33.743888;
     
-    geojson.features.forEach(feature => {
-        if (feature.geometry.type === 'Polygon') {
-            feature.geometry.coordinates[0].forEach(coord => {
-                minLng = Math.min(minLng, coord[0]);
-                maxLng = Math.max(maxLng, coord[0]);
-                minLat = Math.min(minLat, coord[1]);
-                maxLat = Math.max(maxLat, coord[1]);
-            });
-        }
-    });
-    
-    // Usar apenas o tamanho do container
+    // Dimensões do container
     const containerWidth = mapaContainer.clientWidth;
     const containerHeight = mapaContainer.clientHeight;
     
-    // Converter coordenadas geográficas em percentuais
+    // Converter coordenadas geográficas para pixels com precisão
     const lngToX = (lng) => {
         const percentX = ((lng - minLng) / (maxLng - minLng)) * 100;
         // Ajustar 2% para compensar o translateX(2%)
