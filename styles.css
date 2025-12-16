@@ -203,27 +203,7 @@ body {
     filter: drop-shadow(0 0 8px rgba(224, 61, 153, 0.6));
 }
 
-.pinga-ripple {
-    animation: pinga-pulse 2s ease-in-out infinite;
-}
-
-@keyframes pinga-pulse {
-    0% {
-        r: 6px;
-        stroke-width: 1;
-        opacity: 1;
-    }
-    50% {
-        r: 12px;
-        stroke-width: 0.5;
-        opacity: 0.5;
-    }
-    100% {
-        r: 18px;
-        stroke-width: 0;
-        opacity: 0;
-    }
-}
+/* Animação em canvas - remover de SVG */
 
 .checkins-lateral h4 {
     font-size: clamp(12px, 1.5vw, 16px);
