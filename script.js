@@ -675,60 +675,7 @@ async function getCoordinatesByCity(cityName) {
     return null;
 }
 
-// Sistema de animação centralizado com Canvas
-let pingsData = []; // Array de {x, y, cidade, startTime}
-let animationStartTime = 0;
-const RIPPLE_DURATION = 2000; // 2s em ms
-const RIPPLE_RADIUS_MAX = 18;
-
-function startPingsAnimation() {
-    const canvas = document.getElementById('pings-canvas');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    // Redimensionar canvas para match com container
-    const container = document.getElementById('mapa-container');
-    if (container) {
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-    }
-    
-    if (animationStartTime === 0) {
-        animationStartTime = performance.now();
-    }
-    
-    function drawFrame(currentTime) {
-        const elapsed = currentTime - animationStartTime;
-        
-        // Limpar canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Desenhar ripple para cada PING
-        pingsData.forEach(ping => {
-            const timeSincePingStart = (elapsed % RIPPLE_DURATION) / RIPPLE_DURATION;
-            
-            // Calcular raio e opacidade do ripple
-            const rippleRadius = timeSincePingStart * RIPPLE_RADIUS_MAX;
-            const rippleOpacity = Math.max(0, 1 - timeSincePingStart);
-            
-            // Desenhar ripple (onda)
-            ctx.strokeStyle = `rgba(90, 95, 255, ${rippleOpacity * 0.7})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.arc(ping.x, ping.y, rippleRadius, 0, Math.PI * 2);
-            ctx.stroke();
-        });
-        
-        // Próximo frame
-        requestAnimationFrame(drawFrame);
-    }
-    
-    requestAnimationFrame(drawFrame);
-}
-
-// Plotar PINGs no mapa (SVG estático + Canvas para animação)
+// Plotar PINGs no mapa (SVG)
 async function plotarPings(data, geojson) {
     const animacoesLayer = document.getElementById('animacoes-layer');
     const mapaContainer = document.getElementById('mapa-container');
@@ -799,10 +746,6 @@ async function plotarPings(data, geojson) {
     
     const cidadesUnicas = [...new Set(activeData.map(item => item.cidade))];
     
-    // Limpar dados de PINGs anteriores e resetar animação
-    pingsData = [];
-    animationStartTime = 0;
-    
     // Plotar PING para cada cidade ativa
     for (const cidade of cidadesUnicas) {
         if (!cidade || cidade === 'N/A') continue;
@@ -819,10 +762,7 @@ async function plotarPings(data, geojson) {
                 continue;
             }
             
-            // Adicionar à lista de dados para animação via canvas
-            pingsData.push({ x, y, cidade });
-            
-            // Criar SVG do PING estático (apenas o círculo, sem ripple)
+            // Criar SVG do PING - centralizar no ponto (offset de -50%)
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('class', 'pinga');
             svg.setAttribute('style', `left: calc(${x}px - 4.5px); top: calc(${y}px - 4.5px);`);
@@ -830,7 +770,7 @@ async function plotarPings(data, geojson) {
             svg.setAttribute('height', '9');
             svg.setAttribute('viewBox', '0 0 24 24');
             
-            // Círculo principal (estático)
+            // Círculo principal
             const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             circle.setAttribute('cx', '12');
             circle.setAttribute('cy', '12');
@@ -838,6 +778,17 @@ async function plotarPings(data, geojson) {
             circle.setAttribute('fill', '#E03D99');
             circle.setAttribute('filter', 'drop-shadow(0 0 10px #E03D99)');
             svg.appendChild(circle);
+            
+            // Ripple (onda)
+            const ripple = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            ripple.setAttribute('cx', '12');
+            ripple.setAttribute('cy', '12');
+            ripple.setAttribute('r', '6');
+            ripple.setAttribute('fill', 'none');
+            ripple.setAttribute('stroke', '#5A5FFF');
+            ripple.setAttribute('stroke-width', '1');
+            ripple.setAttribute('class', 'pinga-ripple');
+            svg.appendChild(ripple);
             
             // Tooltip ao hover
             svg.addEventListener('mouseenter', (e) => {
@@ -856,11 +807,6 @@ async function plotarPings(data, geojson) {
             console.log(`PING plotado: ${cidade} (${coords.lat}, ${coords.lng})`);
         }
     }
-    
-    // Iniciar animação dos ripples
-    startPingsAnimation();
-    
-    console.log(`📍 Total de PINGs plotados: ${pingsData.length}`);
 }
 
 // Atualizar a cada 30 segundos
