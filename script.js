@@ -47,12 +47,19 @@ function parseCSV(csv) {
         
         const values = lines[i].split(',').map(v => v.trim());
         
+        // Garantir que impactos seja um número válido
+        let impactos = 0;
+        if (impactosIdx >= 0 && values[impactosIdx]) {
+            const impactosValue = values[impactosIdx].replace(/\D/g, '');
+            impactos = parseInt(impactosValue || '0', 10);
+        }
+        
         const item = {
             cliente: clienteIdx >= 0 ? values[clienteIdx] || '' : '',
             status: statusIdx >= 0 ? values[statusIdx] || '' : '',
             cidade: cidadeIdx >= 0 ? values[cidadeIdx] || '' : '',
             exibidora: exibidoraIdx >= 0 ? values[exibidoraIdx] || '' : '',
-            impactostotal: impactosIdx >= 0 ? parseInt(values[impactosIdx] || '0', 10) : 0
+            impactostotal: impactos
         };
         
         data.push(item);
@@ -86,8 +93,9 @@ function processMetrics(data) {
     const clientesUnicos = new Set(activeData.map(item => item.cliente));
     const totalClientes = clientesUnicos.size;
 
-    // Praças Ativas (contagem única de cidades ativas)
-    const pracasUnicas = new Set(activeData.map(item => item.cidade));
+    // Praças Ativas (contagem única de cidades ativas com status campanha = ATIVA)
+    // Toda cidade diferente será considerada como 1
+    const pracasUnicas = new Set(activeData.map(item => item.cidade.toLowerCase().trim()).filter(c => c && c !== 'n/a'));
     const totalPracas = pracasUnicas.size;
 
     // Exibidoras Ativas (contagem única de exibidoras ativas)
@@ -161,6 +169,10 @@ function processMetrics(data) {
     // Ranking das 3 cidades com mais impactos totais
     const cidadesImpactos = new Map();
     activeData.forEach(item => {
+        // Ignorar cidades vazias ou "N/A"
+        const cidade = item.cidade.toLowerCase().trim();
+        if (!cidade || cidade === 'n/a') return;
+        
         if (!cidadesImpactos.has(item.cidade)) {
             cidadesImpactos.set(item.cidade, 0);
         }
@@ -230,7 +242,7 @@ function renderRankingList(data, elementId) {
 
 // Renderizar check-ins recentes na lateral do mapa
 function renderCheckinsRecentes(data) {
-    const container = document.getElementById('lista-checkins-lateral');
+    const container = document.getElementById('lista-lateral');
     if (!container) return;
     
     container.innerHTML = '';
