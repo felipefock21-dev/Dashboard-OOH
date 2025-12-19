@@ -34,7 +34,7 @@ function parseCSV(csv) {
     
     headers.forEach((h, idx) => {
         if (h.includes('cliente') && !h.includes('status')) clienteIdx = idx;
-        if (h.includes('status cliente')) statusIdx = idx;  // ESPECÍFICO: "status cliente"
+        if (h.includes('status campanha')) statusIdx = idx;  // ESPECÍFICO: "status campanha"
         if (h.includes('cidade') || h.includes('praca')) cidadeIdx = idx;
         if (h.includes('exibidora') || h.includes('emissor')) exibidoraIdx = idx;
         if (h.includes('impacto')) impactosIdx = idx;
@@ -67,7 +67,7 @@ function processMetrics(data) {
     console.log('=== PROCESSANDO MÉTRICAS ===');
     console.log('Total de linhas carregadas:', data.length);
     
-    // Filtrar apenas registros com "Status Cliente" = ATIVA
+    // Filtrar apenas registros com "Status Campanha" = ATIVA
     const activeData = data.filter(item => {
         const status = item.status.toLowerCase().trim();
         const isActive = status === 'ativo' || status === 'ativa' || status === 'a';
@@ -235,7 +235,7 @@ function renderCheckinsRecentes(data) {
     
     container.innerHTML = '';
 
-    // Filtrar dados ativos e ordenar por último (pegamos últimos 10)
+    // Filtrar dados ativos (status campanha) e ordenar por último (pegamos últimos 10)
     const activeData = data.filter(item => {
         const status = item.status.toLowerCase().trim();
         return status === 'ativo' || status === 'ativa' || status === 'a';
@@ -738,7 +738,7 @@ async function plotarPings(data, geojson) {
         return svgOffsetY + (percentY * svgHeight);
     };
     
-    // Filtrar cidades únicas com status ativo
+    // Filtrar cidades únicas com status campanha ativo
     const activeData = data.filter(item => {
         const status = item.status.toLowerCase().trim();
         return status === 'ativo' || status === 'ativa' || status === 'a';
