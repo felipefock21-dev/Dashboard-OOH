@@ -823,7 +823,7 @@ async function plotarPings(data, geojson) {
             // Criar SVG do PING - centralizar no ponto (offset de -50%)
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('class', 'pinga');
-            svg.setAttribute('style', `left: calc(${x}px - 4.5px); top: calc(${y}px - 4.5px);`);
+            svg.setAttribute('style', `left: calc(${x}px - 4.5px + 10px); top: calc(${y}px - 4.5px);`);
             svg.setAttribute('width', '9');
             svg.setAttribute('height', '9');
             svg.setAttribute('viewBox', '0 0 24 24');
