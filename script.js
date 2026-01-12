@@ -306,10 +306,6 @@ function renderCheckinsRecentes(data) {
         div.className = 'checkin-item';
         
         div.innerHTML = `
-            <div class="checkin-header">
-                <span class="checkin-cliente">${item.cliente || 'N/A'}</span>
-                <span class="checkin-hora">Agora</span>
-            </div>
             <div class="checkin-praca">${item.cidade || 'N/A'}</div>
             <div class="checkin-exibidora">${item.exibidora || 'N/A'}</div>
         `;
