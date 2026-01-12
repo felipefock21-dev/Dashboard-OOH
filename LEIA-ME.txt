@@ -1,0 +1,134 @@
+# 🚀 INSTRUÇÕES RÁPIDAS - Dashboard OOH Corrigido
+
+## ⚡ INÍCIO RÁPIDO (30 segundos)
+
+### 1. Abrir o Dashboard
+```
+Clique 2x em: index.html
+```
+
+### 2. Verificar Console
+```
+Pressione: F12 (Abrir Developer Tools)
+Aba: Console
+Procure por mensagens verdes ✅
+```
+
+### 3. Se não carregou dados:
+```
+✅ Se ver: "Erro ao carregar dados"
+→ Google Sheets está PRIVADO
+
+SOLUÇÃO:
+1. Abra: https://docs.google.com/spreadsheets/d/1H3qFr2if6MdNN4ZZnrMidTq9kNpOdb6OY8ICAS9Gsj4
+2. Clique: Compartilhar
+3. Mude para: "Qualquer pessoa com o link pode visualizar"
+4. Recarregue: Ctrl+F5
+```
+
+---
+
+## 📖 DOCUMENTAÇÃO
+
+| Arquivo | Propósito |
+|---------|-----------|
+| **index.html** | Dashboard principal ✅ CORRIGIDO |
+| **script.js** | Lógica do dashboard ✅ CORRIGIDO |
+| **diagnostico.html** | 🔍 Testar componentes |
+| **DEBUG.md** | 📋 Guia completo de debug |
+| **CORRECOES.md** | 📝 Resumo das alterações |
+
+---
+
+## 🔧 CORREÇÕES FEITAS
+
+✅ Timestamps de cache atualizados (data inválida removida)
+✅ Tratamento CORS melhorado para Google Sheets
+✅ Mapa aguarda renderização antes de plotar PINGs
+✅ Logging detalhado adicionado em todo script
+✅ Validações de elementos ausentes
+
+---
+
+## 📊 COMO SABER SE ESTÁ FUNCIONANDO
+
+### Console (F12) mostrará:
+```
+🚀 Carregando dashboard...
+🔄 Tentando carregar dados do Google Sheets...
+✅ Dados recebidos! Tamanho: 1234 bytes
+✅ 50 linhas carregadas com sucesso
+```
+
+### Dashboard mostrará:
+- ✅ Números em vez de "--"
+- ✅ Pings (bolinhas rosa) no mapa
+- ✅ Lista de checkins recentes na lateral
+- ✅ Rankings preenchidos
+
+---
+
+## 🆘 PROBLEMAS COMUNS
+
+### ❌ Tela mostra "--"
+**Causa**: Dados não carregaram
+**Solução**: Veja seção "Se não carregou dados" acima
+
+### ❌ Mapa vazio
+**Causa**: PINGs não estão sendo plotados
+**Solução**: 
+1. Abra `diagnostico.html`
+2. Clique "Testar Carregamento do Mapa"
+3. Veja os logs
+
+### ❌ Erro na aba Console
+**Solução**:
+1. Abra `diagnostico.html`
+2. Veja os logs em tempo real
+3. Compare com `DEBUG.md`
+
+---
+
+## 🎯 PRÓXIMAS AÇÕES
+
+### Se tudo funciona:
+✅ Dashboard está pronto para usar!
+✅ Vai recarregar dados a cada 30 segundos
+✅ PINGs aparecem no mapa automaticamente
+
+### Se não funciona:
+1. Abra `diagnostico.html` para testar componentes
+2. Leia `DEBUG.md` para guia passo-a-passo
+3. Verifique Google Sheets (ver seção acima)
+
+---
+
+## 💡 DICAS
+
+- **F12**: Abre console para ver logs
+- **Ctrl+F5**: Recarrega página sem cache
+- **diagnostico.html**: Interface visual para testar
+- **DEBUG.md**: Guia completo com soluções
+
+---
+
+## 📞 RESUMO DAS MUDANÇAS
+
+```
+Versão: 20260112120000
+Data: 12 de Janeiro de 2026
+
+✅ Timestamps atualizados
+✅ Google Sheets com melhor tratamento de erro
+✅ Mapa com carregamento correto
+✅ Logging aprimorado para diagnóstico
+✅ Validações de elementos adicionadas
+```
+
+---
+
+**🎉 Dashboard corrigido e pronto para usar!**
+
+Abra: **index.html**
+Teste com: **diagnostico.html**
+Leia: **DEBUG.md** (se tiver dúvidas)

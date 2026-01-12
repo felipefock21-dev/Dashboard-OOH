@@ -7,14 +7,34 @@ async function fetchSheetData() {
         // URL para exportar a planilha como CSV
         const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
         
-        const response = await fetch(csvUrl);
-        if (!response.ok) throw new Error('Erro ao buscar planilha');
+        console.log('🔄 Tentando carregar dados do Google Sheets...');
+        console.log('ID da Planilha:', SHEET_ID);
+        console.log('URL:', csvUrl);
+        
+        const response = await fetch(csvUrl, {
+            method: 'GET',
+            headers: {
+                'Accept': 'text/csv'
+            }
+        });
+        
+        if (!response.ok) {
+            console.error('Erro HTTP:', response.status, response.statusText);
+            throw new Error(`Erro ${response.status} ao buscar planilha`);
+        }
         
         const csv = await response.text();
+        console.log('✅ Dados recebidos! Tamanho:', csv.length, 'bytes');
+        
+        if (!csv || csv.trim().length === 0) {
+            console.warn('⚠️ Resposta vazia do Google Sheets');
+            throw new Error('Resposta vazia');
+        }
+        
         return parseCSV(csv);
     } catch (error) {
-        console.error('Erro:', error);
-        alert('Erro ao carregar dados. Verifique se a planilha está pública.');
+        console.error('❌ Erro ao carregar dados:', error);
+        alert('Erro ao carregar dados. Verifique se:\n1. A planilha está PÚBLICA\n2. O ID está correto\n3. Há conexão com internet');
         return [];
     }
 }
@@ -69,10 +89,24 @@ function parseCSV(csv) {
     return data;
 }
 
-// Processar dados e calcular métricas
+// Processpar dados e calcular métricas
 function processMetrics(data) {
     console.log('=== PROCESSANDO MÉTRICAS ===');
     console.log('Total de linhas carregadas:', data.length);
+    
+    if (data.length === 0) {
+        console.warn('⚠️ Nenhum dado para processar!');
+        return {
+            totalImpactos: 0,
+            totalClientes: 0,
+            totalPracas: 0,
+            totalExibidoras: 0,
+            clientesMaisAtivos: [],
+            pracasMaisAtivas: [],
+            exibidorasMaisAtivas: [],
+            rankingCidades: []
+        };
+    }
     
     // Filtrar apenas registros com "Status Campanha" = ATIVA
     const activeData = data.filter(item => {
@@ -81,22 +115,28 @@ function processMetrics(data) {
         return isActive;
     });
     
-    console.log('Linhas com status ATIVA:', activeData.length);
+    console.log('✅ Linhas com status ATIVA:', activeData.length);
+    if (activeData.length === 0) {
+        console.warn('⚠️ Nenhum registro ATIVO encontrado!');
+    }
+    
     console.log('Exemplos de status encontrados:', [...new Set(data.map(item => item.status.trim()).slice(0, 10))]);
     console.log('Primeiras linhas ativas:', activeData.slice(0, 3));
 
     // KPIs
     const totalImpactos = activeData.reduce((sum, item) => sum + item.impactostotal, 0);
-    console.log('Total de impactos calculado:', totalImpactos);
+    console.log('📊 Total de impactos calculado:', totalImpactos);
     
     // Clientes Ativos (contagem única de clientes)
     const clientesUnicos = new Set(activeData.map(item => item.cliente));
     const totalClientes = clientesUnicos.size;
+    console.log('👥 Total de clientes únicos:', totalClientes);
 
     // Praças Ativas (contagem única de cidades ativas com status campanha = ATIVA)
     // Toda cidade diferente será considerada como 1
     const pracasUnicas = new Set(activeData.map(item => item.cidade.toLowerCase().trim()).filter(c => c && c !== 'n/a'));
     const totalPracas = pracasUnicas.size;
+    console.log('🏙️ Total de praças (cidades):', totalPracas);
 
     // Exibidoras Ativas (contagem única de exibidoras ativas)
     const exibidorasUnicas = new Set(activeData.map(item => item.exibidora));
@@ -284,18 +324,22 @@ function updateTime() {
 
 // Carregar e exibir dados
 async function loadDashboard() {
-    console.log('Carregando dados...');
+    console.log('🚀 Carregando dashboard...');
     const data = await fetchSheetData();
     
     if (data.length === 0) {
-        console.error('Nenhum dado foi carregado');
+        console.error('❌ Nenhum dado foi carregado');
+        document.getElementById('totalImpactos').textContent = '--';
+        document.getElementById('totalClientes').textContent = '--';
+        document.getElementById('totalPracas').textContent = '--';
+        document.getElementById('totalExibidoras').textContent = '--';
         return;
     }
 
-    console.log(`${data.length} linhas carregadas`);
+    console.log(`✅ ${data.length} linhas carregadas com sucesso`);
     const metrics = processMetrics(data);
 
-    console.log('Métricas calculadas:', metrics);
+    console.log('📈 Métricas calculadas:', metrics);
 
     // Renderizar KPIs (4 métricas principais)
     renderKPIs(metrics);
@@ -324,10 +368,13 @@ function loadMap(data) {
     // Apenas inicializa uma vez
     if (mapLoaded) {
         // Se já carregou, apenas atualizar os PINGs
+        console.log('🔄 Atualizando PINGs...');
         plotarPings(data, geoJsonCache);
         return;
     }
     mapLoaded = true;
+    
+    console.log('📍 Inicializando mapa...');
     
     // Criar um GeoJSON mínimo apenas para os bounds do Brasil
     geoJsonCache = {
@@ -341,9 +388,17 @@ function loadMap(data) {
         }]
     };
     
-    // Plotar PINGs das praças ativas
-    plotarPings(data, geoJsonCache);
-    console.log('Mapa do Brasil e PINGs carregados com sucesso');
+    // Aguardar o SVG ser renderizado
+    const mapaObject = document.getElementById('mapa-object');
+    if (mapaObject) {
+        // Tentar carregar após o elemento estar pronto
+        setTimeout(() => {
+            console.log('📌 Plotando PINGs no mapa...');
+            plotarPings(data, geoJsonCache);
+        }, 500); // Dar tempo para o SVG ser renderizado
+    }
+    
+    console.log('✅ Mapa do Brasil carregado com sucesso');
 }
 
 function loadMapFromKML(svg) {
@@ -805,27 +860,38 @@ async function plotarPings(data, geojson) {
             // Tooltip ao hover
             svg.addEventListener('mouseenter', (e) => {
                 const tooltip = document.getElementById('tooltip');
-                tooltip.innerHTML = `<div class="tooltip-content"><strong>${cidade}</strong><div>Praça Ativa</div></div>`;
-                tooltip.style.left = (e.pageX + 10) + 'px';
-                tooltip.style.top = (e.pageY + 10) + 'px';
-                tooltip.classList.remove('hidden');
+                if (tooltip) {
+                    tooltip.innerHTML = `<div class="tooltip-content"><strong>${cidade}</strong><div>Praça Ativa</div></div>`;
+                    tooltip.style.left = (e.pageX + 10) + 'px';
+                    tooltip.style.top = (e.pageY + 10) + 'px';
+                    tooltip.classList.remove('hidden');
+                }
             });
             
             svg.addEventListener('mouseleave', () => {
-                document.getElementById('tooltip').classList.add('hidden');
+                const tooltip = document.getElementById('tooltip');
+                if (tooltip) {
+                    tooltip.classList.add('hidden');
+                }
             });
             
             animacoesLayer.appendChild(svg);
-            console.log(`PING plotado: ${cidade} (${coords.lat}, ${coords.lng})`);
+            console.log(`✅ PING plotado: ${cidade} (lat: ${coords.lat}, lng: ${coords.lng})`);
         }
     }
+    console.log('✨ Todos os PINGs foram plotados!');
 }
 
 // Atualizar a cada 30 segundos
+console.log('⏱️ Configurando atualização automática a cada 30 segundos');
 setInterval(loadDashboard, 30000);
 
 // Carregar dashboard na inicialização
+console.log('🎯 Iniciando carregamento do dashboard...');
 loadDashboard();
 
 // Carregar ao abrir a página
-document.addEventListener('DOMContentLoaded', loadDashboard);
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 DOM completamente carregado!');
+    loadDashboard();
+});

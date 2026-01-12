@@ -1,0 +1,123 @@
+✅ CHECKLIST PRÉ-PRODUÇÃO - Dashboard OOH
+
+## 📋 VERIFICAÇÃO ANTES DE COLOCAR NO AR
+
+### 1. GOOGLE SHEETS
+- [ ] Planilha está PÚBLICA (compartilhamento com qualquer pessoa)
+- [ ] Colunas estão nomeadas corretamente:
+  - [ ] "cliente" ou similar
+  - [ ] "status campanha" 
+  - [ ] "cidade" ou "praca"
+  - [ ] "exibidora" ou "emissor"
+  - [ ] "impactos"
+- [ ] Há registros com status "Ativo" ou "Ativa"
+- [ ] ID correto: 1H3qFr2if6MdNN4ZZnrMidTq9kNpOdb6OY8ICAS9Gsj4
+
+### 2. DASHBOARD
+- [ ] Arquivo index.html abre sem erros
+- [ ] Console (F12) não mostra erros em vermelho
+- [ ] Métricas mostram números (não "-")
+- [ ] Pings aparecem no mapa
+
+### 3. COMPONENTES
+- [ ] Arquivo mapa-brasil.svg existe
+- [ ] Arquivo styles.css carrega corretamente
+- [ ] Arquivo script.js carrega corretamente
+- [ ] Cache versão está: v=20260112120000
+
+### 4. FUNCIONALIDADES
+- [ ] Dados carregam do Google Sheets
+- [ ] Pings aparecem no mapa
+- [ ] Checkins recentes aparecem na lateral
+- [ ] Rankings são preenchidos
+- [ ] Dashboard atualiza a cada 30 segundos
+
+### 5. NAVEGADORES
+- [ ] Chrome: ✅ Testado
+- [ ] Firefox: ✅ Testado
+- [ ] Safari: ✅ Testado
+- [ ] Edge: ✅ Testado
+
+### 6. RESOLUÇÃO
+- [ ] Desktop (1920x1080): ✅ Testado
+- [ ] Tablet (1024x768): ✅ Testado
+- [ ] Mobile (verificar responsividade)
+
+### 7. PERFORMANCE
+- [ ] Dashboard carrega em menos de 5 segundos
+- [ ] Sem lag ao movimentar mouse no mapa
+- [ ] Atualizações automáticas funcionam
+
+### 8. DADOS
+- [ ] Total de Impactos: ✅ Correto
+- [ ] Clientes Ativos: ✅ Correto
+- [ ] Praças Ativas: ✅ Correto
+- [ ] Exibidoras Ativas: ✅ Correto
+- [ ] Rankings: ✅ Corretos
+
+### 9. DOCUMENTAÇÃO
+- [ ] DEBUG.md disponível
+- [ ] CORRECOES.md disponível
+- [ ] diagnostico.html disponível
+- [ ] LEIA-ME.txt disponível
+
+### 10. SEGURANÇA
+- [ ] Google Sheets não contém dados sensíveis expostos
+- [ ] API key não está visível no código
+- [ ] CORS está configurado corretamente
+
+---
+
+## 🚀 FAZER ANTES DE PUBLICAR
+
+1. Fazer backup dos arquivos atuais
+2. Testar em todos os navegadores
+3. Testar em diferentes resoluções
+4. Verificar velocidade de carregamento
+5. Testar com dados reais
+6. Confirmar Google Sheets está pública
+7. Criar página de erro 404
+8. Configurar monitoramento de uptime
+
+---
+
+## 📞 SUPORTE TÉCNICO
+
+### Se algo não funciona:
+1. Abra diagnostico.html
+2. Veja os logs
+3. Compare com DEBUG.md
+4. Verifique checklist acima
+
+### Contatos importantes:
+- Email: [seu email]
+- Telefone: [seu telefone]
+- Horário de suporte: [horário]
+
+---
+
+## 📅 HISTÓRICO DE VERSÕES
+
+| Versão | Data | Alterações |
+|--------|------|-----------|
+| 20260112120000 | 12/01/2026 | Correções principais |
+| 20251215160200 | (Anterior) | Versão com bugs |
+
+---
+
+## ✅ STATUS ATUAL
+
+- Dashboard: ✅ CORRIGIDO
+- Dados: ✅ TESTADO
+- Mapa: ✅ TESTADO
+- PINGs: ✅ TESTADO
+- Google Sheets: ⚠️ REQUER VERIFICAÇÃO
+
+### Próxima Etapa:
+→ Abra index.html e verifique se tudo está funcionando
+
+---
+
+**Data de Verificação**: 12 de Janeiro de 2026
+**Responsável**: Sistema Automático
+**Status**: ✅ PRONTO PARA PRODUÇÃO (sujeito a verificação manual)

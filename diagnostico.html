@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnóstico - Dashboard OOH</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #333; margin-bottom: 30px; text-align: center; }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .status {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .status.ok { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+        .status.error { background: #f8d7da; color: #721c24; border-left: 4px solid #f5222d; }
+        .status.warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+        .status.info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        button:hover { background: #764ba2; transform: translateY(-2px); }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        ul { margin-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Diagnóstico do Dashboard OOH</h1>
+        
+        <div class="section">
+            <h2>✅ Status do Sistema</h2>
+            <div id="status-area"></div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Dados Carregados</h2>
+            <div class="grid">
+                <div class="stat">
+                    <div class="stat-value" id="total-rows">--</div>
+                    <div class="stat-label">Linhas Total</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="active-rows">--</div>
+                    <div class="stat-label">Registros Ativos</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="total-impactos">--</div>
+                    <div class="stat-label">Total Impactos</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="cidades-count">--</div>
+                    <div class="stat-label">Cidades</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Verificação de Componentes</h2>
+            <ul id="checks-area"></ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Ações</h2>
+            <button onclick="testarGoogleSheets()">Testar Google Sheets</button>
+            <button onclick="testarMapa()">Testar Carregamento do Mapa</button>
+            <button onclick="recarregarDashboard()">Recarregar Dashboard</button>
+            <button onclick="abrirConsole()">Abrir Console (F12)</button>
+        </div>
+
+        <div class="section">
+            <h2>📋 Log do Console</h2>
+            <div id="console-log" style="
+                background: #1e1e1e;
+                color: #00ff00;
+                padding: 15px;
+                border-radius: 8px;
+                font-family: monospace;
+                font-size: 12px;
+                max-height: 300px;
+                overflow-y: auto;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            "></div>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_ID = '1H3qFr2if6MdNN4ZZnrMidTq9kNpOdb6OY8ICAS9Gsj4';
+        let consoleLogs = [];
+
+        // Capturar logs
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+            consoleLogs.push(msg);
+            updateConsoleLog();
+        };
+
+        function updateConsoleLog() {
+            const logDiv = document.getElementById('console-log');
+            logDiv.textContent = consoleLogs.slice(-50).join('\n');
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        async function testarGoogleSheets() {
+            console.log('🔄 Testando conexão com Google Sheets...');
+            const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+            try {
+                const response = await fetch(csvUrl);
+                if (response.ok) {
+                    const csv = await response.text();
+                    console.log(`✅ Google Sheets OK! Recebidos ${csv.length} bytes`);
+                    const lines = csv.split('\n').length;
+                    document.getElementById('total-rows').textContent = lines - 1;
+                    addCheck('Google Sheets', true);
+                } else {
+                    console.log(`❌ Erro HTTP ${response.status}`);
+                    addCheck('Google Sheets', false);
+                }
+            } catch (e) {
+                console.log(`❌ Erro: ${e.message}`);
+                addCheck('Google Sheets', false);
+            }
+        }
+
+        function testarMapa() {
+            console.log('🗺️ Testando carregamento do mapa...');
+            const mapaObject = document.getElementById('mapa-object');
+            if (mapaObject) {
+                console.log('✅ Elemento mapa encontrado');
+                addCheck('Elemento Mapa', true);
+            } else {
+                console.log('❌ Elemento mapa não encontrado');
+                addCheck('Elemento Mapa', false);
+            }
+        }
+
+        function recarregarDashboard() {
+            console.log('🔄 Recarregando dashboard...');
+            location.reload();
+        }
+
+        function abrirConsole() {
+            console.log('Pressione F12 para abrir o console completo');
+        }
+
+        function addCheck(name, status) {
+            const ul = document.getElementById('checks-area');
+            const className = status ? 'status ok' : 'status error';
+            const icon = status ? '✅' : '❌';
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="${className}">${icon} ${name}</span>`;
+            ul.appendChild(li);
+        }
+
+        // Testes iniciais
+        console.log('🎯 Iniciando diagnóstico...');
+        testarGoogleSheets();
+        testarMapa();
+
+        // Atualizar a cada 5 segundos
+        setInterval(testarGoogleSheets, 5000);
+    </script>
+</body>
+</html>
