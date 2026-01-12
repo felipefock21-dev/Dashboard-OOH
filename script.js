@@ -305,8 +305,8 @@ function renderCheckinsRecentes(data) {
         const div = document.createElement('div');
         
         div.innerHTML = `
-            <div class="checkin-praca">${item.cidade || 'N/A'}</div>
-            <div class="checkin-exibidora">${item.exibidora || 'N/A'}</div>
+            <div>${item.cidade || 'N/A'}</div>
+            <div>${item.exibidora || 'N/A'}</div>
         `;
         container.appendChild(div);
     });
