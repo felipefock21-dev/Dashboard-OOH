@@ -303,7 +303,6 @@ function renderCheckinsRecentes(data) {
 
     checkinsRecentes.forEach((item) => {
         const div = document.createElement('div');
-        div.className = 'checkin-item';
         
         div.innerHTML = `
             <div class="checkin-praca">${item.cidade || 'N/A'}</div>
