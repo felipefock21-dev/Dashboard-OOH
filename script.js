@@ -303,11 +303,7 @@ function renderCheckinsRecentes(data) {
 
     checkinsRecentes.forEach((item) => {
         const div = document.createElement('div');
-        
-        div.innerHTML = `
-            <div>${item.cidade || 'N/A'}</div>
-            <div>${item.exibidora || 'N/A'}</div>
-        `;
+        div.innerHTML = '';
         container.appendChild(div);
     });
 }
