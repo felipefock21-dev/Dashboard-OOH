@@ -51,15 +51,12 @@ function parseCSVLine(line) {
 
         if (char === '"') {
             if (insideQuotes && nextChar === '"') {
-                // Aspas duplas dentro de string (escapadas)
                 current += '"';
-                i++; // Skip next quote
+                i++;
             } else {
-                // Toggle quote state
                 insideQuotes = !insideQuotes;
             }
         } else if (char === ',' && !insideQuotes) {
-            // Encontrou separador fora de aspas
             result.push(current.trim().replace(/^"|"$/g, ''));
             current = '';
         } else {
@@ -67,7 +64,6 @@ function parseCSVLine(line) {
         }
     }
 
-    // Adicionar último valor
     result.push(current.trim().replace(/^"|"$/g, ''));
     return result;
 }
@@ -83,13 +79,10 @@ function parseCSV(csv) {
     
     const data = [];
 
-    console.log('Headers encontrados:', headers);
-
     // Encontrar índices das colunas
     let clienteIdx = -1, statusIdx = -1, cidadeIdx = -1, exibidoraIdx = -1, impactosIdx = -1;
     
     headers.forEach((h, idx) => {
-        console.log(`  [${idx}] "${h}"`);
         if (h.includes('cliente') && !h.includes('status')) {
             clienteIdx = idx;
         }
@@ -99,9 +92,8 @@ function parseCSV(csv) {
         if (h.includes('cidade') || h.includes('praca')) {
             cidadeIdx = idx;
         }
-        // CRÍTICO: Procurar por "exibidora" mas NÃO "url" e NÃO "logo"
+        // Procurar por "exibidora" mas NÃO "url" e NÃO "logo"
         if (h === 'exibidora' || (h.includes('exibidor') && !h.includes('url') && !h.includes('logo'))) {
-            console.log(`    ✓ Detectado como exibidora no índice ${idx}`);
             exibidoraIdx = idx;
         }
         if (h.includes('impacto')) {
@@ -109,18 +101,11 @@ function parseCSV(csv) {
         }
     });
 
-    console.log('Índices encontrados:', { clienteIdx, statusIdx, cidadeIdx, exibidoraIdx, impactosIdx });
-    console.log(`✓ Total de colunas (headers): ${headers.length}`);
-
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue;
         
         // Usar parser robusto
         const values = parseCSVLine(lines[i]);
-        
-        if (i <= 3) {
-            console.log(`\nLinha ${i} RAW values (${values.length} colunas):`, values.slice(0, 20));
-        }
         
         // Garantir que impactos seja um número válido
         let impactos = 0;
@@ -137,15 +122,9 @@ function parseCSV(csv) {
             impactostotal: impactos
         };
         
-        if (i <= 3) {
-            console.log(`Linha ${i} parseada:`, item);
-            console.log(`  exibidora[${exibidoraIdx}] = "${item.exibidora}"`);
-        }
-        
         data.push(item);
     }
 
-    console.log('Primeiros 5 registros parseados:', data.slice(0, 5));
     return data;
 }
 
@@ -245,41 +224,29 @@ function processMetrics(data) {
         .slice(0, 3);
 
     // === EXIBIDORAS MAIS ATIVAS ===
-    // Ranking das 3 exibidoras com mais CIDADES DIFERENTES ativas
+    // Ranking das 5 exibidoras com mais CIDADES DIFERENTES ativas
     const exibidorasCidades = new Map();
     activeData.forEach(item => {
-        console.log(`  Processando item: exibidora="${item.exibidora}" (tipo: ${typeof item.exibidora}, length: ${item.exibidora?.length})`);
-        
         if (!exibidorasCidades.has(item.exibidora)) {
             exibidorasCidades.set(item.exibidora, new Set());
         }
         exibidorasCidades.get(item.exibidora).add(item.cidade);
     });
-
-    console.log('🏢 Mapa de exibidoras encontradas:', exibidorasCidades);
-    console.log('🏢 Total de exibidoras únicas (incluindo vazias):', exibidorasCidades.size);
     
     // Filtrar exibidoras vazias
     const exibidorasValidas = Array.from(exibidorasCidades.entries())
         .filter(([nome]) => nome && nome.trim() !== '');
-    
-    console.log('🏢 Total de exibidoras válidas (sem vazias):', exibidorasValidas.length);
 
     const exibidorasMaisAtivas = exibidorasValidas
-        .map(([nome, cidades]) => {
-            console.log(`  → Exibidora: "${nome}" com ${cidades.size} cidades`);
-            return {
-                nome,
-                cidadesAtivas: cidades.size,
-                impactos: activeData
-                    .filter(item => item.exibidora === nome)
-                    .reduce((sum, item) => sum + item.impactostotal, 0)
-            };
-        })
+        .map(([nome, cidades]) => ({
+            nome,
+            cidadesAtivas: cidades.size,
+            impactos: activeData
+                .filter(item => item.exibidora === nome)
+                .reduce((sum, item) => sum + item.impactostotal, 0)
+        }))
         .sort((a, b) => b.cidadesAtivas - a.cidadesAtivas)
         .slice(0, 5);
-
-    console.log('🏢 Exibidoras Mais Ativas (após processamento):', exibidorasMaisAtivas);
 
     // === RANKING DE IMPACTOS POR CIDADE ===
     // Ranking das 3 cidades com mais impactos totais
@@ -328,11 +295,7 @@ function renderRankingList(data, elementId) {
     const container = document.getElementById(elementId);
     container.innerHTML = '';
 
-    console.log(`📊 Renderizando ranking [${elementId}]:`, data);
-    console.log(`   Número de items: ${data.length}`);
-
     if (data.length === 0) {
-        console.warn(`   ⚠️ AVISO: Array vazio para ${elementId}`);
         container.innerHTML = '<div class="loading">Sem dados</div>';
         return;
     }
@@ -350,8 +313,6 @@ function renderRankingList(data, elementId) {
         } else {
             valor = item.impactos.toLocaleString('pt-BR');
         }
-        
-        console.log(`   [${elementId}] Item ${index + 1}: nome="${item.nome}", valor="${valor}"`);
         
         div.innerHTML = `
             <span class="ranking-item-posicao">#${index + 1}</span>
