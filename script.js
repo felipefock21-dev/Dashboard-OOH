@@ -210,6 +210,8 @@ function processMetrics(data) {
     // Ranking das 3 exibidoras com mais CIDADES DIFERENTES ativas
     const exibidorasCidades = new Map();
     activeData.forEach(item => {
+        console.log(`  Processando item: exibidora="${item.exibidora}" (tipo: ${typeof item.exibidora}, length: ${item.exibidora?.length})`);
+        
         if (!exibidorasCidades.has(item.exibidora)) {
             exibidorasCidades.set(item.exibidora, new Set());
         }
@@ -217,9 +219,15 @@ function processMetrics(data) {
     });
 
     console.log('🏢 Mapa de exibidoras encontradas:', exibidorasCidades);
-    console.log('🏢 Total de exibidoras únicas:', exibidorasCidades.size);
+    console.log('🏢 Total de exibidoras únicas (incluindo vazias):', exibidorasCidades.size);
+    
+    // Filtrar exibidoras vazias
+    const exibidorasValidas = Array.from(exibidorasCidades.entries())
+        .filter(([nome]) => nome && nome.trim() !== '');
+    
+    console.log('🏢 Total de exibidoras válidas (sem vazias):', exibidorasValidas.length);
 
-    const exibidorasMaisAtivas = Array.from(exibidorasCidades.entries())
+    const exibidorasMaisAtivas = exibidorasValidas
         .map(([nome, cidades]) => {
             console.log(`  → Exibidora: "${nome}" com ${cidades.size} cidades`);
             return {
