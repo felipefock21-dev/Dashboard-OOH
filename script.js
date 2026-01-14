@@ -90,11 +90,23 @@ function parseCSV(csv) {
     
     headers.forEach((h, idx) => {
         console.log(`  [${idx}] "${h}"`);
-        if (h.includes('cliente') && !h.includes('status')) clienteIdx = idx;
-        if (h.includes('status') && h.includes('campanha')) statusIdx = idx;
-        if (h.includes('cidade') || h.includes('praca')) cidadeIdx = idx;
-        if (h.includes('exibidor')) exibidoraIdx = idx;
-        if (h.includes('impacto')) impactosIdx = idx;
+        if (h.includes('cliente') && !h.includes('status')) {
+            clienteIdx = idx;
+        }
+        if (h.includes('status') && h.includes('campanha')) {
+            statusIdx = idx;
+        }
+        if (h.includes('cidade') || h.includes('praca')) {
+            cidadeIdx = idx;
+        }
+        // CRÍTICO: Procurar por "exibidora" mas NÃO "url" e NÃO "logo"
+        if (h === 'exibidora' || (h.includes('exibidor') && !h.includes('url') && !h.includes('logo'))) {
+            console.log(`    ✓ Detectado como exibidora no índice ${idx}`);
+            exibidoraIdx = idx;
+        }
+        if (h.includes('impacto')) {
+            impactosIdx = idx;
+        }
     });
 
     console.log('Índices encontrados:', { clienteIdx, statusIdx, cidadeIdx, exibidoraIdx, impactosIdx });
