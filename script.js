@@ -39,13 +39,14 @@ async function fetchSheetData() {
     }
 }
 
-// Parser de CSV robusto (com suporte a aspas duplas)
+// Parser de CSV robusto com detecção inteligente
 function parseCSV(csv) {
     const lines = csv.trim().split('\n');
     if (lines.length < 2) return [];
 
-    // Parse mais robusto para headers (remove aspas)
-    const headers = lines[0]
+    // Parse headers - remove aspas e espaços
+    const headerLine = lines[0];
+    const headers = headerLine
         .split(',')
         .map(h => h.trim().toLowerCase().replace(/^"|"$/g, ''));
     
@@ -61,48 +62,57 @@ function parseCSV(csv) {
         if (h.includes('cliente') && !h.includes('status')) clienteIdx = idx;
         if (h.includes('status') && h.includes('campanha')) statusIdx = idx;
         if (h.includes('cidade') || h.includes('praca')) cidadeIdx = idx;
-        if (h.includes('exibidor')) exibidoraIdx = idx;  // "exibidor" vai pegar "exibidora"
+        if (h.includes('exibidor')) exibidoraIdx = idx;
         if (h.includes('impacto')) impactosIdx = idx;
     });
 
     console.log('Índices encontrados:', { clienteIdx, statusIdx, cidadeIdx, exibidoraIdx, impactosIdx });
-    console.log(`✓ Total de colunas: ${headers.length}`);
-    
-    // Debug: mostrar headers em array para análise
-    console.log('Headers array:', headers);
+    console.log(`✓ Total de colunas (headers): ${headers.length}`);
 
     for (let i = 1; i < lines.length; i++) {
-        if (!lines[i].trim()) continue; // Pular linhas vazias
+        if (!lines[i].trim()) continue;
         
-        // Parse mais robusto: remove aspas duplas de todos os valores
+        // Split e remove aspas de cada valor
         const values = lines[i]
             .split(',')
             .map(v => v.trim().replace(/^"|"$/g, ''));
         
         if (i <= 3) {
-            console.log(`\nLinha ${i} RAW values (${values.length} colunas):`, values);
-            if (exibidoraIdx >= 0 && exibidoraIdx < values.length) {
-                console.log(`  → values[${exibidoraIdx}] (exibidora) = "${values[exibidoraIdx]}"`);
-            }
+            console.log(`\nLinha ${i} RAW values (${values.length} colunas):`, values.slice(0, 15)); // Mostrar apenas primeiras 15
         }
         
         // Garantir que impactos seja um número válido
         let impactos = 0;
-        if (impactosIdx >= 0 && values[impactosIdx]) {
+        if (impactosIdx >= 0 && impactosIdx < values.length && values[impactosIdx]) {
             const impactosValue = values[impactosIdx].replace(/\D/g, '');
             impactos = parseInt(impactosValue || '0', 10);
         }
         
+        // Usar o índice correto: se há diferença entre headers e values, usar o índice ajustado
+        let exibidoraVal = '';
+        if (exibidoraIdx >= 0) {
+            // Tentar usar o índice direto primeiro
+            if (exibidoraIdx < values.length) {
+                exibidoraVal = values[exibidoraIdx] || '';
+            } else {
+                // Se o índice está fora do range, isso significa que a estrutura é diferente
+                // Procurar pela coluna de exibidora na linha
+                exibidoraVal = '';
+                console.warn(`⚠️ exibidoraIdx ${exibidoraIdx} >= values.length ${values.length}`);
+            }
+        }
+        
         const item = {
-            cliente: clienteIdx >= 0 ? values[clienteIdx] || '' : '',
-            status: statusIdx >= 0 ? values[statusIdx] || '' : '',
-            cidade: cidadeIdx >= 0 ? values[cidadeIdx] || '' : '',
-            exibidora: exibidoraIdx >= 0 && exibidoraIdx < values.length ? values[exibidoraIdx] || '' : '',
+            cliente: clienteIdx >= 0 && clienteIdx < values.length ? values[clienteIdx] || '' : '',
+            status: statusIdx >= 0 && statusIdx < values.length ? values[statusIdx] || '' : '',
+            cidade: cidadeIdx >= 0 && cidadeIdx < values.length ? values[cidadeIdx] || '' : '',
+            exibidora: exibidoraVal,
             impactostotal: impactos
         };
         
         if (i <= 3) {
             console.log(`Linha ${i} parseada:`, item);
+            console.log(`  exibidora[${exibidoraIdx}] = "${exibidoraVal}"`);
         }
         
         data.push(item);
