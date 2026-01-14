@@ -203,7 +203,9 @@ function processMetrics(data) {
                 .reduce((sum, item) => sum + item.impactostotal, 0)
         }))
         .sort((a, b) => b.cidadesAtivas - a.cidadesAtivas)
-        .slice(0, 3);
+        .slice(0, 5);
+
+    console.log('🏢 Exibidoras Mais Ativas:', exibidorasMaisAtivas);
 
     // === RANKING DE IMPACTOS POR CIDADE ===
     // Ranking das 3 cidades com mais impactos totais
@@ -252,6 +254,8 @@ function renderRankingList(data, elementId) {
     const container = document.getElementById(elementId);
     container.innerHTML = '';
 
+    console.log(`📊 Renderizando ranking [${elementId}]:`, data);
+
     if (data.length === 0) {
         container.innerHTML = '<div class="loading">Sem dados</div>';
         return;
@@ -270,6 +274,8 @@ function renderRankingList(data, elementId) {
         } else {
             valor = item.impactos.toLocaleString('pt-BR');
         }
+        
+        console.log(`  Item ${index + 1}: nome="${item.nome}", valor="${valor}"`);
         
         div.innerHTML = `
             <span class="ranking-item-posicao">#${index + 1}</span>

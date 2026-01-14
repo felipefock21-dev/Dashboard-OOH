@@ -408,6 +408,7 @@ body {
     gap: 3px;
     min-height: 0;
     transition: all 0.3s ease;
+    height: 192px;
 }
 
 .ranking-card:hover {
@@ -432,6 +433,7 @@ body {
     flex: 1;
     overflow-y: auto;
     min-height: 0;
+    max-height: 160px;
 }
 
 .ranking-lista::-webkit-scrollbar {
