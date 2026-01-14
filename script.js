@@ -39,22 +39,53 @@ async function fetchSheetData() {
     }
 }
 
-// Parser de CSV robusto com detecção inteligente
+// Parser CSV robusto que trata aspas corretamente
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let insideQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const nextChar = line[i + 1];
+
+        if (char === '"') {
+            if (insideQuotes && nextChar === '"') {
+                // Aspas duplas dentro de string (escapadas)
+                current += '"';
+                i++; // Skip next quote
+            } else {
+                // Toggle quote state
+                insideQuotes = !insideQuotes;
+            }
+        } else if (char === ',' && !insideQuotes) {
+            // Encontrou separador fora de aspas
+            result.push(current.trim().replace(/^"|"$/g, ''));
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    // Adicionar último valor
+    result.push(current.trim().replace(/^"|"$/g, ''));
+    return result;
+}
+
+// Parser de CSV robusto
 function parseCSV(csv) {
     const lines = csv.trim().split('\n');
     if (lines.length < 2) return [];
 
-    // Parse headers - remove aspas e espaços
-    const headerLine = lines[0];
-    const headers = headerLine
-        .split(',')
-        .map(h => h.trim().toLowerCase().replace(/^"|"$/g, ''));
+    // Parse headers usando o parser robusto
+    const headers = parseCSVLine(lines[0])
+        .map(h => h.toLowerCase());
     
     const data = [];
 
     console.log('Headers encontrados:', headers);
 
-    // Encontrar índices das colunas (busca flexível)
+    // Encontrar índices das colunas
     let clienteIdx = -1, statusIdx = -1, cidadeIdx = -1, exibidoraIdx = -1, impactosIdx = -1;
     
     headers.forEach((h, idx) => {
@@ -72,13 +103,11 @@ function parseCSV(csv) {
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue;
         
-        // Split e remove aspas de cada valor
-        const values = lines[i]
-            .split(',')
-            .map(v => v.trim().replace(/^"|"$/g, ''));
+        // Usar parser robusto
+        const values = parseCSVLine(lines[i]);
         
         if (i <= 3) {
-            console.log(`\nLinha ${i} RAW values (${values.length} colunas):`, values.slice(0, 15)); // Mostrar apenas primeiras 15
+            console.log(`\nLinha ${i} RAW values (${values.length} colunas):`, values.slice(0, 20));
         }
         
         // Garantir que impactos seja um número válido
@@ -88,31 +117,17 @@ function parseCSV(csv) {
             impactos = parseInt(impactosValue || '0', 10);
         }
         
-        // Usar o índice correto: se há diferença entre headers e values, usar o índice ajustado
-        let exibidoraVal = '';
-        if (exibidoraIdx >= 0) {
-            // Tentar usar o índice direto primeiro
-            if (exibidoraIdx < values.length) {
-                exibidoraVal = values[exibidoraIdx] || '';
-            } else {
-                // Se o índice está fora do range, isso significa que a estrutura é diferente
-                // Procurar pela coluna de exibidora na linha
-                exibidoraVal = '';
-                console.warn(`⚠️ exibidoraIdx ${exibidoraIdx} >= values.length ${values.length}`);
-            }
-        }
-        
         const item = {
             cliente: clienteIdx >= 0 && clienteIdx < values.length ? values[clienteIdx] || '' : '',
             status: statusIdx >= 0 && statusIdx < values.length ? values[statusIdx] || '' : '',
             cidade: cidadeIdx >= 0 && cidadeIdx < values.length ? values[cidadeIdx] || '' : '',
-            exibidora: exibidoraVal,
+            exibidora: exibidoraIdx >= 0 && exibidoraIdx < values.length ? values[exibidoraIdx] || '' : '',
             impactostotal: impactos
         };
         
         if (i <= 3) {
             console.log(`Linha ${i} parseada:`, item);
-            console.log(`  exibidora[${exibidoraIdx}] = "${exibidoraVal}"`);
+            console.log(`  exibidora[${exibidoraIdx}] = "${item.exibidora}"`);
         }
         
         data.push(item);
