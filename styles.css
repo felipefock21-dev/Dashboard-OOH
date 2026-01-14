@@ -375,17 +375,13 @@ body {
 .rankings-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
+    gap: 6px;
     flex: 1;
-    max-height: none;
-    padding: 8px;
+    padding: 10px;
     margin: 0;
     min-height: 0;
     overflow-y: auto;
     margin-left: 0;
-    max-height: 400px;
-
-
 }
 
 .rankings-grid::-webkit-scrollbar {
@@ -450,35 +446,40 @@ body {
 .ranking-item {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 4px;
-    padding: 15px 8px;
+    padding: 8px 6px;
     border-left: 2px solid #5A5FFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 4px;
+    min-height: auto;
 }
 
 .ranking-item-posicao {
     font-weight: 700;
     color: #E03D99;
-    font-size: 10px;
-    min-width: 18px;
+    font-size: 11px;
+    min-width: 20px;
+    text-align: center;
 }
 
 .ranking-item-nome {
     flex: 1;
-    font-size: 9px;
+    font-size: 10px;
     color: rgba(255, 255, 255, 0.85);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 1.2;
 }
 
 .ranking-item-valor {
     font-weight: 600;
     color: #5A5FFF;
-    font-size: 9px;
+    font-size: 10px;
     text-align: right;
+    white-space: nowrap;
+    padding-left: 4px;
 }
 
 /* Classes antigas de gráficos removidas */
