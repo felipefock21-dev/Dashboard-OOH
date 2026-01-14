@@ -53,19 +53,25 @@ function parseCSV(csv) {
     let clienteIdx = -1, statusIdx = -1, cidadeIdx = -1, exibidoraIdx = -1, impactosIdx = -1;
     
     headers.forEach((h, idx) => {
+        console.log(`  [${idx}] "${h}"`);
         if (h.includes('cliente') && !h.includes('status')) clienteIdx = idx;
-        if (h.includes('status campanha')) statusIdx = idx;  // ESPECÍFICO: "status campanha"
+        if (h.includes('status') && h.includes('campanha')) statusIdx = idx;
         if (h.includes('cidade') || h.includes('praca')) cidadeIdx = idx;
-        if (h.includes('exibidora') || h.includes('emissor')) exibidoraIdx = idx;
+        if (h.includes('exibidor')) exibidoraIdx = idx;  // "exibidor" vai pegar "exibidora"
         if (h.includes('impacto')) impactosIdx = idx;
     });
 
     console.log('Índices encontrados:', { clienteIdx, statusIdx, cidadeIdx, exibidoraIdx, impactosIdx });
+    console.log(`✓ Total de colunas: ${headers.length}`);
 
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue; // Pular linhas vazias
         
         const values = lines[i].split(',').map(v => v.trim());
+        
+        if (i <= 3) {
+            console.log(`\nLinha ${i} RAW values:`, values);
+        }
         
         // Garantir que impactos seja um número válido
         let impactos = 0;
@@ -84,6 +90,11 @@ function parseCSV(csv) {
         
         if (i <= 3) {
             console.log(`Linha ${i} parseada:`, item);
+            if (exibidoraIdx >= 0) {
+                console.log(`  → exibidora[${exibidoraIdx}] = "${values[exibidoraIdx]}"`);
+            } else {
+                console.log(`  ⚠️ exibidoraIdx is ${exibidoraIdx} - COLUNA NÃO ENCONTRADA!`);
+            }
         }
         
         data.push(item);
