@@ -82,6 +82,10 @@ function parseCSV(csv) {
             impactostotal: impactos
         };
         
+        if (i <= 3) {
+            console.log(`Linha ${i} parseada:`, item);
+        }
+        
         data.push(item);
     }
 
