@@ -67,6 +67,9 @@ function parseCSV(csv) {
 
     console.log('Índices encontrados:', { clienteIdx, statusIdx, cidadeIdx, exibidoraIdx, impactosIdx });
     console.log(`✓ Total de colunas: ${headers.length}`);
+    
+    // Debug: mostrar headers em array para análise
+    console.log('Headers array:', headers);
 
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue; // Pular linhas vazias
@@ -77,7 +80,10 @@ function parseCSV(csv) {
             .map(v => v.trim().replace(/^"|"$/g, ''));
         
         if (i <= 3) {
-            console.log(`\nLinha ${i} RAW values:`, values);
+            console.log(`\nLinha ${i} RAW values (${values.length} colunas):`, values);
+            if (exibidoraIdx >= 0 && exibidoraIdx < values.length) {
+                console.log(`  → values[${exibidoraIdx}] (exibidora) = "${values[exibidoraIdx]}"`);
+            }
         }
         
         // Garantir que impactos seja um número válido
@@ -91,17 +97,12 @@ function parseCSV(csv) {
             cliente: clienteIdx >= 0 ? values[clienteIdx] || '' : '',
             status: statusIdx >= 0 ? values[statusIdx] || '' : '',
             cidade: cidadeIdx >= 0 ? values[cidadeIdx] || '' : '',
-            exibidora: exibidoraIdx >= 0 ? values[exibidoraIdx] || '' : '',
+            exibidora: exibidoraIdx >= 0 && exibidoraIdx < values.length ? values[exibidoraIdx] || '' : '',
             impactostotal: impactos
         };
         
         if (i <= 3) {
             console.log(`Linha ${i} parseada:`, item);
-            if (exibidoraIdx >= 0) {
-                console.log(`  → exibidora[${exibidoraIdx}] = "${values[exibidoraIdx]}"`);
-            } else {
-                console.log(`  ⚠️ exibidoraIdx is ${exibidoraIdx} - COLUNA NÃO ENCONTRADA!`);
-            }
         }
         
         data.push(item);
