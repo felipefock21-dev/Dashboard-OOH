@@ -117,7 +117,7 @@ body {
 /* Check-in Recentes - esquerda grudado */
 .checkins-lateral {
     flex: 0 0 auto;
-    width: clamp(150px, 18%, 250px);
+    width: clamp(100px, 12%, 180px);
     background: #001B4D;
     padding: clamp(8px, 1vw, 12px);
     display: flex;
@@ -337,11 +337,11 @@ body {
 .metrica-card {
     background: rgba(90, 95, 255, 0.08);
     border-radius: clamp(6px, 0.8vw, 10px);
-    padding: clamp(4px, 0.6vw, 8px);
+    padding: clamp(2px, 0.4vw, 4px);
     text-align: center;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(90, 95, 255, 0.3);
-    min-height: clamp(48px, 80vh, 75px);
+    min-height: clamp(35px, 50vh, 50px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -359,13 +359,13 @@ body {
 .metrica-valor {
     color: #E03D99;
     font-weight: 700;
-    font-size: clamp(13px, 1.92vw, 24px);
+    font-size: clamp(11px, 1.6vw, 18px);
     line-height: 1;
     margin-bottom: 1px;
 }
 
 .metrica-label {
-    font-size: clamp(8.4px, 0.78vw, 10.8px);
+    font-size: clamp(7px, 0.65vw, 9px);
     color: rgba(255, 255, 255, 0.7);
     line-height: 1;
     font-weight: 500;
@@ -400,15 +400,15 @@ body {
 .ranking-card {
     background: rgba(224, 61, 153, 0.08);
     border-radius: 10px;
-    padding: 6px;
+    padding: 5px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(224, 61, 153, 0.3);
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
     min-height: 0;
     transition: all 0.3s ease;
-    height: 192px;
+    height: 140px;
 }
 
 .ranking-card:hover {
