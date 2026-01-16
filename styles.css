@@ -50,29 +50,29 @@ body {
     align-items: stretch;
 }
 
-/* Coluna Esquerda (30%) */
+/* Coluna Esquerda (45%) */
 .left-column {
-    flex: 0 0 30% !important;
+    flex: 0 0 45% !important;
     display: flex;
     flex-direction: column;
     gap: clamp(6px, 0.8vh, 10px);
     min-height: 0;
     min-width: 0;
     overflow: hidden;
-    width: 30% !important;
+    width: 45% !important;
     padding: 0;
 }
 
-/* Coluna Direita (70%) */
+/* Coluna Direita (55%) */
 .right-column {
-    flex: 0 0 70% !important;
+    flex: 0 0 55% !important;
     display: flex;
     flex-direction: column;
     gap: clamp(6px, 0.8vh, 10px);
     min-height: 0;
     min-width: 0;
     overflow: hidden;
-    width: 70% !important;
+    width: 55% !important;
     padding: 0;
 }
 
@@ -649,12 +649,12 @@ body {
     }
 
     .left-column {
-        flex: 0 0 40%;
+        flex: 0 0 45%;
         gap: clamp(12px, 1.5vh, 20px);
     }
 
     .right-column {
-        flex: 0 0 60%;
+        flex: 0 0 55%;
         gap: clamp(12px, 1.5vh, 20px);
     }
 
@@ -697,12 +697,12 @@ body {
     }
 
     .left-column {
-        flex: 0 0 40%;
+        flex: 0 0 45%;
         gap: clamp(16px, 2vh, 28px);
     }
 
     .right-column {
-        flex: 0 0 60%;
+        flex: 0 0 55%;
         gap: clamp(16px, 2vh, 28px);
     }
 
