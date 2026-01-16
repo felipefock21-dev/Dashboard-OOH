@@ -198,13 +198,13 @@ body {
 /* Estilos para PINGs no mapa */
 .pinga {
     position: absolute;
-    width: 24px;
-    height: 24px;
-    margin-left: -12px;
-    margin-top: -12px;
+    width: 18px;
+    height: 18px;
+    margin-left: -9px;
+    margin-top: -9px;
     pointer-events: auto;
     cursor: pointer;
-    filter: drop-shadow(0 0 8px rgba(224, 61, 153, 0.6));
+    filter: drop-shadow(0 0 6px rgba(224, 61, 153, 0.5));
     will-change: transform;
 }
 
