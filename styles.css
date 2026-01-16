@@ -110,7 +110,7 @@ body {
     padding: 0;
     background: rgba(224, 61, 153, 0.08);
     border-radius: clamp(12px, 1.5vw, 20px);
-    border: 2px solid rgba(224, 61, 153, 0.3);
+    border: 1.4px solid rgba(224, 61, 153, 0.3);
     overflow: hidden;
 }
 
@@ -122,7 +122,7 @@ body {
     padding: clamp(8px, 1vw, 12px);
     display: flex;
     flex-direction: column;
-    border-right: 2px solid rgba(224, 61, 153, 0.3);
+    border-right: 1.4px solid rgba(224, 61, 153, 0.3);
     border-top-right-radius: clamp(12px, 1.5vw, 20px);
     border-bottom-right-radius: clamp(12px, 1.5vw, 20px);
     min-height: 0;
@@ -138,7 +138,7 @@ body {
     overflow: visible;
     border-top-left-radius: clamp(12px, 1.5vw, 20px);
     border-bottom-left-radius: clamp(12px, 1.5vw, 20px);
-    border: 2px solid rgba(90, 95, 255, 0.4);
+    border: 1.4px solid rgba(90, 95, 255, 0.4);
     width: 100%;
     height: 100%;
     padding: 0;
@@ -340,7 +340,7 @@ body {
     padding: clamp(2px, 0.4vw, 4px);
     text-align: center;
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(90, 95, 255, 0.3);
+    border: 1.4px solid rgba(90, 95, 255, 0.3);
     min-height: clamp(35px, 50vh, 50px);
     display: flex;
     flex-direction: column;
@@ -402,7 +402,7 @@ body {
     border-radius: 10px;
     padding: 5px;
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(224, 61, 153, 0.3);
+    border: 1.4px solid rgba(224, 61, 153, 0.3);
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -449,7 +449,7 @@ body {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 4px;
     padding: 4px 3px;
-    border-left: 2px solid #5A5FFF;
+    border-left: 1.4px solid #5A5FFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -521,7 +521,7 @@ body {
     right: 0;
     width: 100%;
     background: linear-gradient(90deg, #001B4D 0%, rgba(0, 27, 77, 0.95) 50%, #001B4D 100%);
-    border-top: 2px solid #E03D99;
+    border-top: 1.4px solid #E03D99;
     display: flex;
     align-items: center;
     min-height: 45px;
@@ -535,7 +535,7 @@ body {
     align-items: center;
     padding: 0 20px;
     flex-shrink: 0;
-    border-right: 2px solid #E03D99;
+    border-right: 1.4px solid #E03D99;
     background-color: rgba(224, 61, 153, 0.1);
 }
 
