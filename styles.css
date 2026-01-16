@@ -206,6 +206,7 @@ body {
     cursor: pointer;
     filter: drop-shadow(0 0 6px rgba(224, 61, 153, 0.5));
     will-change: transform;
+    transform: translateX(5%) translateY(-4%);
 }
 
 .pinga-ripple {
