@@ -418,7 +418,7 @@ body {
 }
 
 .ranking-titulo {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 600;
     color: #E03D99;
     margin: 0;
@@ -448,26 +448,26 @@ body {
 .ranking-item {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 4px;
-    padding: 7px 6px;
+    padding: 4px 3px;
     border-left: 2px solid #5A5FFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
     min-height: auto;
 }
 
 .ranking-item-posicao {
     font-weight: 700;
     color: #E03D99;
-    font-size: 11px;
-    min-width: 20px;
+    font-size: 9px;
+    min-width: 18px;
     text-align: center;
 }
 
 .ranking-item-nome {
     flex: 1;
-    font-size: 10px;
+    font-size: 8px;
     color: rgba(255, 255, 255, 0.85);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -478,10 +478,10 @@ body {
 .ranking-item-valor {
     font-weight: 600;
     color: #5A5FFF;
-    font-size: 10px;
+    font-size: 8px;
     text-align: right;
     white-space: nowrap;
-    padding-left: 4px;
+    padding-left: 2px;
 }
 
 /* Classes antigas de gráficos removidas */
