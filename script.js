@@ -596,7 +596,7 @@ const geonamesCache = {
     'Teresina': { lat: -5.0892, lng: -42.8019 },
     'São Luís': { lat: -2.8967, lng: -44.3045 },
     'Natal': { lat: -5.7942, lng: -35.2094 },
-    'Campo Grande': { lat: -20.4697, lng: -54.6201 },
+    'Campo Grande': { lat: -21.4697, lng: -54.6201 },
     'Cuiabá': { lat: -15.5939, lng: -56.0911 },
     'Palmas': { lat: -10.1753, lng: -48.3382 },
     'Porto Velho': { lat: -8.7619, lng: -63.9039 },
