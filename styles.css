@@ -201,12 +201,13 @@ body {
     width: 15px;
     height: 15px;
     margin-left: -7.5px;
-    margin-top: -7.5px;
+    margin-top: 0;
+    top: -65px;
     pointer-events: auto;
     cursor: pointer;
     filter: drop-shadow(0 0 5px rgba(224, 61, 153, 0.5));
     will-change: transform;
-    transform: translateX(10%) translateY(-54%);
+    transform: translateX(10%);
 }
 
 .pinga-ripple {
